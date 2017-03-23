@@ -13,4 +13,17 @@ public class User {
 		this.fName = fName;
 		this.lName = lName;
 	}
+	
+	public static User Login(String userID, String password) throws Exception {
+		User user = null;
+		
+		Reader reader = new Reader();
+		user = reader.LoadUser(userID);
+		
+		if (user.password != password) {
+			throw new PasswordIncorrect();
+		}
+		
+		return user;
+	}
 }

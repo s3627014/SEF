@@ -5,21 +5,34 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestLogin {
-	Reader reader;
 	
 	@Before
 	public void setUp () {
-		reader = new Reader();
+		
 	}
 
 	@Test
-	public void test () throws UserNotFound {
-		User user = reader.LoadUser("s11111");
+	public void everythingRightTest () throws Exception {
+		User user = User.Login("s11111", "pass");
 		assertEquals("John", user.fName);
-		user = reader.LoadUser("s22222");
+		user = User.Login("s22222", "pass");
 		assertEquals("Jane", user.fName);
-		user = reader.LoadUser("s33333");
+		user = User.Login("s33333", "pass");
 		assertEquals("Mohammed", user.fName);
+	}
+
+	@Test (expected=UserNotFound.class)
+	public void wrongUsernameTest () throws Exception {
+		User user = User.Login("s00000", "pass");
+		user = User.Login("s22222", "pass");
+		user = User.Login("s33333", "pass");
+	}
+
+	@Test (expected=PasswordIncorrect.class)
+	public void wrongPasswordTest () throws Exception {
+		User user = User.Login("s11111", "wrong");
+		user = User.Login("s22222", "pass");
+		user = User.Login("s33333", "pass");
 	}
 
 	@After
