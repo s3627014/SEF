@@ -10,11 +10,11 @@ public class DBConnect(){
     userName = ;
     password = ;
     Connection con = DriverManager.getConnection(host, userName, password);
-}
+  }
 
   catch ( SQLException err ) {
     System.out.println( err.getMessage( ) );
-}
+  }
 
 
 }
