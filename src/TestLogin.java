@@ -32,6 +32,13 @@ public class TestLogin {
 		user = User.Login("s33333", "pass");
 	}
 
+	@Test (expected=WrongFormatUsername.class)
+	public void wrongUsernameTest () throws Exception {
+		User user = User.Login("s00000", "fail");
+		user = User.Login("s222 22", "pass");
+		user = User.Login("s333s33", "pass");
+	}
+
 	@After
 	public void cleanUp () {
 		
