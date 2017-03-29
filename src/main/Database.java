@@ -8,21 +8,36 @@ import oracle.sql.*;
 
 public class Database {
 	
-	public Connection Connect () throws SQLException {
+	private static Connection con;
+	
+	public static void Connect () throws SQLException {
 		// Connection details
-	    String host = "jdbc:oracle://emu.cs.rmit.edu.au:1521/general"; //emailed Halil for these deets. More to come when he replies -Tim
+	    //String host = "emu.cs.rmit.edu.au:1521/general.cs.rmit.edu.au";
+	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
 	    String userName = "s3435088";
 	    String password = "qoSpjXcw";
 	    
-	    // Make connection work
-	    try
-	    {
-	    Class.forName("oracle.jdbc.driver.OracleDriver");
-//	    DriverManager.registerDriver (new oracle.jdbc.driver.OracleDriver());
-	    }catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
-	    // Connect using details
-	    Connection con = DriverManager.getConnection(host, userName, password);
-	    return con;
+		try {
+			// step1 load the driver class
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+
+			// step2 create the connection object
+			Connection con = DriverManager.getConnection(host, userName, password);
+
+			// step3 create the statement object
+			Statement stmt = con.createStatement();
+
+			// step4 execute query
+			ResultSet rs = stmt.executeQuery("select * from ASS1_USERS");
+			while (rs.next())
+				System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getString(3));
+
+			// step5 close the connection object
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 	
 	public String getWhatever () throws SQLException {
@@ -30,5 +45,18 @@ public class Database {
 	//	Connection connection = Connect();
 		
 		return "Not yet functional";
+	public static Connection getConnection(){
+		return con;
 	}
+	
+	public static void closeConnection(){
+        if(con!=null){
+            try {
+                con.close();
+            } catch (SQLException e) {
+                 e.printStackTrace();
+            }
+        }
+
+    }
 }

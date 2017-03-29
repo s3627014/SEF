@@ -1,18 +1,12 @@
 package main;
 import java.sql.*;
 
+import java.sql.SQLException;
+
 class Initialise {
-	public static void main(String [ ] args)
+	public static void main(String [ ] args) throws SQLException
 	{
-		Database db = new Database();
-		
-		try {
-			db.Connect();			
-		}
-		catch (SQLException err) {
-			System.out.println(err);
-		}
-		
+		Database.Connect();
 		createMenu();
 	}
 
