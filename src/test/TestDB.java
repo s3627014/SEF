@@ -17,8 +17,9 @@ public class TestDB {
 	}
 	
 	@Test
-	public void testConncetion() throws Exception {
-		fail("Not yet implemented");
+	public void testConnection() throws Exception {
+		
+		Database.Connect();
 	}
 
 }
