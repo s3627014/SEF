@@ -5,12 +5,12 @@ public class Database {
 	
 	private static Connection con;
 	
-	public void Connect (String host, String userName, String password) throws SQLException {
+	public static void Connect () throws SQLException {
 		// Connection details
 	    //String host = "emu.cs.rmit.edu.au:1521/general.cs.rmit.edu.au";
-	    host = "jdbc:oracle:thin:emu.cs.rmit.edu.au:1521:general";
-	    userName = "s3435088";
-	    password = "qoSpjXcw";
+	    String host = "jdbc:oracle:thin:emu.cs.rmit.edu.au:1521:general";
+	    String userName = "s3435088";
+	    String password = "qoSpjXcw";
 	    
 	    try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
