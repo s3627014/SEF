@@ -1,4 +1,10 @@
+package test;
+import main.*;
 import static org.junit.Assert.*;
+import main.PasswordIncorrect;
+import main.User;
+import main.UserNotFound;
+
 import org.junit.*;
 
 public class TestLogin {
@@ -19,7 +25,7 @@ public class TestLogin {
 	}
 
 	@Test (expected=UserNotFound.class)
-	public void wrongUsernameTest () throws Exception {
+	public void userNotFound () throws Exception {
 		User user = User.Login("s00000", "pass");
 		user = User.Login("s22222", "pass");
 		user = User.Login("s33333", "pass");
@@ -30,13 +36,6 @@ public class TestLogin {
 		User user = User.Login("s11111", "wrong");
 		user = User.Login("s22222", "pass");
 		user = User.Login("s33333", "pass");
-	}
-
-	@Test (expected=WrongFormatUsername.class)
-	public void wrongUsernameTest () throws Exception {
-		User user = User.Login("s00000", "fail");
-		user = User.Login("s222 22", "pass");
-		user = User.Login("s333s33", "pass");
 	}
 
 	@After
