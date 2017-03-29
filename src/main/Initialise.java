@@ -3,7 +3,7 @@ package main;
 class Initialise {
 	public static void main(String [ ] args)
 	{
-		//DBConnect();
+		//Connect();
 		createMenu();
 	}
 
