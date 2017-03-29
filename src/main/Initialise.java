@@ -1,9 +1,18 @@
 package main;
+import java.sql.*;
 
 class Initialise {
 	public static void main(String [ ] args)
 	{
-		DBConnect();
+		Database db = new Database();
+		
+		try {
+			db.Connect();			
+		}
+		catch (SQLException err) {
+			System.out.println(err);
+		}
+		
 		createMenu();
 	}
 
