@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TestDB {
 
 	@Test
-	public void test() {
+	public void testConncetion() throws Exception {
 		fail("Not yet implemented");
 	}
 
