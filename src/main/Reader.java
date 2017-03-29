@@ -38,7 +38,7 @@ public class Reader {
 		
 		// Search through database
 		for (User u : users) {
-			if (u.id.equals(userID)){
+			if (u.getUserID().equals(userID)){
 				user = u;
 				break;
 			}
