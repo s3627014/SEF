@@ -4,11 +4,6 @@
 	<classpathentry kind="src" path="Lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-<<<<<<< HEAD
-	<classpathentry exported="true" kind="lib" path="src/lib/ojdbc14.jar"/>
-=======
 	<classpathentry kind="lib" path="Lib/classes12.jar"/>
-	<classpathentry kind="lib" path="Lib/ojdbc14.jar"/>
->>>>>>> branch 'master' of https://github.com/s3627014/SEF.git
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,5 +1,4 @@
 package main;
-import java.sql.*;
 
 import java.sql.SQLException;
 
