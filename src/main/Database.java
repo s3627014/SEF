@@ -5,23 +5,16 @@ public class Database {
 	
 	private static Connection con;
 	
-	public static void Connect () throws SQLException {
+	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
-	    //String host = "emu.cs.rmit.edu.au:1521/general.cs.rmit.edu.au";
-	    String host = "jdbc:oracle:thin:emu.cs.rmit.edu.au:1521:general";
-	    String userName = "s3435088";
+	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
+	    String username = "s3435088";
 	    String password = "qoSpjXcw";
 	    
-	    try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		    con = DriverManager.getConnection(host, userName, password);
-		    
-		} catch (Exception e) {
-			e.printStackTrace();
-		}  
-	}
-	
-	public static Connection getConnection(){
+		// Load the driver class and start connection
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection con = DriverManager.getConnection(host, username, password);
+
 		return con;
 	}
 	
