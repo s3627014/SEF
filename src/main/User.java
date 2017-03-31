@@ -17,14 +17,15 @@ public class User {
 	
 	public static User login(String userID, String password) throws Exception {
 		User user = null;
-		
+
 		Reader reader = new Reader();
 		user = reader.LoadUser(userID);
-		
+
+
 		if (!user.checkPassword(password)) {
 			throw new PasswordIncorrect();
 		}
-		
+
 		return user;
 	}
 	
