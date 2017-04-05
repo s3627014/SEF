@@ -37,7 +37,19 @@ public class TestLogin {
 		user = User.login("s22222", "pass");
 		user = User.login("s33333", "pass");
 	}
-
+	@Test (expected=PasswordIncorrect.class)
+	public void wrongPasswordFormatTest () throws Exception {
+		User user = User.login("s11111", "p a s s");
+		user = User.login("s22222", "pass");
+		user = User.login("s33333", "pass");
+	}
+	@Test (expected=UserNotFound.class)
+	public void userWrongFormat () throws Exception {
+		User user = User.login("s000 00", "pass");
+		user = User.login("s22222", "pass");
+		user = User.login("s33333", "pass");
+	}
+	
 	@After
 	public void cleanUp () {
 		
