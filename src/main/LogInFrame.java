@@ -8,8 +8,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
@@ -74,16 +76,26 @@ public class LogInFrame extends JFrame {
 				String userName = txtUserName.getText();
 				String passWord = txtPassWord.getText();
 				
-				if(userName.equals("test")&&passWord.equals("12345")){
+				try {
+					User.login(userName, passWord);
 					newframe regFace = new newframe();
 					regFace.setVisible(true);
 					dispose();
 				}
-				else{
-					JOptionPane.showMessageDialog(null, "Hello");
+				catch (UserNotFound err){
+					JOptionPane.showMessageDialog(null, "User not found.");
 					txtUserName.setText("");
 					txtPassWord.setText("");
 					txtUserName.requestFocus();
+				}
+				catch (PasswordIncorrect err){
+					JOptionPane.showMessageDialog(null, "Password incorrect.");
+					txtUserName.setText("");
+					txtPassWord.setText("");
+					txtUserName.requestFocus();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				

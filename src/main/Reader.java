@@ -11,7 +11,7 @@ public class Reader {
 				new ArrayList<Mark>()));
 		users.add(new Student("s33333", "pass", "Mohammed", "Ali", new OverloadPerms(), 
 				new ArrayList<Mark>()));
-		users.add(new Staff("st00001", "pass", "Mohammed", "Ali"));
+	//	users.add(new Staff("st00001", "pass", "Mohammed", "Ali"));
 		users.add(new Admin("a00001", "pass", "Mohammed", "Ali"));
 	}
 	
