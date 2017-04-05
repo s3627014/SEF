@@ -1,10 +1,12 @@
 package main;
 
+import errors.PasswordIncorrect;
+
 public class User {
-	private String id;
-	private String password;
-	private String fName;
-	private String lName;
+	protected String id;
+	protected String password;
+	protected String fName;
+	protected String lName;
 	
 	User () {}
 	
@@ -18,9 +20,9 @@ public class User {
 	public static User login(String userID, String password) throws Exception {
 		User user = null;
 
-		Reader reader = new Reader();
-		user = reader.LoadUser(userID);
-
+		user = Reader.LoadUser(userID);
+		
+		System.out.println(user.password);
 
 		if (!user.checkPassword(password)) {
 			throw new PasswordIncorrect();

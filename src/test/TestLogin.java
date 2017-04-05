@@ -1,11 +1,11 @@
 package test;
 import main.*;
+import errors.*;
 import static org.junit.Assert.*;
-import main.PasswordIncorrect;
-import main.User;
-import main.UserNotFound;
 
 import org.junit.*;
+
+import errors.PasswordIncorrect;
 
 public class TestLogin {
 	
@@ -24,18 +24,14 @@ public class TestLogin {
 		assertEquals("Mohammed", user.getFirstName());
 	}
 
-	@Test (expected=UserNotFound.class)
+	@Test (expected=InstanceNotFound.class)
 	public void userNotFound () throws Exception {
 		User user = User.login("s00000", "pass");
-		user = User.login("s22222", "pass");
-		user = User.login("s33333", "pass");
 	}
 
 	@Test (expected=PasswordIncorrect.class)
 	public void wrongPasswordTest () throws Exception {
 		User user = User.login("s11111", "wrong");
-		user = User.login("s22222", "pass");
-		user = User.login("s33333", "pass");
 	}
 
 	@After
