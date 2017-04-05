@@ -6,6 +6,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JSpinner;
+import javax.swing.JList;
+import javax.swing.JSeparator;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class newframe extends JFrame {
 
@@ -32,11 +39,47 @@ public class newframe extends JFrame {
 	 */
 	public newframe() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 941, 635);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		Jlist();
+		
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					
+					LogInFrame regFace = new LogInFrame();
+					regFace.setVisible(true);
+					dispose();
+					
+				}
+				catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		
+		btnLogOut.setBounds(712, 478, 171, 41);
+		contentPane.add(btnLogOut);
 	}
-
+	
+	private void Jlist() {
+		
+		JList<String> list; 
+		//states an array
+		DefaultListModel<String> listModel = new DefaultListModel<>();
+		//change when database is up and running
+		listModel.addElement("example1");
+		listModel.addElement("example2");
+		list = new JList<>(listModel);
+		list.setBounds(26, 28, 857, 234);
+		contentPane.add(list);		
+	}
 }
