@@ -21,8 +21,6 @@ public class User {
 		User user = null;
 
 		user = Reader.LoadUser(userID);
-		
-		System.out.println(user.password);
 
 		if (!user.checkPassword(password)) {
 			throw new PasswordIncorrect();

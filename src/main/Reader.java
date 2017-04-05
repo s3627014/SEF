@@ -24,7 +24,7 @@ public class Reader {
 		
 		// Go through result set and build user
 		try {
-			while (rs.next()) {
+			while (rs.next()) {				
 			    fName = rs.getString("FNAME");
 			    lName = rs.getString("LNAME");
 			    pass = rs.getString("PASS");
@@ -79,7 +79,59 @@ public class Reader {
 		}
 		else if (userID.startsWith("e")) {
 			
-			// Make staff specific loads
+			// Load offerings (classes taught)
+			rs = SearchDB("ASS1_OFFERINGS", "TEACHER", userID);
+			
+			// Go through result set and build offerings
+			ArrayList<String> offerIDs = new ArrayList<String>();
+			ArrayList<CourseOffering> offerings = new ArrayList<CourseOffering>();
+			try {
+				while (rs.next()) {
+				    String offerID = rs.getString("OFFERID");
+				    offerIDs.add(offerID);
+				}
+			} catch (SQLException err) {
+				System.out.println(err);
+			}
+			
+			// Load offerings as CourseOfferings
+			for (String offerID : offerIDs){
+				CourseOffering offering = LoadOffering(offerID);
+				offerings.add(offering);
+			}
+			
+			// Load courses (courses coordinated)
+			rs = SearchDB("ASS1_COURSES", "COORDINATOR", userID);
+			
+			// Go through result set and build offerings
+			ArrayList<String> courseIDs = new ArrayList<String>();
+			ArrayList<Course> courses = new ArrayList<Course>();
+			try {
+				while (rs.next()) {
+				    String courseID = rs.getString("COURSEID");
+				    courseIDs.add(courseID);
+				}
+			} catch (SQLException err) {
+				System.out.println(err);
+			}
+			
+			// Load courses as Courses
+			for (String courseID : courseIDs){
+				Course course = LoadCourse(courseID);
+				courses.add(course);
+			}
+			
+			// Set up staff
+			if (courses.size() > 0){
+				ProgramCoordinator staff = new ProgramCoordinator(userID, pass, fName, lName, 
+						offerings, courses);
+				return staff;
+			}
+			else {
+				Staff staff = new Staff(userID, pass, fName, lName, offerings);
+				return staff;
+			}
+			
 		}
 		else if (userID.startsWith("a")) {
 			
@@ -87,6 +139,80 @@ public class Reader {
 		}
 		
 		return user;
+	}
+	
+	public static Course LoadCourse (String courseID) throws InstanceNotFound {
+		
+		// Make course null to begin with
+		Course course = null;
+	    String courseName = null;
+	    String description = null;
+	    String coordID = null;
+	    Staff coordinator = null;
+	    ArrayList<String> prereqIDs = new ArrayList<String>();
+	    ArrayList<Course> prereqs = new ArrayList<Course>();
+	    ArrayList<String> topics = new ArrayList<String>();
+		
+		// Search through database for course 
+		ResultSet rs = SearchDB("ASS1_COURSES", "COURSEID", courseID);
+		
+		// Go through result set and build course
+		try {
+			while (rs.next()) {
+			    courseName = rs.getString("COURSENAME");
+			    description = rs.getString("DESCRIPTION");
+			    coordID = rs.getString("COORDINATOR");
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		// Throw error if course was not found
+		if (courseName == null)
+			throw new InstanceNotFound();
+		
+		// Search through database for topics 
+		rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
+		
+		// Go through result set and build course
+		try {
+			while (rs.next()) {
+			    String topicDesc = rs.getString("DESCRIPTION");
+			    topics.add(topicDesc);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		// Search through database for prereq IDs
+		rs = SearchDB("ASS1_PREREQS", "COURSE", courseID);
+		
+		// Go through result set and build course
+		try {
+			while (rs.next()) {
+			    String prereqID = rs.getString("PREREQ");
+			    prereqIDs.add(prereqID);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		// Load coordinator as Staff
+		coordinator = (Staff) LoadUser(coordID);
+		
+		// Load prereqs as Courses
+		for (String prereqID : prereqIDs) {
+			
+			Course prereq = LoadCourse(prereqID);
+			prereqs.add(prereq);
+		}
+		
+		return course;
+	}
+	
+	public static CourseOffering LoadOffering (String offerID) {
+		
+		return new CourseOffering();
 	}
 	
 	// This function will eventually hold the SQL calls, for now it just has a local array
@@ -107,6 +233,8 @@ public class Reader {
 		// Build sql query to select the key value from the table
 		String query = "SELECT * FROM " + table;
 		query += " WHERE " + key + "='" + value + "'";
+		
+		System.out.println(query);
 		
 		// Attempt to run statement on oracle server
 		ResultSet rs = null;

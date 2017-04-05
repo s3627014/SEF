@@ -6,16 +6,18 @@ public class Course {
 	private String courseName;
 	private String courseID;
 	private String desc;
+	private Staff coordinator;
 	private ArrayList<Course> prereqs;
 	private ArrayList<String> topics;
 	private ArrayList<Student> exemptStudents;
 	
 	// CONSTRUCTORS
-	public Course (String courseName, String courseID, String desc, ArrayList<Course>prereqs,
-			ArrayList<String> topics) {
+	public Course (String courseName, String courseID, String desc, Staff coordinator, 
+			ArrayList<Course>prereqs, ArrayList<String> topics) {
 		this.courseName = courseName;
 		this.courseID = courseID;
 		this.desc = desc;
+		this.coordinator = coordinator;
 		this.prereqs = prereqs;
 		this.topics = topics;
 	}
@@ -31,8 +33,12 @@ public class Course {
 		return this.courseID;
 	}
 	
-	public String getCourseDesc () {
+	public String getDesc () {
 		return this.desc;
+	}
+	
+	public Staff getCoordinator () {
+		return this.coordinator;
 	}
 	
 	public ArrayList<String> getTopics () {
