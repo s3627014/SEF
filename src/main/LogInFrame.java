@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import java.awt.Font;
 
 public class LogInFrame extends JFrame {
 
@@ -29,6 +30,7 @@ public class LogInFrame extends JFrame {
 			public void run() {
 				try {
 					LogInFrame frame = new LogInFrame();
+					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +51,7 @@ public class LogInFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnLogin = new JButton("Login");
-
+		getRootPane().setDefaultButton(btnLogin);
 		btnLogin.setBounds(644, 203, 171, 41);
 		contentPane.add(btnLogin);
 		
@@ -70,6 +72,11 @@ public class LogInFrame extends JFrame {
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(55, 139, 156, 33);
 		contentPane.add(lblPassword);
+		
+		JLabel lblCourseManager = new JLabel("Course Manager");
+		lblCourseManager.setFont(new Font("Dialog", Font.BOLD, 31));
+		lblCourseManager.setBounds(388, 12, 240, 33);
+		contentPane.add(lblCourseManager);
 		
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -102,5 +109,6 @@ public class LogInFrame extends JFrame {
 				
 			}
 		});
+		
 	}
 }
