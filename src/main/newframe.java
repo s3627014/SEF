@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JSpinner;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -68,6 +69,15 @@ public class newframe extends JFrame {
 		
 		btnLogOut.setBounds(712, 478, 171, 41);
 		contentPane.add(btnLogOut);
+		
+		JButton btnTestButton = new JButton("TEST BUTTON");
+		btnTestButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Password incorrect.");
+			}
+		});
+		btnTestButton.setBounds(220, 467, 185, 27);
+		contentPane.add(btnTestButton);
 	}
 	
 	private void Jlist() {
