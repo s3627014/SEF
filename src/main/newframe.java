@@ -13,6 +13,7 @@ import javax.swing.JSeparator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
@@ -46,19 +47,19 @@ public class newframe extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		Jlist();
-		
+
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				try {
-					
+
 					LogInFrame regFace = new LogInFrame();
 					regFace.setVisible(true);
 					dispose();
-					
+
 				}
 				catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -66,11 +67,11 @@ public class newframe extends JFrame {
 				}
 			}
 		});
-		
-		
+
+
 		btnLogOut.setBounds(712, 478, 171, 41);
 		contentPane.add(btnLogOut);
-		
+
 		JButton btnTestButton = new JButton("TEST BUTTON");
 		btnTestButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -86,17 +87,26 @@ public class newframe extends JFrame {
 		btnTestButton.setBounds(220, 467, 185, 27);
 		contentPane.add(btnTestButton);
 	}
-	
+
 	private void Jlist() {
-		
-		JList<String> list; 
+
+		JList<String> list;
 		//states an array
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		//change when database is up and running
-		listModel.addElement("example1");
-		listModel.addElement("example2");
+		Student student = new Student();
+		try {
+			ResultSet courses = student.listCourses();
+			while(courses.next()){
+				listModel.addElement(courses.getString("COURSENAME"));
+
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		list = new JList<>(listModel);
 		list.setBounds(26, 28, 857, 234);
-		contentPane.add(list);		
+		contentPane.add(list);
 	}
 }

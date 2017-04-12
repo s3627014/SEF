@@ -17,11 +17,10 @@ public class Student extends User {
 	public Student() {
 
 	}
-	public static void listCourses() throws SQLException {
+	public static ResultSet listCourses() throws SQLException {
 		Reader reader = new Reader();
 		ResultSet courseList = reader.GetTable("ASS1_COURSES");
-		System.out.println(courseList.getString("COURSENAME"));
-		courseList.next();
-		System.out.println(courseList.getString("COURSENAME"));
+		return courseList;
+
 	}
 }
