@@ -1,11 +1,11 @@
 package test;
 import main.*;
+import errors.*;
 import static org.junit.Assert.*;
-import main.PasswordIncorrect;
-import main.User;
-import main.UserNotFound;
 
 import org.junit.*;
+
+import errors.PasswordIncorrect;
 
 public class TestLogin {
 	
@@ -14,28 +14,38 @@ public class TestLogin {
 		
 	}
 
-	@Test
-	public void everythingRightTest () throws Exception {
-		User user = User.login("s11111", "pass");
+	@Test (timeout=1000)
+	public void studentLogin () throws Exception {
+		Student user = (Student) User.login("s12345", "pass");
 		assertEquals("John", user.getFirstName());
-		user = User.login("s22222", "pass");
-		assertEquals("Jane", user.getFirstName());
-		user = User.login("s33333", "pass");
-		assertEquals("Mohammed", user.getFirstName());
+	}
+	
+	@Test (timeout=1000)
+	public void adminLogin () throws Exception {
+		Admin user = (Admin) User.login("a123456", "pass");
+		assertEquals("Bland", user.getFirstName());
+	}
+	
+	@Test (timeout=1000)
+	public void staffLogin () throws Exception {
+		Staff user = (Staff) User.login("e12345", "pass");
+		assertEquals("Halil", user.getFirstName());
+	}
+	
+	@Test (timeout=1000)
+	public void progCoordLogin () throws Exception {
+		ProgramCoordinator user = (ProgramCoordinator) User.login("e23456", "pass");
+		assertEquals("CompSciGuy", user.getFirstName());
 	}
 
-	@Test (expected=UserNotFound.class)
+	@Test (expected=InstanceNotFound.class)
 	public void userNotFound () throws Exception {
 		User user = User.login("s00000", "pass");
-		user = User.login("s22222", "pass");
-		user = User.login("s33333", "pass");
 	}
 
 	@Test (expected=PasswordIncorrect.class)
 	public void wrongPasswordTest () throws Exception {
-		User user = User.login("s11111", "wrong");
-		user = User.login("s22222", "pass");
-		user = User.login("s33333", "pass");
+		User user = User.login("s12345", "wrong");
 	}
 	@Test (expected=PasswordIncorrect.class)
 	public void wrongPasswordFormatTest () throws Exception {

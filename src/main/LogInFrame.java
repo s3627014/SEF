@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
 
+import errors.*;
+
 public class LogInFrame extends JFrame {
 
 	private JPanel contentPane;
@@ -89,7 +91,7 @@ public class LogInFrame extends JFrame {
 					regFace.setVisible(true);
 					dispose();
 				}
-				catch (UserNotFound err){
+				catch (InstanceNotFound err){
 					JOptionPane.showMessageDialog(null, "User not found.");
 					txtUserName.setText("");
 					txtPassWord.setText("");
