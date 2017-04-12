@@ -298,7 +298,7 @@ public class Reader {
 		// Return user if found in database
 		return(rs);
 	}
-	
+	 
 	// This function will eventually hold the SQL calls, for now it just has a local array
 	public ResultSet GetTable (String table) {
 		
