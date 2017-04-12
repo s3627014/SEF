@@ -13,6 +13,7 @@ import javax.swing.JSeparator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class newframe extends JFrame {
@@ -73,7 +74,13 @@ public class newframe extends JFrame {
 		JButton btnTestButton = new JButton("TEST BUTTON");
 		btnTestButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Password incorrect.");
+				Student student = new Student();
+				try {
+					student.listCourses();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnTestButton.setBounds(220, 467, 185, 27);

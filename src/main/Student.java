@@ -1,4 +1,6 @@
 package main;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Student extends User {
@@ -14,5 +16,12 @@ public class Student extends User {
 
 	public Student() {
 
+	}
+	public static void listCourses() throws SQLException {
+		Reader reader = new Reader();
+		ResultSet courseList = reader.GetTable("ASS1_COURSES");
+		System.out.println(courseList.getString("COURSENAME"));
+		courseList.next();
+		System.out.println(courseList.getString("COURSENAME"));
 	}
 }
