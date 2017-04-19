@@ -1,8 +1,12 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import main.Course;
 import main.CourseOffering;
+import main.Mark;
 import main.Reader;
 import main.User;
 
@@ -51,10 +55,14 @@ public class TestReader {
 	public void testOfferLoad() throws InstanceNotFound {
 		Reader reader = new Reader();
 		CourseOffering offer = reader.LoadOffering("o12345");
-		
-		offer.print();
-		
 		assertEquals(offer.getCourse().getCourseName(), "Software Engineering Fundamentals");
 	}
 
+	@Test (timeout=5000)
+	public void testMarksLoad() throws InstanceNotFound {
+		Reader reader = new Reader();
+		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", "s12345");
+		assertEquals(marks.get(0).getResult(), "82");
+	//	assertEquals(marks.get(1).getResult(), "71");
+	}
 }

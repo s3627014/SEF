@@ -6,6 +6,10 @@ public class CourseOffering {
 	Course course;
 	Staff lecturer;
 	
+	public CourseOffering (String offerID) {
+		this.offerID = offerID;
+	}
+	
 	public CourseOffering (String offerID, DateTime semester, Course course, Staff lecturer) {
 		this.offerID = offerID;
 		this.semester = semester;

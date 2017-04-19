@@ -14,7 +14,7 @@ public class Reader {
 	private ArrayList<User> users = new ArrayList<User>();
 	private ArrayList<Course> courses = new ArrayList<Course>();
 	private ArrayList<CourseOffering> offerings = new ArrayList<CourseOffering>();
-	
+	private ArrayList<Mark> allMarks = new ArrayList<Mark>();	
 	
 	// CHECKS
 	private User CheckForUser (String userID) {
@@ -50,6 +50,28 @@ public class Reader {
 		for (CourseOffering offer : offerings) {
 			if (offer.getOfferID().equals(offerID)){
 				result = offer;
+			}
+		}
+		
+		return result;
+	}
+	
+	private Mark CheckForMark (String studentID, String offering, String institution) {
+		Mark result = null;
+		
+		// Go through marks and check for match
+		for (Mark mark : allMarks) {
+			if (institution == null && mark.getClass() == InternalMark.class){
+				InternalMark m = (InternalMark) mark;
+				if (studentID.equals(m.getStudent().getUserID()) && 
+						offering.equals(m.getOffer().getOfferID()))
+					result = m;
+			}
+			else if (institution != null && mark.getClass() == ExternalMark.class){
+				ExternalMark m = (ExternalMark) mark;
+				if (studentID.equals(m.getStudent().getUserID()) && 
+						offering.equals(m.getCourse()) && institution.equals(m.getInstitution()))
+					result = m;
 			}
 		}
 		
@@ -110,19 +132,7 @@ public class Reader {
 			}
 			
 			// Load internal marks
-			rs = SearchDB("ASS1_INTLMARKS", "STUDENT", userID);
-			
-			// Go through result set and build overloads
-			ArrayList<Mark> marks = new ArrayList<Mark>();
-			try {
-				while (rs.next()) {
-				    String offerID = rs.getString("OFFERING");
-				    String result = rs.getString("MARK");
-				    Mark mark = new Mark(userID, offerID, result);
-				}
-			} catch (SQLException err) {
-				System.out.println(err);
-			}
+			ArrayList<Mark> marks = LoadMarks("STUDENT", userID);
 			
 			// Set up student
 			Student student = new Student(userID, pass, fName, lName, overloadPerms, marks);
@@ -335,6 +345,101 @@ public class Reader {
 		offer.setAll(offerID, semester, course, lecturer);
 		
 		return offer;
+	}
+	
+	public ArrayList<Mark> LoadMarks (String key, String value) throws InstanceNotFound {
+		
+		// Set an empty list up
+		ArrayList<Mark> marks = new ArrayList<Mark>();
+		
+		// Search through database for internal marks 
+		ResultSet rs = SearchDB("ASS1_INTLMARKS", key, value);
+		
+		// Go through result set and build internal marks
+		try {
+			while (rs.next()) {
+				// Start with null variables
+				Student student = null;
+				CourseOffering offer = null;
+				
+				// Get gotten values
+				String studentID = rs.getString("STUDENT");
+				String offerID = rs.getString("OFFERING");
+				String result = rs.getString("MARK");
+				
+				// Build mark
+				Student tempStudent = new Student(studentID);
+				CourseOffering tempOffer = new CourseOffering(offerID);
+				InternalMark mark = new InternalMark(tempStudent, tempOffer, result);
+				
+				// Check that mark doesn't already exist
+				if (CheckForMark(studentID, offerID, null) != null){
+					continue;
+				}
+				
+				// Otherwise need to assemble mark and add to lists
+				allMarks.add(mark);
+				
+				// Load student and offer
+				student = (Student) LoadUser(studentID);
+				offer = LoadOffering(offerID);
+				
+				// Set up mark again
+				mark.setAll(student, offer, result);
+				System.out.println("Adding INTL Mark:" + mark);
+				marks.add(mark);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		System.out.println("After INTL: " + marks.size());
+		
+		// Search through database for external marks 
+		rs = SearchDB("ASS1_EXTLMARKS", key, value);
+		
+		// Go through result set and build external marks
+		try {
+			while (rs.next()) {
+				// Start with null variables
+				Student student = null;
+				
+				// Get gotten values
+				String studentID = rs.getString("STUDENT");
+				String course = rs.getString("COURSE");
+				String institution = rs.getString("INSTITUTION");
+				String description = rs.getString("DESCRIPTION");
+				Date startDate = rs.getDate("STARTDATE");
+				String result = rs.getString("MARK");
+				
+				// Build mark
+				Student tempStudent = new Student(studentID);
+				ExternalMark mark = new ExternalMark(tempStudent, course, institution, description,
+						startDate, result);
+				
+				// Check that mark doesn't already exist
+				if (CheckForMark(studentID, course, institution) != null){
+					continue;
+				}
+				
+				// Otherwise need to assemble mark and add to lists
+				allMarks.add(mark);
+				
+				// Load student and offer
+				student = (Student) LoadUser(studentID);
+				
+				// Set up mark again
+				mark.setAll(student, course, institution, description, startDate, result);
+				System.out.println("Adding EXTL Mark:" + mark);
+				marks.add(mark);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}		
+		
+		System.out.println("After EXTL: " + marks.size());
+		
+		return marks;
 	}
 	
 	// This function will eventually hold the SQL calls, for now it just has a local array
