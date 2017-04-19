@@ -14,25 +14,25 @@ public class TestLogin {
 		
 	}
 
-	@Test (timeout=1000)
+	@Test (timeout=3000)
 	public void studentLogin () throws Exception {
 		Student user = (Student) User.login("s12345", "pass");
 		assertEquals("John", user.getFirstName());
 	}
 	
-	@Test (timeout=1000)
+	@Test (timeout=3000)
 	public void adminLogin () throws Exception {
-		Admin user = (Admin) User.login("a123456", "pass");
+		Admin user = (Admin) User.login("a12345", "pass");
 		assertEquals("Bland", user.getFirstName());
 	}
 	
-	@Test (timeout=1000)
+	@Test (timeout=3000)
 	public void staffLogin () throws Exception {
 		Staff user = (Staff) User.login("e12345", "pass");
 		assertEquals("Halil", user.getFirstName());
 	}
 	
-	@Test (timeout=1000)
+	@Test (timeout=3000)
 	public void progCoordLogin () throws Exception {
 		ProgramCoordinator user = (ProgramCoordinator) User.login("e23456", "pass");
 		assertEquals("CompSciGuy", user.getFirstName());
@@ -47,17 +47,13 @@ public class TestLogin {
 	public void wrongPasswordTest () throws Exception {
 		User user = User.login("s12345", "wrong");
 	}
-	@Test (expected=PasswordIncorrect.class)
+	@Test (expected=WrongFormat.class)
 	public void wrongPasswordFormatTest () throws Exception {
-		User user = User.login("s11111", "p a s s");
-		user = User.login("s22222", "pass");
-		user = User.login("s33333", "pass");
+		User user = User.login("s12345", "p a s s");
 	}
-	@Test (expected=UserNotFound.class)
+	@Test (expected=WrongFormat.class)
 	public void userWrongFormat () throws Exception {
 		User user = User.login("s000 00", "pass");
-		user = User.login("s22222", "pass");
-		user = User.login("s33333", "pass");
 	}
 	
 	@After

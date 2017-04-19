@@ -174,6 +174,8 @@ public class Reader {
 		else if (userID.startsWith("a")) {
 			
 			// Make admin specific loads
+			Admin admin = new Admin(userID, pass, fName, lName);
+			return admin;
 		}
 		
 		return user;
