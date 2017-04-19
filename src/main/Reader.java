@@ -1,5 +1,6 @@
 package main;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -12,7 +13,10 @@ import errors.*;
 public class Reader {
 	private ArrayList<User> users = new ArrayList<User>();
 	private ArrayList<Course> courses = new ArrayList<Course>();
+	private ArrayList<CourseOffering> offerings = new ArrayList<CourseOffering>();
 	
+	
+	// CHECKS
 	private User CheckForUser (String userID) {
 		User result = null;
 		
@@ -39,6 +43,21 @@ public class Reader {
 		return result;
 	}
 	
+	private CourseOffering CheckForOffer (String offerID) {
+		CourseOffering result = null;
+		
+		// Go through users and check for match
+		for (CourseOffering offer : offerings) {
+			if (offer.getOfferID().equals(offerID)){
+				result = offer;
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	// LOADS
 	public User LoadUser (String userID) throws InstanceNotFound {
 		
 		// Check user hasn't been read in already
@@ -261,9 +280,61 @@ public class Reader {
 		return course;
 	}
 	
-	public CourseOffering LoadOffering (String offerID) {
+	public CourseOffering LoadOffering (String offerID) throws InstanceNotFound {
+		// Check user hasn't been read in already
+		CourseOffering offer = CheckForOffer(offerID);
+		if (offer != null)
+			return offer;
 		
-		return new CourseOffering();
+		// If it doesn't exist start everything at null
+		DateTime semester = null;
+		Course course = null;
+	    Staff lecturer = null;
+	    String courseID = null;
+	    String lecturerID = null;
+		
+		// Search through database for course 
+		ResultSet rs = SearchDB("ASS1_OFFERINGS", "OFFERID", offerID);
+		
+		// Go through result set and build offering
+		try {
+			while (rs.next()) {
+				Date semesterDate = rs.getDate("SEMESTER");
+				courseID = rs.getString("COURSE");
+				lecturerID = rs.getString("TEACHER");
+				
+				// Create semester date
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(semesterDate);
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				int month = cal.get(Calendar.MONTH);
+				int year = cal.get(Calendar.YEAR);
+				semester = new DateTime(day, month, year);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		// Throw error if offering was not found
+		if (semester == null)
+			throw new InstanceNotFound();
+		
+		// Build temporary offering object
+		offer = new CourseOffering(offerID, semester, course, lecturer);
+		
+		// Add to list of loaded users before loading secondary tables
+		offerings.add(offer);			
+		
+		// Load course
+		course = LoadCourse(courseID);
+		
+		// Load lecturer as Staff
+		lecturer = (Staff) LoadUser(lecturerID);
+		
+		// Recreate course offering
+		offer.setAll(offerID, semester, course, lecturer);
+		
+		return offer;
 	}
 	
 	// This function will eventually hold the SQL calls, for now it just has a local array

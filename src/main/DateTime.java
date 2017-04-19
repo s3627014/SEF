@@ -75,9 +75,9 @@ public class DateTime {
 	}
 	
 	// Advances date/time by specified days, hours and mins for testing purposes
-		public void setAdvance(int days, int hours, int mins)
-		{
-			advance = ((days * 24L + hours) * 60L) * 60000L;
-		}
+	public void setAdvance(int days, int hours, int mins)
+	{
+		advance = ((days * 24L + hours) * 60L) * 60000L;
+	}
 	
 }
