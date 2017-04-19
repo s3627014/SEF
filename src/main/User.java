@@ -1,6 +1,7 @@
 package main;
 
 import errors.PasswordIncorrect;
+import errors.WrongFormat;
 
 public class User {
 	protected String id;
@@ -19,10 +20,16 @@ public class User {
 	
 	public static User login(String userID, String password) throws Exception {
 		User user = null;
+		
+		// Check for format
+		if (userID.contains(" ") || password.contains(" ")){
+			throw new WrongFormat();
+		}
 
 		Reader reader = new Reader();
 		user = reader.LoadUser(userID);
 
+		// Check for correct password
 		if (!user.checkPassword(password)) {
 			throw new PasswordIncorrect();
 		}

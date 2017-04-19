@@ -1,13 +1,19 @@
 package main;
 
 public class Mark {
-	String userID;
-	String offerID;
-	String result;
+	protected Student student;
+	protected String result;
 	
-	public Mark (String userID, String offerID, String result) {
-		this.userID = userID;
-		this.offerID = offerID;
+	public Mark (Student student, String result) {
+		this.student = student;
 		this.result = result;
+	}
+	
+	public Student getStudent () {
+		return student;
+	}
+	
+	public String getResult () {
+		return result;
 	}
 }
