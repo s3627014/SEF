@@ -7,4 +7,19 @@ public class OverloadPerms {
 	public void addSemester (DateTime semester) {
 		this.semesters.add(semester);
 	}
+	
+	public ArrayList<DateTime> getSemesters () {
+		return semesters;
+	}
+	
+	public boolean checkSemester (DateTime semester) {
+		boolean result = false;
+		
+		for (DateTime s : semesters) {
+			if (semester.equals(s))
+				result = true;
+		}
+		
+		return result;
+	}
 }

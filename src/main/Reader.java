@@ -11,83 +11,12 @@ import errors.*;
 
 
 public class Reader {
-	private ArrayList<User> users = new ArrayList<User>();
-	private ArrayList<Course> courses = new ArrayList<Course>();
-	private ArrayList<CourseOffering> offerings = new ArrayList<CourseOffering>();
-	private ArrayList<Mark> allMarks = new ArrayList<Mark>();	
 	
-	// CHECKS
-	private User CheckForUser (String userID) {
-		User result = null;
-		
-		// Go through users and check for match
-		for (User user : users) {
-			if (user.getUserID().equals(userID)){
-				result = user;
-			}
-		}
-		
-		return result;
-	}
-	
-	private Course CheckForCourse (String courseID) {
-		Course result = null;
-		
-		// Go through users and check for match
-		for (Course course : courses) {
-			if (course.getCourseID().equals(courseID)){
-				result = course;
-			}
-		}
-		
-		return result;
-	}
-	
-	private CourseOffering CheckForOffer (String offerID) {
-		CourseOffering result = null;
-		
-		// Go through users and check for match
-		for (CourseOffering offer : offerings) {
-			if (offer.getOfferID().equals(offerID)){
-				result = offer;
-			}
-		}
-		
-		return result;
-	}
-	
-	private Mark CheckForMark (String studentID, String offering, String institution) {
-		Mark result = null;
-		
-		// Go through marks and check for match
-		for (Mark mark : allMarks) {
-			if (institution == null && mark.getClass() == InternalMark.class){
-				InternalMark m = (InternalMark) mark;
-				if (studentID.equals(m.getStudent().getUserID()) && 
-						offering.equals(m.getOffer().getOfferID()))
-					result = m;
-			}
-			else if (institution != null && mark.getClass() == ExternalMark.class){
-				ExternalMark m = (ExternalMark) mark;
-				if (studentID.equals(m.getStudent().getUserID()) && 
-						offering.equals(m.getCourse()) && institution.equals(m.getInstitution()))
-					result = m;
-			}
-		}
-		
-		return result;
-	}
-	
-	
-	// LOADS
 	public User LoadUser (String userID) throws InstanceNotFound {
+		System.out.println("Loading User");
 		
-		// Check user hasn't been read in already
-		User user = CheckForUser(userID);
-		if (user != null)
-			return user;
-		
-		// If it doesn't exist start everything at null
+		// Set everything to null
+		User user = null;
 	    String fName = null;
 	    String lName = null;
 	    String pass = null;
@@ -116,89 +45,59 @@ public class Reader {
 		if (userID.startsWith("s")) {
 			
 			// Load overloads
-			rs = SearchDB("ASS1_OVERLOADS", "STUDENT", userID);
-			
-			// Go through result set and build overloads
-			OverloadPerms overloadPerms = new OverloadPerms();
-			try {
-				while (rs.next()) {
-				    Date dateSem = rs.getDate("SEMESTER");
-				// Waiting on Tim to create convertDate function
-				//    DateTime semester = DateTime.convertDate(dateSem);
-				//    overloadPerms.addSemester(semester);
-				}
-			} catch (SQLException err) {
-				System.out.println(err);
-			}
-			
-			// Load internal marks
-			ArrayList<Mark> marks = LoadMarks("STUDENT", userID);
+ 			rs = SearchDB("ASS1_OVERLOADS", "STUDENT", userID);
+ 			
+ 			// Go through result set and build overloads
+ 			OverloadPerms overloadPerms = new OverloadPerms();
+ 			try {
+ 				while (rs.next()) {
+ 				    Date dateSem = rs.getDate("SEMESTER");
+ 				    DateTime semester;
+ 				    
+ 					// Create semester date
+ 					Calendar cal = Calendar.getInstance();
+ 					cal.setTime(dateSem);
+ 					int day = cal.get(Calendar.DAY_OF_MONTH);
+ 					int month = cal.get(Calendar.MONTH);
+ 					int year = cal.get(Calendar.YEAR);
+ 					semester = new DateTime(day, month, year);
+ 					
+ 					// Set overloadPerm semester date
+ 					overloadPerms.addSemester(semester);
+ 				}
+ 			} catch (SQLException err) {
+ 				System.out.println(err);
+  			}
 			
 			// Set up student
-			Student student = new Student(userID, pass, fName, lName, overloadPerms, marks);
-			
-			// Add and return
-			users.add(student);
+			Student student = new Student(userID, pass, fName, lName, overloadPerms);
 			return student;
 		}
 		else if (userID.startsWith("e")) {
 			
-			// Load offerings (classes taught)
-			rs = SearchDB("ASS1_OFFERINGS", "TEACHER", userID);
-			
-			// Go through result set and build offerings
-			ArrayList<String> offerIDs = new ArrayList<String>();
-			ArrayList<CourseOffering> offerings = new ArrayList<CourseOffering>();
-			try {
-				while (rs.next()) {
-				    String offerID = rs.getString("OFFERID");
-				    offerIDs.add(offerID);
-				}
-			} catch (SQLException err) {
-				System.out.println(err);
-			}
-			
-			// Load offerings as CourseOfferings
-			for (String offerID : offerIDs){
-				CourseOffering offering = LoadOffering(offerID);
-				offerings.add(offering);
-			}
-			
-			// Load courses (courses coordinated)
-			rs = SearchDB("ASS1_COURSES", "COORDINATOR", userID);
-			
-			// Go through result set and build offerings
-			ArrayList<String> courseIDs = new ArrayList<String>();
-			ArrayList<Course> courses = new ArrayList<Course>();
-			try {
-				while (rs.next()) {
-				    String courseID = rs.getString("COURSEID");
-				    courseIDs.add(courseID);
-				}
-			} catch (SQLException err) {
-				System.out.println(err);
-			}
-			
-			// Build temporary object and add to list before other loads
-			Staff staff = new Staff(userID, pass, fName, lName, offerings);	
-			users.add(staff);
-			
-			// Load courses as Courses
-			for (String courseID : courseIDs){
-				Course course = LoadCourse(courseID);
-				courses.add(course);
-			}
-			
-			// Set up staff
-			if (courses.size() > 0){
-				staff = (ProgramCoordinator) new ProgramCoordinator(userID, pass, fName, lName, 
-						offerings, courses);
-				return staff;
-			}
-			else {	
-				return staff;
-			}
-			
+			// Check if is a program coordinator
+ 			rs = SearchDB("ASS1_COURSES", "COORDINATOR", userID);
+ 			
+ 			// Go through result set and get courseIDs
+ 			ArrayList<String> courseIDs = new ArrayList<String>();
+ 			try {
+ 				while (rs.next()) {
+ 				    String courseID = rs.getString("COURSEID");
+ 				   courseIDs.add(courseID);
+ 				}
+ 			} catch (SQLException err) {
+ 				System.out.println(err);
+ 			}
+ 			
+			// Set up staff depending on whether is program coordinator
+ 			if (courseIDs.size() > 0){
+ 				ProgramCoordinator staff = new ProgramCoordinator(userID, pass, fName, lName);	
+ 				return staff;	
+ 			}
+ 			else {
+ 				Staff staff = new Staff(userID, pass, fName, lName);	
+ 				return staff;	
+ 			}		
 		}
 		else if (userID.startsWith("a")) {
 			
@@ -211,20 +110,15 @@ public class Reader {
 	}
 	
 	public Course LoadCourse (String courseID) throws InstanceNotFound {
+		System.out.println("Loading Course");
 		
-		// Check user hasn't been read in already
-		Course course = CheckForCourse(courseID);
-		if (course != null)
-			return course;
-		
-		// If it doesn't exist start everything at null
+		// Set everything to null
+		Course course = null;
 	    String courseName = null;
 	    String description = null;
 	    String coordID = null;
 	    Staff coordinator = null;
-	    ArrayList<String> prereqIDs = new ArrayList<String>();
-	    ArrayList<Course> prereqs = new ArrayList<Course>();
-	    ArrayList<String> topics = new ArrayList<String>();
+ 	    ArrayList<String> topics = new ArrayList<String>();
 		
 		// Search through database for course 
 		ResultSet rs = SearchDB("ASS1_COURSES", "COURSEID", courseID);
@@ -244,59 +138,59 @@ public class Reader {
 		if (courseName == null)
 			throw new InstanceNotFound();
 		
-		// Build temporary course object
-		course = new Course(courseName, courseID, description, coordinator, prereqs, 
-				topics);
-		
-		// Add to list of loaded users before loading secondary tables
-		courses.add(course);			
-		
 		// Search through database for topics 
-		rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
+ 		rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
+ 		
+ 		// Go through result set and build course
+ 		try {
+ 			while (rs.next()) {
+ 			    String topicDesc = rs.getString("DESCRIPTION");
+ 			    topics.add(topicDesc);
+ 			}
+ 		} catch (SQLException err) {
+ 			System.out.println(err);
+ 		}
 		
-		// Go through result set and build course
-		try {
-			while (rs.next()) {
-			    String topicDesc = rs.getString("DESCRIPTION");
-			    topics.add(topicDesc);
-			}
-		} catch (SQLException err) {
-			System.out.println(err);
-		}
-		
-		// Search through database for prereq IDs
-		rs = SearchDB("ASS1_PREREQS", "COURSE", courseID);
-		
-		// Go through result set and build course
-		try {
-			while (rs.next()) {
-			    String prereqID = rs.getString("PREREQ");
-			    prereqIDs.add(prereqID);
-			}
-		} catch (SQLException err) {
-			System.out.println(err);
-		}
-		
-		// Load coordinator as Staff
-		coordinator = (Staff) LoadUser(coordID);
-		
-		// Load prereqs as Courses
-		for (String prereqID : prereqIDs) {
-			
-			Course prereq = LoadCourse(prereqID);
-			prereqs.add(prereq);
-		}
-		
+		// Set up course object
+		course = new Course(courseName, courseID, description, coordinator, topics);	
 		return course;
 	}
 	
-	public CourseOffering LoadOffering (String offerID) throws InstanceNotFound {
-		// Check user hasn't been read in already
-		CourseOffering offer = CheckForOffer(offerID);
-		if (offer != null)
-			return offer;
+	public ArrayList<Course> LoadPrereqs (String key, String value) throws InstanceNotFound {
+		System.out.println("Loading Prereqs");
 		
-		// If it doesn't exist start everything at null
+		// Set an empty list up
+		ArrayList<Course> prereqs = new ArrayList<Course>();
+		
+		// Search through database for offers 
+		ResultSet rs = SearchDB("ASS1_PREREQS", key, value);
+		
+		// Go through result set and build internal marks
+		try {
+			while (rs.next()) {
+				// Set all to null
+				Course prereq = null;
+				String prereqID = null;
+				
+				// Get gotten values
+				prereqID = rs.getString("PREREQ");
+				
+				// Load course and add
+				prereq = (Course) LoadCourse(prereqID);
+				prereqs.add(prereq);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		return prereqs;
+	}
+	
+	public CourseOffering LoadOffering (String offerID) throws InstanceNotFound {
+		System.out.println("Loading Offer");
+	
+		// Set all to null
+		CourseOffering offer = null;
 		DateTime semester = null;
 		Course course = null;
 	    Staff lecturer = null;
@@ -323,31 +217,74 @@ public class Reader {
 			}
 		} catch (SQLException err) {
 			System.out.println(err);
-		}
+		}			
+ 		
+ 		// Load course
+ 		course = LoadCourse(courseID);
+ 		
+ 		// Load lecturer as Staff
+ 		lecturer = (Staff) LoadUser(lecturerID);
 		
 		// Throw error if offering was not found
 		if (semester == null)
 			throw new InstanceNotFound();
 		
-		// Build temporary offering object
-		offer = new CourseOffering(offerID, semester, course, lecturer);
-		
-		// Add to list of loaded users before loading secondary tables
-		offerings.add(offer);			
-		
-		// Load course
-		course = LoadCourse(courseID);
-		
-		// Load lecturer as Staff
-		lecturer = (Staff) LoadUser(lecturerID);
-		
-		// Recreate course offering
-		offer.setAll(offerID, semester, course, lecturer);
-		
+		// Set up offer 
+		offer = new CourseOffering(offerID, semester, course, lecturer);	
 		return offer;
 	}
 	
+	public ArrayList<CourseOffering> LoadOfferings (String key, String value) throws InstanceNotFound {
+		System.out.println("Loading Offers");
+		
+		// Set an empty list up
+		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
+		
+		// Search through database for offers 
+		ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
+		
+		// Go through result set and build internal marks
+		try {
+			while (rs.next()) {
+				// Set all to null
+				String offerID = null;
+				DateTime semester = null;
+				Course course = null;
+			    Staff lecturer = null;
+			    String courseID = null;
+			    String lecturerID = null;
+				
+				// Get gotten values
+			    offerID = rs.getString("OFFERID");
+			    Date semesterDate = rs.getDate("SEMESTER");
+				courseID = rs.getString("COURSE");
+				lecturerID = rs.getString("TEACHER");
+				
+				// Create semester date
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(semesterDate);
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				int month = cal.get(Calendar.MONTH);
+				int year = cal.get(Calendar.YEAR);
+				semester = new DateTime(day, month, year);
+				
+				// Load student and offer
+				course = (Course) LoadCourse(courseID);
+				lecturer = (Staff) LoadUser(lecturerID);
+				
+				// Build offer
+				CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);
+				offers.add(offer);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		return offers;
+	}
+	
 	public ArrayList<Mark> LoadMarks (String key, String value) throws InstanceNotFound {
+		System.out.println("Loading Marks");
 		
 		// Set an empty list up
 		ArrayList<Mark> marks = new ArrayList<Mark>();
@@ -367,33 +304,17 @@ public class Reader {
 				String offerID = rs.getString("OFFERING");
 				String result = rs.getString("MARK");
 				
-				// Build mark
-				Student tempStudent = new Student(studentID);
-				CourseOffering tempOffer = new CourseOffering(offerID);
-				InternalMark mark = new InternalMark(tempStudent, tempOffer, result);
-				
-				// Check that mark doesn't already exist
-				if (CheckForMark(studentID, offerID, null) != null){
-					continue;
-				}
-				
-				// Otherwise need to assemble mark and add to lists
-				allMarks.add(mark);
-				
 				// Load student and offer
 				student = (Student) LoadUser(studentID);
 				offer = LoadOffering(offerID);
 				
-				// Set up mark again
-				mark.setAll(student, offer, result);
-				System.out.println("Adding INTL Mark:" + mark);
+				// Build mark
+				InternalMark mark = new InternalMark(student, offer, result);
 				marks.add(mark);
 			}
 		} catch (SQLException err) {
 			System.out.println(err);
 		}
-		
-		System.out.println("After INTL: " + marks.size());
 		
 		// Search through database for external marks 
 		rs = SearchDB("ASS1_EXTLMARKS", key, value);
@@ -412,38 +333,23 @@ public class Reader {
 				Date startDate = rs.getDate("STARTDATE");
 				String result = rs.getString("MARK");
 				
-				// Build mark
-				Student tempStudent = new Student(studentID);
-				ExternalMark mark = new ExternalMark(tempStudent, course, institution, description,
-						startDate, result);
-				
-				// Check that mark doesn't already exist
-				if (CheckForMark(studentID, course, institution) != null){
-					continue;
-				}
-				
-				// Otherwise need to assemble mark and add to lists
-				allMarks.add(mark);
-				
-				// Load student and offer
+				// Load student
 				student = (Student) LoadUser(studentID);
 				
-				// Set up mark again
-				mark.setAll(student, course, institution, description, startDate, result);
-				System.out.println("Adding EXTL Mark:" + mark);
+				// Build mark
+				ExternalMark mark = new ExternalMark(student, course, institution, description,
+						startDate, result);
 				marks.add(mark);
 			}
 		} catch (SQLException err) {
 			System.out.println(err);
 		}		
 		
-		System.out.println("After EXTL: " + marks.size());
-		
 		return marks;
 	}
 	
 	// This function will eventually hold the SQL calls, for now it just has a local array
-	public ResultSet SearchDB (String table, String key, String value) {
+	private ResultSet SearchDB (String table, String key, String value) {
 		
 		// Connect to database
 		Connection con = null;
