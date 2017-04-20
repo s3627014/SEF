@@ -12,6 +12,13 @@ public class Course {
 	private ArrayList<Student> exemptStudents;
 	
 	// CONSTRUCTORS
+	public Course (String courseName, String courseID, String desc, Staff coordinator) {
+		this.courseName = courseName;
+		this.courseID = courseID;
+		this.desc = desc;
+		this.coordinator = coordinator;
+	}
+	
 	public Course (String courseName, String courseID, String desc, Staff coordinator, 
 			ArrayList<Course>prereqs, ArrayList<String> topics) {
 		this.courseName = courseName;

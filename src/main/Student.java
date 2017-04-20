@@ -6,9 +6,15 @@ import java.util.ArrayList;
 public class Student extends User {
 	OverloadPerms overloadPerms;
 	ArrayList<Mark> marks;
+
+	public Student () {}
 	
 	public Student (String id) {
 		this.id = id;
+	}
+	
+	public Student (String id, String password, String fName, String lName){
+		super(id, password, fName, lName);
 	}
 
 	public Student (String id, String password, String fName, String lName, OverloadPerms overloadPerms,
@@ -17,10 +23,7 @@ public class Student extends User {
 		this.overloadPerms = overloadPerms;
 		this.marks = marks;
 	}
-
-	public Student () {
-
-	}
+	
 	public static ResultSet listCourses() throws SQLException {
 		Reader reader = new Reader();
 		ResultSet courseList = reader.GetTable("ASS1_COURSES");
