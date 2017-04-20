@@ -12,11 +12,13 @@ public class Course {
 	private ArrayList<Student> exemptStudents;
 	
 	// CONSTRUCTORS
-	public Course (String courseName, String courseID, String desc, Staff coordinator) {
+	public Course (String courseName, String courseID, String desc, Staff coordinator, 
+			ArrayList<String> topics) {
 		this.courseName = courseName;
 		this.courseID = courseID;
 		this.desc = desc;
 		this.coordinator = coordinator;
+		this.topics = topics;
 	}
 	
 	public Course (String courseName, String courseID, String desc, Staff coordinator, 
@@ -30,6 +32,10 @@ public class Course {
 	}
 	
 	public Course (){}
+	
+	public void setPrereqs (ArrayList<Course> prereqs) {
+		this.prereqs = prereqs;
+	}
 
 	// GETTERS
 	public String getCourseName () {
@@ -40,7 +46,7 @@ public class Course {
 		return this.courseID;
 	}
 	
-	public String getDesc () {
+	public String getDescription () {
 		return this.desc;
 	}
 	
@@ -50,6 +56,10 @@ public class Course {
 	
 	public ArrayList<String> getTopics () {
 		return this.topics;
+	}
+	
+	public ArrayList<Course> getPrereqs () {
+		return this.prereqs;
 	}
 	
 	// Check functions	
