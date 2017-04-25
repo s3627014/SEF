@@ -3,6 +3,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import errors.InstanceNotFound;
+
 public class Student extends User {
 	OverloadPerms overloadPerms;
 	ArrayList<Mark> marks;
@@ -21,10 +23,21 @@ public class Student extends User {
 		this.marks = marks;
 	}
 	
-	public static ResultSet listCourses () throws SQLException {
+	public ArrayList<CourseOffering> listCourses () throws SQLException {
+		
+		// Initialise reader and result
 		Reader reader = new Reader();
-		ResultSet courseList = reader.GetTable("ASS1_COURSES");
-		return courseList;
+		ArrayList<CourseOffering> classList = null;
+		
+		// Run reader function
+		try {
+			classList = reader.LoadClasses(this.id);
+		} catch (InstanceNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return classList;
 	}
 	
 	public OverloadPerms getOverloadPerms () {
