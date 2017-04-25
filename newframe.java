@@ -13,6 +13,8 @@ import javax.swing.JSeparator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
@@ -35,6 +37,7 @@ public class newframe extends JFrame {
 				}
 			}
 		});
+
 	}
 
 	/**
@@ -95,10 +98,10 @@ public class newframe extends JFrame {
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		//change when database is up and running
 		Student student = new Student();
-		
+
 		User user = new User();
-		
-		
+
+
 		Reader reader = new Reader();
 		try {
 			ResultSet offeringList = student.listCourses();
@@ -123,5 +126,34 @@ public class newframe extends JFrame {
 		list = new JList<>(listModel);
 		list.setBounds(26, 28, 857, 234);
 		contentPane.add(list);
+	    list.addMouseListener(new MouseAdapter(){
+	          @Override
+	          public void mouseClicked(MouseEvent e) {
+	              System.out.println("Mouse click.");
+	              int index = list.getSelectedIndex();
+	              System.out.println("Index Selected: " + index);
+	              String s = (String) list.getSelectedValue();
+	              System.out.println("Value Selected: " + s.toString());
+	              int response = JOptionPane.showConfirmDialog(null, "Do you want to withdraw from " + s.toString() + "?", "Confirm",
+	            	        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+	            	    if (response == JOptionPane.NO_OPTION) {
+	            	      System.out.println("No button clicked");
+	            	    } else if (response == JOptionPane.YES_OPTION) {
+	            	      System.out.println("Yes button clicked");
+	            	      Reader reader = new Reader();
+	            	      try {
+							reader.deleteRecord();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	            	    } else if (response == JOptionPane.CLOSED_OPTION) {
+	            	      System.out.println("JOptionPane closed");
+	            	    }
+	          }
+	    });
+		String t = list.getSelectedValue();
+		System.out.println(t);
 	}
+
 }
