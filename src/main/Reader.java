@@ -234,6 +234,55 @@ public class Reader {
 		return offer;
 	}
 	
+	public ArrayList<CourseOffering> LoadOfferings (String key, String value) throws InstanceNotFound {
+		System.out.println("Loading Offers");
+		
+		// Set an empty list up
+		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
+		
+		// Search through database for offers 
+		ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
+		
+		// Go through result set and build internal marks
+		try {
+			while (rs.next()) {
+				// Set all to null
+				String offerID = null;
+				DateTime semester = null;
+				Course course = null;
+			    Staff lecturer = null;
+			    String courseID = null;
+			    String lecturerID = null;
+				
+				// Get gotten values
+			    offerID = rs.getString("OFFERID");
+			    Date semesterDate = rs.getDate("SEMESTER");
+				courseID = rs.getString("COURSE");
+				lecturerID = rs.getString("TEACHER");
+				
+				// Create semester date
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(semesterDate);
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				int month = cal.get(Calendar.MONTH);
+				int year = cal.get(Calendar.YEAR);
+				semester = new DateTime(day, month, year);
+				
+				// Load student and offer
+				course = (Course) LoadCourse(courseID);
+				lecturer = (Staff) LoadUser(lecturerID);
+				
+				// Build offer
+				CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);
+				offers.add(offer);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
+		return offers;
+	}
+	
 	public ArrayList<Mark> LoadMarks (String key, String value) throws InstanceNotFound {
 		System.out.println("Loading Marks");
 		
@@ -297,130 +346,6 @@ public class Reader {
 		}		
 		
 		return marks;
-	}
-	
-	public ArrayList<CourseOffering> LoadOfferings (String key, String value) throws InstanceNotFound {
-		System.out.println("Loading Offers");
-		
-		// Set an empty list up
-		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
-		
-		// Search through database for offers 
-		ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
-		
-		// Go through result set and build internal marks
-		try {
-			while (rs.next()) {
-				// Set all to null
-				String offerID = null;
-				DateTime semester = null;
-				Course course = null;
-			    Staff lecturer = null;
-			    String courseID = null;
-			    String lecturerID = null;
-				
-				// Get gotten values
-			    offerID = rs.getString("OFFERID");
-			    Date semesterDate = rs.getDate("SEMESTER");
-				courseID = rs.getString("COURSE");
-				lecturerID = rs.getString("TEACHER");
-				
-				// Create semester date
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(semesterDate);
-				int day = cal.get(Calendar.DAY_OF_MONTH);
-				int month = cal.get(Calendar.MONTH);
-				int year = cal.get(Calendar.YEAR);
-				semester = new DateTime(day, month, year);
-				
-				// Load student and offer
-				course = (Course) LoadCourse(courseID);
-				lecturer = (Staff) LoadUser(lecturerID);
-				
-				// Build offer
-				CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);
-				offers.add(offer);
-			}
-		} catch (SQLException err) {
-			System.out.println(err);
-		}
-		
-		return offers;
-	}
-	
-	public ArrayList<CourseOffering> LoadClasses (String userID) throws InstanceNotFound {
-		System.out.println("Loading Enrolments");
-		
-		// Set an empty list up
-		ArrayList<CourseOffering> classes = new ArrayList<CourseOffering>();
-		
-		// If student get enrolments
-		if (userID.startsWith("s")){
-			
-			// Search through database for enrolment 
-			ResultSet rs = SearchDB("ASS1_ENROLMENTS", "STUDENT", userID);
-			
-			// Go through result set and build internal marks
-			try {
-				while (rs.next()) {
-					// Start with null variables
-					CourseOffering offer = null;
-					
-					// Get gotten values
-					String offerID = rs.getString("OFFERING");
-					
-					// Load student and offer
-					offer = LoadOffering(offerID);
-					classes.add(offer);
-				}
-			} catch (SQLException err) {
-				System.out.println(err);
-			}			
-		}
-		// If staff get offerings
-		else if (userID.startsWith("e")){
-			
-			// Search through database for internal marks 
-			ResultSet rs = SearchDB("ASS1_OFFERINGS", "TEACHER", userID);
-			
-			// Go through result set and build internal marks
-			try {
-				while (rs.next()) {
-					// Set all to null
-					String offerID = null;
-					DateTime semester = null;
-					Course course = null;
-				    Staff lecturer = null;
-				    String courseID = null;
-				    String lecturerID = null;
-					
-					// Get gotten values
-				    offerID = rs.getString("OFFERID");
-				    Date semesterDate = rs.getDate("SEMESTER");
-					courseID = rs.getString("COURSE");
-					lecturerID = rs.getString("TEACHER");
-					
-					// Create semester date
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(semesterDate);
-					int day = cal.get(Calendar.DAY_OF_MONTH);
-					int month = cal.get(Calendar.MONTH);
-					int year = cal.get(Calendar.YEAR);
-					semester = new DateTime(day, month, year);
-					
-					// Build offer
-					CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);					
-					classes.add(offer);
-				}
-			} catch (SQLException err) {
-				System.out.println(err);
-			}			
-		}
-		else {
-			throw new InstanceNotFound();
-		}
-		
-		return classes;
 	}
 	
 	// This function will eventually hold the SQL calls, for now it just has a local array

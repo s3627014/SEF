@@ -83,20 +83,4 @@ public class TestReader {
 		ArrayList<CourseOffering> offers = reader.LoadOfferings("TEACHER", "e12345");
 		assertEquals(offers.size(), 2);
 	}
-
-	@Test (timeout=5000)
-	public void testStudentClassesLoad() throws InstanceNotFound {
-		Reader reader = new Reader();
-		ArrayList<CourseOffering> offers = reader.LoadClasses("s12345");
-		assertEquals(offers.size(), 2);
-		offers = reader.LoadClasses("s23456");
-		assertEquals(offers.size(), 0);
-	}
-
-	@Test (timeout=5000)
-	public void testTeacherClassesLoad() throws InstanceNotFound {
-		Reader reader = new Reader();
-		ArrayList<CourseOffering> offers = reader.LoadClasses("e12345");
-		assertEquals(offers.size(), 2);
-	}
 }

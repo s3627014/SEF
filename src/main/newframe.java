@@ -12,13 +12,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-
-import errors.InstanceNotFound;
-
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class newframe extends JFrame {
@@ -32,7 +28,7 @@ public class newframe extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LogInFrame frame = new LogInFrame();
+					newframe frame = new newframe();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +40,7 @@ public class newframe extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public newframe(String userID) {
+	public newframe() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 941, 635);
 		contentPane = new JPanel();
@@ -52,7 +48,7 @@ public class newframe extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		Jlist(userID);
+		Jlist();
 
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(new ActionListener() {
@@ -92,41 +88,25 @@ public class newframe extends JFrame {
 		contentPane.add(btnTestButton);
 	}
 
-	private void Jlist(String userID) {
+	private void Jlist() {
 
 		JList<String> list;
 		//states an array
 		DefaultListModel<String> listModel = new DefaultListModel<>();
-		
-		// Get the user
-		Reader reader = new Reader();
-		User user = null;
+		//change when database is up and running
+		Student student = new Student();
 		try {
-			user = reader.LoadUser(userID);
-		} catch (InstanceNotFound e1) {
+			ResultSet courses = student.listCourses();
+			while(courses.next()){
+				listModel.addElement(courses.getString("COURSENAME"));
+
+			}
+		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		// Different display for different user types
-		if (user instanceof Student){
-
-			// Existing student stuff (changed to use new student .listCourses)
-			Student student = (Student) user;
-			ArrayList<CourseOffering> offers;
-			try {
-				offers = student.listCourses();
-				for (CourseOffering offer : offers) {
-					listModel.addElement(offer.getCourse().getCourseName());
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			list = new JList<>(listModel);
-			list.setBounds(26, 28, 857, 234);
-			contentPane.add(list);
-		}
-		
+		list = new JList<>(listModel);
+		list.setBounds(26, 28, 857, 234);
+		contentPane.add(list);
 	}
 }
