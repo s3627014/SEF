@@ -3,9 +3,9 @@ package main;
 public class Keypair {
 
 	public String key;
-	public String value;
+	public Object value;
 	
-	public Keypair (String key, String value) {
+	public Keypair (String key, Object value) {
 		this.key = key;
 		this.value = value;
 	}

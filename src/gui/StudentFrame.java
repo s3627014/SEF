@@ -1,4 +1,4 @@
-package main;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -12,13 +12,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
+
+import errors.InstanceNotFound;
+import main.CourseOffering;
+import main.Reader;
+import main.Student;
+import main.User;
+
 import java.awt.Font;
 
 public class StudentFrame extends JFrame {
@@ -32,7 +42,7 @@ public class StudentFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					StudentFrame frame = new StudentFrame();
+					LogInFrame frame = new LogInFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +54,7 @@ public class StudentFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public StudentFrame() {
+	public StudentFrame(String userID) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 941, 635);
 		contentPane = new JPanel();
@@ -52,7 +62,7 @@ public class StudentFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		Jlist();
+		Jlist(userID);
 
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(new ActionListener() {
@@ -101,20 +111,33 @@ public class StudentFrame extends JFrame {
 		contentPane.add(btnCourseOfferings);
 	}
 
-	private void Jlist() {
+	private void Jlist(String userID) {
 		//states an array
 		DefaultListModel<String> listModel = new DefaultListModel<>();
-		//change when database is up and running
-		Student student = new Student();
+		
+		// Load user 
+		Reader reader = new Reader();
+		User user = null;
 		try {
-			ResultSet courses = student.listCourses();
-			while(courses.next()){
-				listModel.addElement(courses.getString("COURSENAME"));
-
-			}
-		} catch (SQLException e1) {
+			user = reader.LoadUser(userID);
+		} catch (InstanceNotFound e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
+		}
+		
+		if (user instanceof Student) {
+			Student student = (Student) user;
+			
+			try {
+				ArrayList<CourseOffering> courses = student.listCourses();
+				for (CourseOffering course : courses){
+					listModel.addElement(course.getCourse().getCourseName());
+
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		
 	}

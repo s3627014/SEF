@@ -14,14 +14,16 @@ import errors.*;
 public class Reader {
 	
 	// LOAD ALL FUNCTIONS
+	
 	public ArrayList<Course> LoadAllCourses () throws InstanceNotFound {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		
-		// Search through database for course 
-		ResultSet rs = GetTable("ASS1_COURSES");
-		
 		// Go through result set and build course
 		try {
+			
+			// Search through database for course 
+			ResultSet rs = GetTable("ASS1_COURSES");
+			
 			while (rs.next()) {
 				// Set everything to null
 				Course course = null;
@@ -69,10 +71,38 @@ public class Reader {
 	public ArrayList<Course> LoadAllUsers () throws InstanceNotFound {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		
+		// Go through result set and build user
+		try {
+			
+			// Search through database for user 
+			ResultSet rs = GetTable("ASS1_USERS");
+			
+			while (rs.next()) {		
+				
+				// Set everything to null
+				User user = null;
+				String userID = null;
+			    String fName = null;
+			    String lName = null;
+			    String pass = null;
+			    
+			    // Get information
+				userID = rs.getString("USERID");
+			    fName = rs.getString("FNAME");
+			    lName = rs.getString("LNAME");
+			    pass = rs.getString("PASS");
+			    
+			    user = new User(userID, pass, fName, lName);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+		
 		return courses;
 	}
+
 	
-	// INDIVIDUAL LOAD FUNCTIONS
+	// SPECIFIC LOAD FUNCTIONS
 	
 	public User LoadUser (String userID) throws InstanceNotFound {
 		System.out.println("Loading User");
@@ -83,11 +113,12 @@ public class Reader {
 	    String lName = null;
 	    String pass = null;
 		
-		// Search through database for user 
-		ResultSet rs = SearchDB("ASS1_USERS", "USERID", userID);
-		
 		// Go through result set and build user
 		try {
+			
+			// Search through database for user 
+			ResultSet rs = SearchDB("ASS1_USERS", "USERID", userID);
+			
 			while (rs.next()) {				
 			    fName = rs.getString("FNAME");
 			    lName = rs.getString("LNAME");
@@ -105,13 +136,16 @@ public class Reader {
 		
 		// Check if student, staff or admin (will start with 's', 'e' or 'a' respectively)
 		if (userID.startsWith("s")) {
+	 			
+			// Student based variables
+			OverloadPerms overloadPerms = new OverloadPerms();
 			
-			// Load overloads
- 			rs = SearchDB("ASS1_OVERLOADS", "STUDENT", userID);
- 			
- 			// Go through result set and build overloads
- 			OverloadPerms overloadPerms = new OverloadPerms();
  			try {
+ 				// Load overloads
+ 				ResultSet rs = SearchDB("ASS1_OVERLOADS", "STUDENT", userID);
+ 	 			
+ 	 			// Go through result set and build overloads
+ 	 			
  				while (rs.next()) {
  				    Date dateSem = rs.getDate("SEMESTER");
  				    DateTime semester;
@@ -136,13 +170,14 @@ public class Reader {
 			return student;
 		}
 		else if (userID.startsWith("e")) {
-			
-			// Check if is a program coordinator
- 			rs = SearchDB("ASS1_COURSES", "COORDINATOR", userID);
  			
  			// Go through result set and get courseIDs
  			ArrayList<String> courseIDs = new ArrayList<String>();
  			try {
+ 				
+ 				// Check if is a program coordinator
+ 				ResultSet rs = SearchDB("ASS1_COURSES", "COORDINATOR", userID);
+ 				
  				while (rs.next()) {
  				    String courseID = rs.getString("COURSEID");
  				   courseIDs.add(courseID);
@@ -182,11 +217,12 @@ public class Reader {
 	    Staff coordinator = null;
  	    ArrayList<String> topics = new ArrayList<String>();
 		
-		// Search through database for course 
-		ResultSet rs = SearchDB("ASS1_COURSES", "COURSEID", courseID);
-		
 		// Go through result set and build course
 		try {
+			
+			// Search through database for course 
+			ResultSet rs = SearchDB("ASS1_COURSES", "COURSEID", courseID);
+			
 			while (rs.next()) {
 			    courseName = rs.getString("COURSENAME");
 			    description = rs.getString("DESCRIPTION");
@@ -199,12 +235,13 @@ public class Reader {
 		// Throw error if course was not found
 		if (courseName == null)
 			throw new InstanceNotFound();
-		
-		// Search through database for topics 
- 		rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
  		
  		// Go through result set and build course
  		try {
+ 			
+ 			// Search through database for topics 
+ 	 		ResultSet rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
+ 	 		
  			while (rs.next()) {
  			    String topicDesc = rs.getString("DESCRIPTION");
  			    topics.add(topicDesc);
@@ -224,11 +261,12 @@ public class Reader {
 		// Set everything to null
 		ArrayList<Course> courses = new ArrayList<Course>();
 		
-		// Search through database for courses with a matching name 
-		ResultSet rs = PartialSearchDB("ASS1_COURSES", "COURSENAME", searchTerm);
-		
 		// Go through result set and build course
 		try {
+			
+			// Search through database for courses with a matching name 
+			ResultSet rs = PartialSearchDB("ASS1_COURSES", "COURSENAME", searchTerm);
+			
 			while (rs.next()) {
 				
 				// Start at null
@@ -270,12 +308,13 @@ public class Reader {
 		} catch (SQLException err) {
 			System.out.println(err);
 		}
-
-		// Search through database for courses with a matching name 
-		rs = PartialSearchDB("ASS1_COURSES", "COURSEID", searchTerm);
 		
 		// Go through result set and build course
 		try {
+
+			// Search through database for courses with a matching name 
+			ResultSet rs = PartialSearchDB("ASS1_COURSES", "COURSEID", searchTerm);
+			
 			while (rs.next()) {
 				
 				// Start at null
@@ -327,11 +366,12 @@ public class Reader {
 		// Set an empty list up
 		ArrayList<Course> prereqs = new ArrayList<Course>();
 		
-		// Search through database for offers 
-		ResultSet rs = SearchDB("ASS1_PREREQS", key, value);
-		
 		// Go through result set and build internal marks
 		try {
+			
+			// Search through database for offers 
+			ResultSet rs = SearchDB("ASS1_PREREQS", key, value);
+			
 			while (rs.next()) {
 				// Set all to null
 				Course prereq = null;
@@ -362,11 +402,12 @@ public class Reader {
 	    String courseID = null;
 	    String lecturerID = null;
 		
-		// Search through database for course 
-		ResultSet rs = SearchDB("ASS1_OFFERINGS", "OFFERID", offerID);
-		
 		// Go through result set and build offering
 		try {
+			
+			// Search through database for course 
+			ResultSet rs = SearchDB("ASS1_OFFERINGS", "OFFERID", offerID);
+			
 			while (rs.next()) {
 				Date semesterDate = rs.getDate("SEMESTER");
 				courseID = rs.getString("COURSE");
@@ -405,11 +446,12 @@ public class Reader {
 		// Set an empty list up
 		ArrayList<Mark> marks = new ArrayList<Mark>();
 		
-		// Search through database for internal marks 
-		ResultSet rs = SearchDB("ASS1_INTLMARKS", key, value);
-		
 		// Go through result set and build internal marks
 		try {
+			
+			// Search through database for internal marks 
+			ResultSet rs = SearchDB("ASS1_INTLMARKS", key, value);
+			
 			while (rs.next()) {
 				// Start with null variables
 				Student student = null;
@@ -432,11 +474,12 @@ public class Reader {
 			System.out.println(err);
 		}
 		
-		// Search through database for external marks 
-		rs = SearchDB("ASS1_EXTLMARKS", key, value);
-		
 		// Go through result set and build external marks
 		try {
+			
+			// Search through database for external marks 
+			ResultSet rs = SearchDB("ASS1_EXTLMARKS", key, value);
+			
 			while (rs.next()) {
 				// Start with null variables
 				Student student = null;
@@ -470,12 +513,14 @@ public class Reader {
 		// Set an empty list up
 		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
 		
-		// Search through database for offers 
-		ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
-		
 		// Go through result set and build internal marks
 		try {
+			
+			// Search through database for offers 
+			ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
+			
 			while (rs.next()) {
+				
 				// Set all to null
 				String offerID = null;
 				DateTime semester = null;
@@ -522,11 +567,12 @@ public class Reader {
 		// If student get enrolments
 		if (userID.startsWith("s")){
 			
-			// Search through database for enrolment 
-			ResultSet rs = SearchDB("ASS1_ENROLMENTS", "STUDENT", userID);
-			
 			// Go through result set and build internal marks
 			try {
+				
+				// Search through database for enrolment 
+				ResultSet rs = SearchDB("ASS1_ENROLMENTS", "STUDENT", userID);
+				
 				while (rs.next()) {
 					// Start with null variables
 					CourseOffering offer = null;
@@ -545,11 +591,12 @@ public class Reader {
 		// If staff get offerings
 		else if (userID.startsWith("e")){
 			
-			// Search through database for internal marks 
-			ResultSet rs = SearchDB("ASS1_OFFERINGS", "TEACHER", userID);
-			
 			// Go through result set and build internal marks
 			try {
+				
+				// Search through database for internal marks 
+				ResultSet rs = SearchDB("ASS1_OFFERINGS", "TEACHER", userID);
+				
 				while (rs.next()) {
 					// Set all to null
 					String offerID = null;
@@ -587,76 +634,272 @@ public class Reader {
 		
 		return classes;
 	}
+
 	
-	public boolean AddUser (User user) {
+	// SAVE FUNCTIONS
+	
+	public boolean SaveUser (User user) {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("USERID", user.getUserID()));	
 		keypairs.add(new Keypair("PASS", user.getPassword()));		
 		keypairs.add(new Keypair("FNAME", user.getFirstName()));	
-		keypairs.add(new Keypair("LNAME", user.getLastName()));		
-		AddRecord("ASS1_USERS", keypairs);
+		keypairs.add(new Keypair("LNAME", user.getLastName()));	
+		
+		// Try to update, and if no instance exists try to add
+		try {
+			UpdateRecord("ASS1_USERS", keypairs);
+		} catch (SQLException e) {
+			try {
+				AddRecord("ASS1_USERS", keypairs);
+			} catch (SQLException err) {
+				// TODO Auto-generated catch block
+				err.printStackTrace();
+			}
+		}
 		
 		return true;
 	}
 	
-	public boolean AddCourse (Course course) {
+	public boolean SaveCourse (Course course) {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("COURSEID", course.getCourseID()));	
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));	
-		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));		
-		AddRecord("ASS1_COURSES", keypairs);
+		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
+		
+		// Try to update, and if no instance exists try to add
+		try {
+			UpdateRecord("ASS1_COURSES", keypairs);
+		} catch (SQLException e) {
+			try {
+				AddRecord("ASS1_COURSES", keypairs);
+			} catch (SQLException err) {
+				// TODO Auto-generated catch block
+				err.printStackTrace();
+			}
+		}
 		
 		return true;
 	}
 	
-	public boolean CreateOffering (CourseOffering offer) {
+	public boolean SaveOffering (CourseOffering offer) {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("OFFERID", offer.getOfferID()));	
-		keypairs.add(new Keypair("SEMESTER", offer.getSemester().getFormattedDate()));	
+		keypairs.add(new Keypair("SEMESTER", offer.getSemester().getDate()));	
 		keypairs.add(new Keypair("COURSE", offer.getCourse().getCourseID()));		
-		keypairs.add(new Keypair("TEACHER", offer.getLecturer().getUserID()));		
-		AddRecord("ASS1_OFFERINGS", keypairs);
+		keypairs.add(new Keypair("TEACHER", offer.getLecturer().getUserID()));	
+		
+		// Try to update, and if no instance exists try to add
+		try {
+			UpdateRecord("ASS1_OFFERINGS", keypairs);
+		} catch (SQLException e) {
+			try {
+				AddRecord("ASS1_OFFERINGS", keypairs);
+			} catch (SQLException err) {
+				// TODO Auto-generated catch block
+				err.printStackTrace();
+			}
+		}
 		
 		return true;
 	}
 	
-	// CREATION FUNCTIONS
-	
-	public boolean CreateEnrolment (String studentID, String offerID) {
+	public boolean SaveEnrolment (String studentID, String offerID) {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));	
-		keypairs.add(new Keypair("OFFERING", offerID));			
-		AddRecord("ASS1_ENROLMENTS", keypairs);
+		keypairs.add(new Keypair("OFFERING", offerID));		
+		
+		// Try to add
+		try {
+			AddRecord("ASS1_ENROLMENTS", keypairs);
+		} catch (SQLException err) {
+			// TODO Auto-generated catch block
+			err.printStackTrace();
+		}
 		
 		return true;
 	}
 	
-	// DELETION FUNCTIONS
-	
-	public void DeleteMark (String studentID, String offerID){
-		
+	public boolean SaveMark (InternalMark mark) {
+			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("STUDENT", studentID));
-		keypairs.add(new Keypair("OFFERING", offerID));
-		DeleteRecord("ASS1_MARKS", keypairs);
+		keypairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));	
+		keypairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));		
+		keypairs.add(new Keypair("MARK", mark.getResult()));
+		
+		// Try to update, and if no instance exists try to add
+		try {
+			UpdateRecord("ASS1_INTLMARKS", keypairs);
+		} catch (SQLException e) {
+			try {
+				AddRecord("ASS1_INTLMARKS", keypairs);
+			} catch (SQLException err) {
+				// TODO Auto-generated catch block
+				err.printStackTrace();
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean SaveOverloadPerms (String studentID, DateTime semester) {
+			
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));	
+		keypairs.add(new Keypair("SEMESTER", semester.getDate()));	
+		
+		// Try to add
+		try {
+			AddRecord("ASS1_OVERLOADS", keypairs);
+		} catch (SQLException err) {
+			// TODO Auto-generated catch block
+			err.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	public boolean CreateExemptions (String studentID, String courseID) {
+			
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));	
+		keypairs.add(new Keypair("COURSE", courseID));	
+		
+		// Try to add
+		try {
+			AddRecord("ASS1_EXEMPTIONS", keypairs);
+		} catch (SQLException err) {
+			// TODO Auto-generated catch block
+			err.printStackTrace();
+		}
+		
+		return true;
 	}
 
-	public void Unenrol (String studentID, String offerID){
+	public boolean SavePrereq (String courseID, String prereqID) {
+			
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("COURSE", courseID));	
+		keypairs.add(new Keypair("PREREQ", prereqID));		
+		
+		// Try to add
+		try {
+			AddRecord("ASS1_PREREQS", keypairs);
+		} catch (SQLException err) {
+			// TODO Auto-generated catch block
+			err.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	
+	// DELETION FUNCTIONS
+	
+	public boolean DeleteOffering (String offerID) {
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("OFFERID", offerID));
+		
+		try {
+			DeleteRecord("ASS1_OFFERINGS", keypairs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	public boolean DeleteEnrolment (String studentID, String offerID) {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));
 		keypairs.add(new Keypair("OFFERING", offerID));
-		DeleteRecord("ASS1_ENROLMENTS", keypairs);
+		
+		try {
+			DeleteRecord("ASS1_ENROLMENTS", keypairs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
 	}
+
+	public boolean DeleteMark (String studentID, String offerID) {
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));
+		keypairs.add(new Keypair("OFFERING", offerID));
+		
+		try {
+			DeleteRecord("ASS1_MARKS", keypairs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+
+	public boolean DeleteOverloadPerm (String studentID, DateTime semester) {
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));
+		keypairs.add(new Keypair("SEMESTER", semester.getDate()));
+		
+		try {
+			DeleteRecord("ASS1_PREREQS", keypairs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	public boolean DeleteExemption (String studentID, String courseID) {
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));
+		keypairs.add(new Keypair("COURSE", courseID));
+		
+		try {
+			DeleteRecord("ASS1_EXEMPTIONS", keypairs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	public boolean DeletePrereq (String courseID, String prereqID) {
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("COURSE", courseID));
+		keypairs.add(new Keypair("PREREQ", prereqID));
+		
+		try {
+			DeleteRecord("ASS1_PREREQS", keypairs);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+
 	
 	// PRIVATE HELPER FUNCTIONS
 	
-	private ResultSet SearchDB (String table, String key, String value) {
+	private ResultSet SearchDB (String table, String key, String value) 
+			throws SQLException {
 		
 		// Connect to database
 		Connection con = null;
@@ -689,8 +932,9 @@ public class Reader {
 		// Return user if found in database
 		return(rs);
 	}
-	
-	private ResultSet PartialSearchDB (String table, String key, String value) {
+		
+	private ResultSet PartialSearchDB (String table, String key, String value) 
+			throws SQLException {
 		
 		// Connect to database
 		Connection con = null;
@@ -723,8 +967,9 @@ public class Reader {
 		// Return user if found in database
 		return(rs);
 	}
-	
-	private boolean AddRecord (String table, ArrayList<Keypair> keypairs) {
+
+	private boolean AddRecord (String table, ArrayList<Keypair> keypairs) 
+			throws SQLException {
 		
 		// Connect to database
 		Connection con = null;
@@ -777,8 +1022,46 @@ public class Reader {
 		
 		return true;
 	}
+
+	private boolean UpdateRecord (String table, ArrayList<Keypair> keypairs) 
+			throws SQLException {
+		
+		// Connect to database
+		Connection con = null;
+		try {
+			 con = Database.connect();
+		} 
+		catch (ClassNotFoundException err) {
+			System.out.println("Could not find Oracle package.");
+		} 
+		catch (SQLException err) {
+			System.out.println("Could not connect to database.");
+		}
+		
+		// Build sql query to select the key values from the table
+		String query = "UPDATE " + table + " SET ";
+
+		// Handle first key
+		if (keypairs.size() > 0){
+			query += keypairs.get(0).key + " ='" + keypairs.get(0).value + "'";
+		}
+		// Handle secondary keys
+		for (int i = 1; i < keypairs.size(); i++) {
+			query += ", " + keypairs.get(i).key + " ='" + keypairs.get(i).value + "'";
+		}
+		
+		System.out.println(query);
+		
+		// Attempt to run statement on oracle server
+		ResultSet rs = null;
+		Statement stmt = con.createStatement();
+		rs = stmt.executeQuery(query);
+		
+		return true;
+	}
 	
-	private boolean DeleteRecord (String table, ArrayList<Keypair> keypairs) {
+	private boolean DeleteRecord (String table, ArrayList<Keypair> keypairs) 
+			throws SQLException {
 		
 		// Connect to database
 		Connection con = null;
@@ -819,7 +1102,8 @@ public class Reader {
 		return true;
 	}
 	
-	private ResultSet GetTable (String table) {
+	private ResultSet GetTable (String table) 
+			throws SQLException {
 		
 		// Connect to database
 		Connection con = null;

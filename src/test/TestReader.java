@@ -72,7 +72,7 @@ public class TestReader {
 		courses.get(0).setPrereqs(reader.LoadPrereqs("COURSE", courses.get(0).getCourseID()));
 		assertEquals(courses.get(0).getPrereqs().size(), 1);
 		
-		courses = reader.SearchForCourse("c12345");
+		courses = reader.SearchForCourse("c23456");
 		assertEquals(courses.get(0).getCourseName(), "Database Concepts");
 		assertEquals(courses.get(0).getDescription(), "A class about databases.");
 		assertEquals(courses.get(0).getTopics().size(), 2);
@@ -107,8 +107,8 @@ public class TestReader {
 		Reader reader = new Reader();
 		
 		// Enrol in two classes
-		reader.CreateEnrolment("s12345", "o12345");
-		reader.CreateEnrolment("s12345", "o23456");
+		reader.SaveEnrolment("s12345", "o12345");
+		reader.SaveEnrolment("s12345", "o23456");
 		
 		// Check classes
 		ArrayList<CourseOffering> offers = reader.LoadClasses("s12345");
@@ -116,12 +116,14 @@ public class TestReader {
 		
 		// Unenrol from one class
 		reader = new Reader();
-		reader.Unenrol("s12345", "o12345");
+		reader.DeleteEnrolment("s12345", "o12345");
 		
 		// Check classes
 		offers = reader.LoadClasses("s12345");
 		assertEquals(offers.size(), 1);
 		
+		// Delete other made class
+		reader.DeleteEnrolment("s12345", "o23456");
 	}
 
 	@Test (timeout=5000)
