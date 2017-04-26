@@ -87,7 +87,7 @@ public class LogInFrame extends JFrame {
 				
 				try {
 					User.login(userName, passWord);
-					newframe regFace = new newframe();
+					newframe regFace = new newframe(userName);
 					regFace.setVisible(true);
 					dispose();
 				}
