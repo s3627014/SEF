@@ -61,6 +61,17 @@ public class TestReader {
 		course.setPrereqs(reader.LoadPrereqs("COURSE", course.getCourseID()));
 		assertEquals(course.getPrereqs().size(), 1);
 	}
+
+	@Test (timeout=5000)
+	public void testCourseSearch() throws InstanceNotFound {
+		Reader reader = new Reader();
+		ArrayList<Course> courses = reader.SearchForCourse("Database");
+		assertEquals(courses.get(0).getCourseName(), "Database Concepts");
+		assertEquals(courses.get(0).getDescription(), "A class about databases.");
+		assertEquals(courses.get(0).getTopics().size(), 2);
+		courses.get(0).setPrereqs(reader.LoadPrereqs("COURSE", courses.get(0).getCourseID()));
+		assertEquals(courses.get(0).getPrereqs().size(), 1);
+	}
 	
 	@Test (timeout=5000)
 	public void testOfferLoad() throws InstanceNotFound {
@@ -87,10 +98,23 @@ public class TestReader {
 	@Test (timeout=5000)
 	public void testStudentClassesLoad() throws InstanceNotFound {
 		Reader reader = new Reader();
+		
+		// Enrol in two classes
+		reader.CreateEnrolment("s12345", "o12345");
+		reader.CreateEnrolment("s12345", "o23456");
+		
+		// Check classes
 		ArrayList<CourseOffering> offers = reader.LoadClasses("s12345");
 		assertEquals(offers.size(), 2);
-		offers = reader.LoadClasses("s23456");
-		assertEquals(offers.size(), 0);
+		
+		// Unenrol from one class
+		reader = new Reader();
+		reader.Unenrol("s12345", "o12345");
+		
+		// Check classes
+		offers = reader.LoadClasses("s12345");
+		assertEquals(offers.size(), 1);
+		
 	}
 
 	@Test (timeout=5000)
