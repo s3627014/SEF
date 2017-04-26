@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import main.Admin;
 import main.Course;
 import main.CourseOffering;
+import main.DateTime;
 import main.Mark;
 import main.ProgramCoordinator;
 import main.Reader;
+import main.Staff;
 import main.Student;
 import main.User;
 
@@ -25,7 +27,7 @@ public class TestReader {
 		Student user = (Student) reader.LoadUser("s12345");
 		assertEquals(user.getFirstName(), "John");
 		assertEquals(user.getLastName(), "Smith");
-		assertEquals(user.getOverloadPerms().getSemesters().size(), 1);
+		assertEquals(user.getOverloadPerms().getSemesters().size(), 2);
 	}
 
 	@Test (timeout=5000)
@@ -38,7 +40,7 @@ public class TestReader {
 	@Test (timeout=5000)
 	public void testProgramCoordinatorLoad() throws InstanceNotFound {
 		Reader reader = new Reader();
-		ProgramCoordinator user = (ProgramCoordinator) reader.LoadUser("e23456");
+		Staff user = (Staff) reader.LoadUser("e23456");
 		assertEquals(user.getFirstName(), "CompSciGuy");
 		assertEquals(user.getLastName(), "Master");
 	}
@@ -131,5 +133,35 @@ public class TestReader {
 		Reader reader = new Reader();
 		ArrayList<CourseOffering> offers = reader.LoadClasses("e12345");
 		assertEquals(offers.size(), 2);
+	}
+	
+	@Test (timeout=5000)
+	public void testUserSave() throws Exception {
+		Reader reader = new Reader();
+		User user = new Student("s45678", "pass", "Luke", "Lukington", null);
+		reader.SaveUser(user);
+		
+		user = (Student) reader.LoadUser("s45678");
+		assertEquals(user.getFirstName(), "Luke");
+		assertEquals(user.getLastName(), "Lukington");
+	}
+	
+	@Test (timeout=5000)
+	public void testCourseSave() throws Exception {
+		Reader reader = new Reader();
+		Course course = new Course("Testing Course", "c34567", "A testing course.", 
+				new Staff("e12345", "pass", "Halil", "Ali"), new ArrayList<String>());
+		reader.SaveCourse(course);
+		
+		course = reader.LoadCourse("c34567");
+		assertEquals(course.getCourseName(), "Testing Course");
+		assertEquals(course.getDescription(), "A testing course.");
+	}
+	
+	@Test (timeout=5000)
+	public void testOverloadPermSave() throws Exception {
+		Reader reader = new Reader();
+		DateTime semester = new DateTime(1,1,2012);
+		reader.SaveOverloadPerm("s12345", semester);
 	}
 }

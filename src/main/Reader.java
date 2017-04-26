@@ -640,18 +640,20 @@ public class Reader {
 	
 	public boolean SaveUser (User user) {
 
-		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("USERID", user.getUserID()));	
-		keypairs.add(new Keypair("PASS", user.getPassword()));		
-		keypairs.add(new Keypair("FNAME", user.getFirstName()));	
-		keypairs.add(new Keypair("LNAME", user.getLastName()));	
+		ArrayList<Keypair> setPairs = new ArrayList<Keypair>();
+		setPairs.add(new Keypair("PASS", user.getPassword()));		
+		setPairs.add(new Keypair("FNAME", user.getFirstName()));	
+		setPairs.add(new Keypair("LNAME", user.getLastName()));	
+
+		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("USERID", user.getUserID()));	
 		
 		// Try to update, and if no instance exists try to add
 		try {
-			UpdateRecord("ASS1_USERS", keypairs);
+			UpdateRecord("ASS1_USERS", setPairs, wherePairs);
 		} catch (SQLException e) {
 			try {
-				AddRecord("ASS1_USERS", keypairs);
+				AddRecord("ASS1_USERS", setPairs);
 			} catch (SQLException err) {
 				// TODO Auto-generated catch block
 				err.printStackTrace();
@@ -663,15 +665,17 @@ public class Reader {
 	
 	public boolean SaveCourse (Course course) {
 
-		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("COURSEID", course.getCourseID()));	
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));	
 		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
+
+		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
 		
 		// Try to update, and if no instance exists try to add
 		try {
-			UpdateRecord("ASS1_COURSES", keypairs);
+			UpdateRecord("ASS1_COURSES", keypairs, wherePairs);
 		} catch (SQLException e) {
 			try {
 				AddRecord("ASS1_COURSES", keypairs);
@@ -686,15 +690,17 @@ public class Reader {
 	
 	public boolean SaveOffering (CourseOffering offer) {
 
-		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("OFFERID", offer.getOfferID()));	
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("SEMESTER", offer.getSemester().getDate()));	
 		keypairs.add(new Keypair("COURSE", offer.getCourse().getCourseID()));		
 		keypairs.add(new Keypair("TEACHER", offer.getLecturer().getUserID()));	
+
+		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("OFFERID", offer.getOfferID()));	
 		
 		// Try to update, and if no instance exists try to add
 		try {
-			UpdateRecord("ASS1_OFFERINGS", keypairs);
+			UpdateRecord("ASS1_OFFERINGS", keypairs, wherePairs);
 		} catch (SQLException e) {
 			try {
 				AddRecord("ASS1_OFFERINGS", keypairs);
@@ -726,14 +732,16 @@ public class Reader {
 	
 	public boolean SaveMark (InternalMark mark) {
 			
-		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));	
-		keypairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("MARK", mark.getResult()));
+		
+		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));	
+		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));	
 		
 		// Try to update, and if no instance exists try to add
 		try {
-			UpdateRecord("ASS1_INTLMARKS", keypairs);
+			UpdateRecord("ASS1_INTLMARKS", keypairs, wherePairs);
 		} catch (SQLException e) {
 			try {
 				AddRecord("ASS1_INTLMARKS", keypairs);
@@ -746,7 +754,7 @@ public class Reader {
 		return true;
 	}
 	
-	public boolean SaveOverloadPerms (String studentID, DateTime semester) {
+	public boolean SaveOverloadPerm (String studentID, DateTime semester) {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));	
@@ -998,11 +1006,11 @@ public class Reader {
 		
 		// Handle first key
 		if (keypairs.size() > 0){
-			query += "'" + keypairs.get(0).value + "'";
+			query += keypairs.get(0).getValue();
 		}
 		// Handle secondary keys
 		for (int i = 1; i < keypairs.size(); i++) {
-			query += ", '" + keypairs.get(i).value + "'";
+			query += ", " + keypairs.get(i).getValue();
 		}
 		
 		// Finish query
@@ -1011,10 +1019,9 @@ public class Reader {
 		System.out.println(query);
 		
 		// Attempt to run statement on oracle server
-		ResultSet rs = null;
 		try {
 			Statement stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
+			stmt.executeQuery(query);
 		}
 		catch (SQLException err) {
 			System.out.println(err);
@@ -1023,8 +1030,8 @@ public class Reader {
 		return true;
 	}
 
-	private boolean UpdateRecord (String table, ArrayList<Keypair> keypairs) 
-			throws SQLException {
+	private boolean UpdateRecord (String table, ArrayList<Keypair> setPairs, 
+			ArrayList<Keypair> wherePairs) throws SQLException {
 		
 		// Connect to database
 		Connection con = null;
@@ -1042,20 +1049,28 @@ public class Reader {
 		String query = "UPDATE " + table + " SET ";
 
 		// Handle first key
-		if (keypairs.size() > 0){
-			query += keypairs.get(0).key + " ='" + keypairs.get(0).value + "'";
+		if (setPairs.size() > 0){
+			query += setPairs.get(0).key + " =" + setPairs.get(0).getValue();
 		}
 		// Handle secondary keys
-		for (int i = 1; i < keypairs.size(); i++) {
-			query += ", " + keypairs.get(i).key + " ='" + keypairs.get(i).value + "'";
+		for (int i = 1; i < setPairs.size(); i++) {
+			query += ", " + setPairs.get(i).key + " =" + setPairs.get(i).getValue();
+		}
+
+		// Continue building WHERE section of query
+		if (wherePairs.size() > 0){
+			query += " WHERE " + wherePairs.get(0).key + " =" + wherePairs.get(0).getValue();
+		}
+		// Handle secondary keys
+		for (int i = 1; i < wherePairs.size(); i++) {
+			query += " AND " + wherePairs.get(i).key + " =" + wherePairs.get(i).getValue();
 		}
 		
 		System.out.println(query);
 		
 		// Attempt to run statement on oracle server
-		ResultSet rs = null;
 		Statement stmt = con.createStatement();
-		rs = stmt.executeQuery(query);
+		stmt.executeQuery(query);
 		
 		return true;
 	}
@@ -1090,10 +1105,9 @@ public class Reader {
 		System.out.println(query);
 		
 		// Attempt to run statement on oracle server
-		ResultSet rs = null;
 		try {
 			Statement stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
+			stmt.executeQuery(query);
 		}
 		catch (SQLException err) {
 			System.out.println(err);
