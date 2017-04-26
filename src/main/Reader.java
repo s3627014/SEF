@@ -13,6 +13,67 @@ import errors.*;
 
 public class Reader {
 	
+	// LOAD ALL FUNCTIONS
+	public ArrayList<Course> LoadAllCourses () throws InstanceNotFound {
+		ArrayList<Course> courses = new ArrayList<Course>();
+		
+		// Search through database for course 
+		ResultSet rs = GetTable("ASS1_COURSES");
+		
+		// Go through result set and build course
+		try {
+			while (rs.next()) {
+				// Set everything to null
+				Course course = null;
+			    String courseID = null;
+			    String courseName = null;
+			    String description = null;
+			    String coordID = null;
+			    Staff coordinator = null;
+		 	    ArrayList<String> topics = new ArrayList<String>();
+				
+		 	    // Get information
+			    courseID = rs.getString("COURSEID");
+			    courseName = rs.getString("COURSENAME");
+			    description = rs.getString("DESCRIPTION");
+			    coordID = rs.getString("COORDINATOR");
+				
+				// Throw error if course was not found
+				if (courseName == null)
+					throw new InstanceNotFound();
+				
+				// Search through database for topics 
+		 		rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
+		 		
+		 		// Go through result set and build course
+		 		try {
+		 			while (rs.next()) {
+		 			    String topicDesc = rs.getString("DESCRIPTION");
+		 			    topics.add(topicDesc);
+		 			}
+		 		} catch (SQLException err) {
+		 			System.out.println(err);
+		 		}
+				
+				// Set up course object
+				course = new Course(courseName, courseID, description, coordinator, topics);
+				courses.add(course);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}	
+		
+		return courses;
+	}
+	
+	public ArrayList<Course> LoadAllUsers () throws InstanceNotFound {
+		ArrayList<Course> courses = new ArrayList<Course>();
+		
+		return courses;
+	}
+	
+	// INDIVIDUAL LOAD FUNCTIONS
+	
 	public User LoadUser (String userID) throws InstanceNotFound {
 		System.out.println("Loading User");
 		
@@ -338,55 +399,6 @@ public class Reader {
 		return offer;
 	}
 	
-	public ArrayList<CourseOffering> LoadOfferings (String key, String value) throws InstanceNotFound {
-		System.out.println("Loading Offers");
-		
-		// Set an empty list up
-		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
-		
-		// Search through database for offers 
-		ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
-		
-		// Go through result set and build internal marks
-		try {
-			while (rs.next()) {
-				// Set all to null
-				String offerID = null;
-				DateTime semester = null;
-				Course course = null;
-			    Staff lecturer = null;
-			    String courseID = null;
-			    String lecturerID = null;
-				
-				// Get gotten values
-			    offerID = rs.getString("OFFERID");
-			    Date semesterDate = rs.getDate("SEMESTER");
-				courseID = rs.getString("COURSE");
-				lecturerID = rs.getString("TEACHER");
-				
-				// Create semester date
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(semesterDate);
-				int day = cal.get(Calendar.DAY_OF_MONTH);
-				int month = cal.get(Calendar.MONTH);
-				int year = cal.get(Calendar.YEAR);
-				semester = new DateTime(day, month, year);
-				
-				// Load student and offer
-				course = (Course) LoadCourse(courseID);
-				lecturer = (Staff) LoadUser(lecturerID);
-				
-				// Build offer
-				CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);
-				offers.add(offer);
-			}
-		} catch (SQLException err) {
-			System.out.println(err);
-		}
-		
-		return offers;
-	}
-	
 	public ArrayList<Mark> LoadMarks (String key, String value) throws InstanceNotFound {
 		System.out.println("Loading Marks");
 		
@@ -452,74 +464,128 @@ public class Reader {
 		return marks;
 	}
 	
-	// This function will eventually hold the SQL calls, for now it just has a local array
-	private ResultSet SearchDB (String table, String key, String value) {
+	public ArrayList<CourseOffering> LoadOfferings (String key, String value) throws InstanceNotFound {
+		System.out.println("Loading Offers");
 		
-		// Connect to database
-		Connection con = null;
+		// Set an empty list up
+		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
+		
+		// Search through database for offers 
+		ResultSet rs = SearchDB("ASS1_OFFERINGS", key, value);
+		
+		// Go through result set and build internal marks
 		try {
-			 con = Database.connect();
-		} 
-		catch (ClassNotFoundException err) {
-			System.out.println("Could not find Oracle package.");
-		} 
-		catch (SQLException err) {
-			System.out.println("Could not connect to database.");
-		}
-		
-		// Build sql query to select the key value from the table
-		String query = "SELECT * FROM " + table;
-		query += " WHERE " + key + "='" + value + "'";
-		
-		System.out.println(query);
-		
-		// Attempt to run statement on oracle server
-		ResultSet rs = null;
-		try {
-			Statement stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
-		}
-		catch (SQLException err) {
+			while (rs.next()) {
+				// Set all to null
+				String offerID = null;
+				DateTime semester = null;
+				Course course = null;
+			    Staff lecturer = null;
+			    String courseID = null;
+			    String lecturerID = null;
+				
+				// Get gotten values
+			    offerID = rs.getString("OFFERID");
+			    Date semesterDate = rs.getDate("SEMESTER");
+				courseID = rs.getString("COURSE");
+				lecturerID = rs.getString("TEACHER");
+				
+				// Create semester date
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(semesterDate);
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				int month = cal.get(Calendar.MONTH);
+				int year = cal.get(Calendar.YEAR);
+				semester = new DateTime(day, month, year);
+				
+				// Load student and offer
+				course = (Course) LoadCourse(courseID);
+				lecturer = (Staff) LoadUser(lecturerID);
+				
+				// Build offer
+				CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);
+				offers.add(offer);
+			}
+		} catch (SQLException err) {
 			System.out.println(err);
-		}		
+		}
 		
-		// Return user if found in database
-		return(rs);
+		return offers;
 	}
 	
-	// This function will eventually hold the SQL calls, for now it just has a local array
-	private ResultSet PartialSearchDB (String table, String key, String value) {
+	public ArrayList<CourseOffering> LoadClasses (String userID) throws InstanceNotFound {
+		System.out.println("Loading Enrolments");
 		
-		// Connect to database
-		Connection con = null;
-		try {
-			 con = Database.connect();
-		} 
-		catch (ClassNotFoundException err) {
-			System.out.println("Could not find Oracle package.");
-		} 
-		catch (SQLException err) {
-			System.out.println("Could not connect to database.");
+		// Set an empty list up
+		ArrayList<CourseOffering> classes = new ArrayList<CourseOffering>();
+		
+		// If student get enrolments
+		if (userID.startsWith("s")){
+			
+			// Search through database for enrolment 
+			ResultSet rs = SearchDB("ASS1_ENROLMENTS", "STUDENT", userID);
+			
+			// Go through result set and build internal marks
+			try {
+				while (rs.next()) {
+					// Start with null variables
+					CourseOffering offer = null;
+					
+					// Get gotten values
+					String offerID = rs.getString("OFFERING");
+					
+					// Load student and offer
+					offer = LoadOffering(offerID);
+					classes.add(offer);
+				}
+			} catch (SQLException err) {
+				System.out.println(err);
+			}			
+		}
+		// If staff get offerings
+		else if (userID.startsWith("e")){
+			
+			// Search through database for internal marks 
+			ResultSet rs = SearchDB("ASS1_OFFERINGS", "TEACHER", userID);
+			
+			// Go through result set and build internal marks
+			try {
+				while (rs.next()) {
+					// Set all to null
+					String offerID = null;
+					DateTime semester = null;
+					Course course = null;
+				    Staff lecturer = null;
+				    String courseID = null;
+				    String lecturerID = null;
+					
+					// Get gotten values
+				    offerID = rs.getString("OFFERID");
+				    Date semesterDate = rs.getDate("SEMESTER");
+					courseID = rs.getString("COURSE");
+					lecturerID = rs.getString("TEACHER");
+					
+					// Create semester date
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(semesterDate);
+					int day = cal.get(Calendar.DAY_OF_MONTH);
+					int month = cal.get(Calendar.MONTH);
+					int year = cal.get(Calendar.YEAR);
+					semester = new DateTime(day, month, year);
+					
+					// Build offer
+					CourseOffering offer = new CourseOffering (offerID, semester, course, lecturer);					
+					classes.add(offer);
+				}
+			} catch (SQLException err) {
+				System.out.println(err);
+			}			
+		}
+		else {
+			throw new InstanceNotFound();
 		}
 		
-		// Build sql query to select the key value from the table
-		String query = "SELECT * FROM " + table;
-		query += " WHERE " + key + " LIKE '%" + value + "%'";
-		
-		System.out.println(query);
-		
-		// Attempt to run statement on oracle server
-		ResultSet rs = null;
-		try {
-			Statement stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
-		}
-		catch (SQLException err) {
-			System.out.println(err);
-		}		
-		
-		// Return user if found in database
-		return(rs);
+		return classes;
 	}
 	
 	public boolean AddUser (User user) {
@@ -558,6 +624,8 @@ public class Reader {
 		return true;
 	}
 	
+	// CREATION FUNCTIONS
+	
 	public boolean CreateEnrolment (String studentID, String offerID) {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
@@ -568,7 +636,94 @@ public class Reader {
 		return true;
 	}
 	
-	// This function will eventually hold the SQL calls, for now it just has a local array
+	// DELETION FUNCTIONS
+	
+	public void DeleteMark (String studentID, String offerID){
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));
+		keypairs.add(new Keypair("OFFERING", offerID));
+		DeleteRecord("ASS1_MARKS", keypairs);
+	}
+
+	public void Unenrol (String studentID, String offerID){
+		
+		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
+		keypairs.add(new Keypair("STUDENT", studentID));
+		keypairs.add(new Keypair("OFFERING", offerID));
+		DeleteRecord("ASS1_ENROLMENTS", keypairs);
+	}
+	
+	// PRIVATE HELPER FUNCTIONS
+	
+	private ResultSet SearchDB (String table, String key, String value) {
+		
+		// Connect to database
+		Connection con = null;
+		try {
+			 con = Database.connect();
+		} 
+		catch (ClassNotFoundException err) {
+			System.out.println("Could not find Oracle package.");
+		} 
+		catch (SQLException err) {
+			System.out.println("Could not connect to database.");
+		}
+		
+		// Build sql query to select the key value from the table
+		String query = "SELECT * FROM " + table;
+		query += " WHERE " + key + "='" + value + "'";
+		
+		System.out.println(query);
+		
+		// Attempt to run statement on oracle server
+		ResultSet rs = null;
+		try {
+			Statement stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+		}
+		catch (SQLException err) {
+			System.out.println(err);
+		}		
+		
+		// Return user if found in database
+		return(rs);
+	}
+	
+	private ResultSet PartialSearchDB (String table, String key, String value) {
+		
+		// Connect to database
+		Connection con = null;
+		try {
+			 con = Database.connect();
+		} 
+		catch (ClassNotFoundException err) {
+			System.out.println("Could not find Oracle package.");
+		} 
+		catch (SQLException err) {
+			System.out.println("Could not connect to database.");
+		}
+		
+		// Build sql query to select the key value from the table
+		String query = "SELECT * FROM " + table;
+		query += " WHERE " + key + " LIKE '%" + value + "%'";
+		
+		System.out.println(query);
+		
+		// Attempt to run statement on oracle server
+		ResultSet rs = null;
+		try {
+			Statement stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+		}
+		catch (SQLException err) {
+			System.out.println(err);
+		}		
+		
+		// Return user if found in database
+		return(rs);
+	}
+	
 	private boolean AddRecord (String table, ArrayList<Keypair> keypairs) {
 		
 		// Connect to database
@@ -623,25 +778,6 @@ public class Reader {
 		return true;
 	}
 	
-	// Reader method to unenrol a student from a class
-	public void DeleteMark (String studentID, String offerID){
-		
-		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("STUDENT", studentID));
-		keypairs.add(new Keypair("OFFERING", offerID));
-		DeleteRecord("ASS1_MARKS", keypairs);
-	}
-	
-	// Reader method to unenrol a student from a class
-	public void Unenrol (String studentID, String offerID){
-		
-		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
-		keypairs.add(new Keypair("STUDENT", studentID));
-		keypairs.add(new Keypair("OFFERING", offerID));
-		DeleteRecord("ASS1_ENROLMENTS", keypairs);
-	}
-	
-	// This function will eventually hold the SQL calls, for now it just has a local array
 	private boolean DeleteRecord (String table, ArrayList<Keypair> keypairs) {
 		
 		// Connect to database
@@ -682,9 +818,8 @@ public class Reader {
 		
 		return true;
 	}
-	 
-	// This function will eventually hold the SQL calls, for now it just has a local array
-	public ResultSet GetTable (String table) {
+	
+	private ResultSet GetTable (String table) {
 		
 		// Connect to database
 		Connection con = null;
