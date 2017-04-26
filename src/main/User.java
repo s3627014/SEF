@@ -50,6 +50,10 @@ public class User {
 			return false;
 	}
 	
+	public String getPassword () {
+		return this.password;
+	}
+	
 	public String getFirstName () {
 		return this.fName;
 	}
