@@ -71,6 +71,13 @@ public class TestReader {
 		assertEquals(courses.get(0).getTopics().size(), 2);
 		courses.get(0).setPrereqs(reader.LoadPrereqs("COURSE", courses.get(0).getCourseID()));
 		assertEquals(courses.get(0).getPrereqs().size(), 1);
+		
+		courses = reader.SearchForCourse("c12345");
+		assertEquals(courses.get(0).getCourseName(), "Database Concepts");
+		assertEquals(courses.get(0).getDescription(), "A class about databases.");
+		assertEquals(courses.get(0).getTopics().size(), 2);
+		courses.get(0).setPrereqs(reader.LoadPrereqs("COURSE", courses.get(0).getCourseID()));
+		assertEquals(courses.get(0).getPrereqs().size(), 1);
 	}
 	
 	@Test (timeout=5000)
