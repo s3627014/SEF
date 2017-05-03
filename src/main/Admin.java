@@ -41,4 +41,18 @@ public class Admin extends User {
 	   
 	   return offers;
    }
+   
+   public boolean createCourseOffering(Course course) {
+	   boolean result = true;
+	   
+	   Reader reader = new Reader();
+	   try {
+		   reader.SaveCourse(course);
+	   }
+	   catch (Exception err) {
+		   result = false;
+	   }
+	   
+	   return result;
+   }
 }
