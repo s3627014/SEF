@@ -688,7 +688,7 @@ public class Reader {
 	
 	// SAVE FUNCTIONS
 	
-	public boolean SaveUser (User user) {
+	public boolean SaveUser (User user) throws SQLException {
 
 		ArrayList<Keypair> setPairs = new ArrayList<Keypair>();
 		setPairs.add(new Keypair("PASS", user.getPassword()));		
@@ -699,21 +699,13 @@ public class Reader {
 		wherePairs.add(new Keypair("USERID", user.getUserID()));	
 		
 		// Try to update, and if no instance exists try to add
-		try {
-			UpdateRecord("ASS1_USERS", setPairs, wherePairs);
-		} catch (SQLException e) {
-			try {
-				AddRecord("ASS1_USERS", setPairs);
-			} catch (SQLException err) {
-				// TODO Auto-generated catch block
-				err.printStackTrace();
-			}
-		}
+		UpdateRecord("ASS1_USERS", setPairs, wherePairs);
+		AddRecord("ASS1_USERS", setPairs);
 		
 		return true;
 	}
 	
-	public boolean SaveCourse (Course course) {
+	public boolean SaveCourse (Course course) throws SQLException {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
@@ -724,21 +716,13 @@ public class Reader {
 		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
 		
 		// Try to update, and if no instance exists try to add
-		try {
-			UpdateRecord("ASS1_COURSES", keypairs, wherePairs);
-		} catch (SQLException e) {
-			try {
-				AddRecord("ASS1_COURSES", keypairs);
-			} catch (SQLException err) {
-				// TODO Auto-generated catch block
-				err.printStackTrace();
-			}
-		}
+		UpdateRecord("ASS1_COURSES", keypairs, wherePairs);
+		AddRecord("ASS1_COURSES", keypairs);
 		
 		return true;
 	}
 	
-	public boolean SaveOffering (CourseOffering offer) {
+	public boolean SaveOffering (CourseOffering offer) throws SQLException {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("SEMESTER", offer.getSemester().getDate()));	
@@ -749,38 +733,25 @@ public class Reader {
 		wherePairs.add(new Keypair("OFFERID", offer.getOfferID()));	
 		
 		// Try to update, and if no instance exists try to add
-		try {
-			UpdateRecord("ASS1_OFFERINGS", keypairs, wherePairs);
-		} catch (SQLException e) {
-			try {
-				AddRecord("ASS1_OFFERINGS", keypairs);
-			} catch (SQLException err) {
-				// TODO Auto-generated catch block
-				err.printStackTrace();
-			}
-		}
+		UpdateRecord("ASS1_OFFERINGS", keypairs, wherePairs);
+		AddRecord("ASS1_OFFERINGS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean SaveEnrolment (String studentID, String offerID) {
+	public boolean SaveEnrolment (String studentID, String offerID) throws SQLException {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));	
 		keypairs.add(new Keypair("OFFERING", offerID));		
 		
 		// Try to add
-		try {
-			AddRecord("ASS1_ENROLMENTS", keypairs);
-		} catch (SQLException err) {
-			// TODO Auto-generated catch block
-			err.printStackTrace();
-		}
+		AddRecord("ASS1_ENROLMENTS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean SaveMark (InternalMark mark) {
+	public boolean SaveMark (InternalMark mark) throws SQLException {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("MARK", mark.getResult()));
@@ -790,67 +761,44 @@ public class Reader {
 		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));	
 		
 		// Try to update, and if no instance exists try to add
-		try {
-			UpdateRecord("ASS1_INTLMARKS", keypairs, wherePairs);
-		} catch (SQLException e) {
-			try {
-				AddRecord("ASS1_INTLMARKS", keypairs);
-			} catch (SQLException err) {
-				// TODO Auto-generated catch block
-				err.printStackTrace();
-			}
-		}
+		UpdateRecord("ASS1_INTLMARKS", keypairs, wherePairs);
+		AddRecord("ASS1_INTLMARKS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean SaveOverloadPerm (String studentID, DateTime semester) {
+	public boolean SaveOverloadPerm (String studentID, DateTime semester) throws SQLException {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));	
 		keypairs.add(new Keypair("SEMESTER", semester.getDate()));	
 		
 		// Try to add
-		try {
-			AddRecord("ASS1_OVERLOADS", keypairs);
-		} catch (SQLException err) {
-			// TODO Auto-generated catch block
-			err.printStackTrace();
-		}
+		AddRecord("ASS1_OVERLOADS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean CreateExemptions (String studentID, String courseID) {
+	public boolean CreateExemptions (String studentID, String courseID) throws SQLException {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));	
 		keypairs.add(new Keypair("COURSE", courseID));	
 		
 		// Try to add
-		try {
-			AddRecord("ASS1_EXEMPTIONS", keypairs);
-		} catch (SQLException err) {
-			// TODO Auto-generated catch block
-			err.printStackTrace();
-		}
+		AddRecord("ASS1_EXEMPTIONS", keypairs);
 		
 		return true;
 	}
 
-	public boolean SavePrereq (String courseID, String prereqID) {
+	public boolean SavePrereq (String courseID, String prereqID) throws SQLException {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("COURSE", courseID));	
 		keypairs.add(new Keypair("PREREQ", prereqID));		
 		
 		// Try to add
-		try {
-			AddRecord("ASS1_PREREQS", keypairs);
-		} catch (SQLException err) {
-			// TODO Auto-generated catch block
-			err.printStackTrace();
-		}
+		AddRecord("ASS1_PREREQS", keypairs);
 		
 		return true;
 	}
@@ -858,97 +806,67 @@ public class Reader {
 	
 	// DELETION FUNCTIONS
 	
-	public boolean DeleteOffering (String offerID) {
+	public boolean DeleteOffering (String offerID) throws SQLException {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("OFFERID", offerID));
 		
-		try {
-			DeleteRecord("ASS1_OFFERINGS", keypairs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DeleteRecord("ASS1_OFFERINGS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean DeleteEnrolment (String studentID, String offerID) {
+	public boolean DeleteEnrolment (String studentID, String offerID) throws SQLException {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));
 		keypairs.add(new Keypair("OFFERING", offerID));
 		
-		try {
-			DeleteRecord("ASS1_ENROLMENTS", keypairs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DeleteRecord("ASS1_ENROLMENTS", keypairs);
 		
 		return true;
 	}
 
-	public boolean DeleteMark (String studentID, String offerID) {
+	public boolean DeleteMark (String studentID, String offerID) throws SQLException {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));
 		keypairs.add(new Keypair("OFFERING", offerID));
 		
-		try {
-			DeleteRecord("ASS1_MARKS", keypairs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DeleteRecord("ASS1_MARKS", keypairs);
 		
 		return true;
 	}
 
-	public boolean DeleteOverloadPerm (String studentID, DateTime semester) {
+	public boolean DeleteOverloadPerm (String studentID, DateTime semester) throws SQLException {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));
 		keypairs.add(new Keypair("SEMESTER", semester.getDate()));
 		
-		try {
-			DeleteRecord("ASS1_PREREQS", keypairs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DeleteRecord("ASS1_PREREQS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean DeleteExemption (String studentID, String courseID) {
+	public boolean DeleteExemption (String studentID, String courseID) throws SQLException {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("STUDENT", studentID));
 		keypairs.add(new Keypair("COURSE", courseID));
 		
-		try {
-			DeleteRecord("ASS1_EXEMPTIONS", keypairs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DeleteRecord("ASS1_EXEMPTIONS", keypairs);
 		
 		return true;
 	}
 	
-	public boolean DeletePrereq (String courseID, String prereqID) {
+	public boolean DeletePrereq (String courseID, String prereqID) throws SQLException {
 		
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();
 		keypairs.add(new Keypair("COURSE", courseID));
 		keypairs.add(new Keypair("PREREQ", prereqID));
 		
-		try {
-			DeleteRecord("ASS1_PREREQS", keypairs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DeleteRecord("ASS1_PREREQS", keypairs);
 		
 		return true;
 	}

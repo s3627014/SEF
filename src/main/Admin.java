@@ -14,6 +14,20 @@ public class Admin extends User {
         super(id, password, fName, lName);
     }
    
+   public ArrayList<User> getAllUsers () {
+	   
+	   Reader reader = new Reader();
+	   ArrayList<User> users = null;
+	   try {
+			users = reader.LoadAllUsers();
+	   } catch (InstanceNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	   }
+	   
+	   return users;
+   }
+   
    public ArrayList<Course> getAllCourses () {
 	   
 	   Reader reader = new Reader();
@@ -42,12 +56,18 @@ public class Admin extends User {
 	   return offers;
    }
    
-   public boolean createCourseOffering(Course course) {
-	   boolean result = true;
+   public boolean addCourseOffering(String offerID, DateTime semester, Course course, 
+		   		Staff lecturer){
 	   
+	   // Create offer based on passed in variables
+	   CourseOffering offer = new CourseOffering(offerID, semester, course, lecturer);
+	   
+	   boolean result = true;
+
+		// Instantiate reader and save
 	   Reader reader = new Reader();
 	   try {
-		   reader.SaveCourse(course);
+		   reader.SaveOffering(offer);
 	   }
 	   catch (Exception err) {
 		   result = false;
