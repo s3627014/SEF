@@ -11,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,7 +29,6 @@ public class StudentPageCourseController {
 	private TableColumn<CourseOffering, String> courseIDColumn;
 	@FXML
 	private Button withdrawButton;
-	
 	private String userID;
 
 	public StudentPageCourseController() {}
@@ -46,7 +44,6 @@ public class StudentPageCourseController {
     }
 
 	public void ListStudentCourses() {
-
 		ObservableList<CourseOffering> studentEnrolledCourses = FXCollections.observableArrayList();
 		Reader reader = new Reader();
 		User user = null;
