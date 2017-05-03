@@ -8,8 +8,9 @@ import errors.InstanceNotFound;
 public class Student extends User {
 	OverloadPerms overloadPerms;
 	ArrayList<Mark> marks;
-
+	private static ArrayList<CourseOffering> classList;
 	public Student () {}
+	private Reader reader = new Reader();
 	
 	public Student (String id, String password, String fName, String lName, OverloadPerms overloadPerms){
 		super(id, password, fName, lName);
@@ -26,8 +27,7 @@ public class Student extends User {
 	public ArrayList<CourseOffering> listCourses () throws SQLException {
 		
 		// Initialise reader and result
-		Reader reader = new Reader();
-		ArrayList<CourseOffering> classList = null;
+		//ArrayList<CourseOffering> classList = null;
 		
 		// Run reader function
 		try {
@@ -50,5 +50,11 @@ public class Student extends User {
 	
 	public void setMarks (ArrayList<Mark> marks) {
 		this.marks = marks;
+	}
+	public void withdraw(String userID, String offerID) {
+		System.out.println("ID IS " + offerID);
+		System.out.println(userID);
+		reader.DeleteEnrolment(userID,offerID);
+		System.out.println("Withdrawn from unit!!!");
 	}
 }
