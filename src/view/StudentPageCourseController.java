@@ -4,13 +4,11 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import application.MainApp;
 import errors.InstanceNotFound;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,8 +25,6 @@ public class StudentPageCourseController {
 	private TableColumn<CourseOffering, String> courseNameColumn;
 	@FXML
 	private TableColumn<CourseOffering, String> courseIDColumn;
-	@FXML
-	private Button withdrawButton;
 	private String userID;
 
 	public StudentPageCourseController() {}
@@ -39,7 +35,6 @@ public class StudentPageCourseController {
     private void initialize() {
     	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseNameProperty());
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseIDProperty());
-    	
 			
     }
 
@@ -74,14 +69,5 @@ public class StudentPageCourseController {
 		this.userID = userID;
 		System.out.println("Setting the id as " + userID);
 		ListStudentCourses();
-	}
-	public void withdraw() {
-		Student student = new Student();
-		student.withdraw(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
-		ListStudentCourses();
-	}
-	public void backButtonClicked() {
-		MainApp main = new MainApp();
-		main.showStudentHomePage();
 	}
 }
