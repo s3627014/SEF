@@ -3,20 +3,25 @@ package view;
 import application.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import main.Database;
 import main.User;
 
 public class StudentPageHomeController {
 	@FXML
 	private Button courseButton;
+
 	private String userID;
+	 MainApp main = new MainApp();
 	 @FXML
 	    private void initialize() {
-	    	
 	    }
 	 public void CourseClicked() throws Exception{
-	    	MainApp main = new MainApp();
 	    	main.showStudentCoursePage();
+	    	
+	    }
+	 public void EnrolClicked() throws Exception{
+	    	main.showStudentEnrolPage();
 	    	
 	    }
 	 public void setUserID(String userID) {

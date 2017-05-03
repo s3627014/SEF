@@ -2,6 +2,9 @@ package main;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
+
+import application.MainApp;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -9,6 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import errors.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import view.LoginPageController;
 
 
 public class Reader {
@@ -125,7 +131,7 @@ public class Reader {
 				Date semesterDate = rs.getDate("SEMESTER");
 				courseID = rs.getString("COURSE");
 				lecturerID = rs.getString("TEACHER");
-				
+				offerID = rs.getString("OFFERID");
 				// Create semester date
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(semesterDate);
@@ -141,6 +147,7 @@ public class Reader {
 		 		lecturer = (Staff) LoadUser(lecturerID);
 				
 				// Set up offer 
+
 				offer = new CourseOffering(offerID, semester, course, lecturer);	
 				offers.add(offer);
 			}
@@ -156,7 +163,6 @@ public class Reader {
 	
 	public User LoadUser (String userID) throws InstanceNotFound {
 		System.out.println("Loading User");
-		
 		// Set everything to null
 		User user = null;
 	    String fName = null;

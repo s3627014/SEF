@@ -1,10 +1,10 @@
 package main;
 
 public class CourseOffering {
-	String offerID;
-	DateTime semester;
-	Course course;
-	Staff lecturer;
+	private String offerID;
+	private DateTime semester;
+	private Course course;
+	private Staff lecturer;
 	
 	public CourseOffering (String offerID) {
 		this.offerID = offerID;

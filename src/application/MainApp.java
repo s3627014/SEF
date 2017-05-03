@@ -5,11 +5,16 @@ import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.User;
+import view.StudentEnrolPageController;
 import view.StudentPageCourseController;
 import view.StudentPageHomeController;
 
@@ -38,14 +43,15 @@ public class MainApp extends Application {
             primaryStage.setTitle("Course Manager");
             scene.getStylesheets().add
             (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            
             primaryStage.show();
+            
         } catch (Exception ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public void showStudentCoursePage(){
     	try {
- 
     		FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/studentCoursePage.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
@@ -54,6 +60,25 @@ public class MainApp extends Application {
             scene.getStylesheets().add
             (MainApp.class.getResource("/styles/login.css").toExternalForm());
             StudentPageCourseController controller = loader.getController();
+            System.out.println("Sending id: " + userID);
+            controller.setUserID(userID);
+            
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void showStudentEnrolPage(){
+    	try {
+ 
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/studentEnrolPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            StudentEnrolPageController controller = loader.getController();
             System.out.println("Sending id: " + userID);
             controller.setUserID(userID);
             primaryStage.show();
@@ -82,5 +107,6 @@ public class MainApp extends Application {
     public String getUserID() {
     	return userID;
     }
+
    
 }
