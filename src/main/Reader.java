@@ -15,40 +15,6 @@ public class Reader {
 	
 	// LOAD ALL FUNCTIONS
 	
-	public ArrayList<User> LoadAllUsers () throws InstanceNotFound {
-		ArrayList<User> users = new ArrayList<User>();
-		
-		// Go through result set and build user
-		try {
-			
-			// Search through database for user 
-			ResultSet rs = GetTable("ASS1_USERS");
-			
-			while (rs.next()) {		
-				
-				// Set everything to null
-				User user = null;
-				String userID = null;
-			    String fName = null;
-			    String lName = null;
-			    String pass = null;
-			    
-			    // Get information
-				userID = rs.getString("USERID");
-			    fName = rs.getString("FNAME");
-			    lName = rs.getString("LNAME");
-			    pass = rs.getString("PASS");
-			    
-			    user = new User(userID, pass, fName, lName);
-			    users.add(user);
-			}
-		} catch (SQLException err) {
-			System.out.println(err);
-		}
-		
-		return users;
-	}
-	
 	public ArrayList<Course> LoadAllCourses () throws InstanceNotFound {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		
@@ -102,53 +68,37 @@ public class Reader {
 		return courses;
 	}
 	
-	public ArrayList<CourseOffering> LoadAllOfferings () throws InstanceNotFound {
-		ArrayList<CourseOffering> offers = new ArrayList<CourseOffering>();
+	public ArrayList<Course> LoadAllUsers () throws InstanceNotFound {
+		ArrayList<Course> courses = new ArrayList<Course>();
 		
-		// Go through result set and build course
+		// Go through result set and build user
 		try {
 			
-			// Search through database for course 
-			ResultSet rs = GetTable("ASS1_OFFERINGS");
+			// Search through database for user 
+			ResultSet rs = GetTable("ASS1_USERS");
 			
-			while (rs.next()) {
-				// Set all to null
-				CourseOffering offer = null;
-			    String offerID = null;
-				DateTime semester = null;
-				Course course = null;
-			    Staff lecturer = null;
-			    String courseID = null;
-			    String lecturerID = null;
-
+			while (rs.next()) {		
+				
+				// Set everything to null
+				User user = null;
+				String userID = null;
+			    String fName = null;
+			    String lName = null;
+			    String pass = null;
+			    
 			    // Get information
-				Date semesterDate = rs.getDate("SEMESTER");
-				courseID = rs.getString("COURSE");
-				lecturerID = rs.getString("TEACHER");
-				
-				// Create semester date
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(semesterDate);
-				int day = cal.get(Calendar.DAY_OF_MONTH);
-				int month = cal.get(Calendar.MONTH);
-				int year = cal.get(Calendar.YEAR);
-				semester = new DateTime(day, month, year);	
-		 		
-		 		// Load course
-		 		course = LoadCourse(courseID);
-		 		
-		 		// Load lecturer as Staff
-		 		lecturer = (Staff) LoadUser(lecturerID);
-				
-				// Set up offer 
-				offer = new CourseOffering(offerID, semester, course, lecturer);	
-				offers.add(offer);
+				userID = rs.getString("USERID");
+			    fName = rs.getString("FNAME");
+			    lName = rs.getString("LNAME");
+			    pass = rs.getString("PASS");
+			    
+			    user = new User(userID, pass, fName, lName);
 			}
 		} catch (SQLException err) {
 			System.out.println(err);
-		}	
+		}
 		
-		return offers;
+		return courses;
 	}
 
 	

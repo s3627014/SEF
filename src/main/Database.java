@@ -17,7 +17,18 @@ public class Database {
 
 		return con;
 	}
-	
+	public static Connection connect2 () throws SQLException, ClassNotFoundException {
+		// Connection details
+	    String host = "jdbc:oracle:thin:@192.168.1.111:1521:xe";
+	    String username = "hope";
+	    String password = "oracle";
+	    
+		// Load the driver class and start connection
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection con = DriverManager.getConnection(host, username, password);
+		System.out.println("CONNECTED");
+		return con;
+	}
 	public static void closeConnection(){
         if(con!=null){
             try {

@@ -2,9 +2,12 @@ package main;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Course {
-	private String courseName;
-	private String courseID;
+	private StringProperty courseName;
+	private StringProperty courseID;
 	private String desc;
 	private Staff coordinator;
 	private ArrayList<Course> prereqs;
@@ -14,8 +17,8 @@ public class Course {
 	// CONSTRUCTORS
 	public Course (String courseName, String courseID, String desc, Staff coordinator, 
 			ArrayList<String> topics) {
-		this.courseName = courseName;
-		this.courseID = courseID;
+		this.courseName = new SimpleStringProperty(courseName);
+		this.courseID = new SimpleStringProperty(courseID);
 		this.desc = desc;
 		this.coordinator = coordinator;
 		this.topics = topics;
@@ -23,8 +26,8 @@ public class Course {
 	
 	public Course (String courseName, String courseID, String desc, Staff coordinator, 
 			ArrayList<Course>prereqs, ArrayList<String> topics) {
-		this.courseName = courseName;
-		this.courseID = courseID;
+		this.courseName = new SimpleStringProperty(courseName);;
+		this.courseID = new SimpleStringProperty(courseID);
 		this.desc = desc;
 		this.coordinator = coordinator;
 		this.prereqs = prereqs;
@@ -39,13 +42,17 @@ public class Course {
 
 	// GETTERS
 	public String getCourseName () {
+		return this.courseName.get();
+	}
+	public StringProperty getCourseNameProperty () {
 		return this.courseName;
 	}
-	
 	public String getCourseID () {
+		return this.courseID.get();
+	}
+	public StringProperty getCourseIDProperty() {
 		return this.courseID;
 	}
-	
 	public String getDescription () {
 		return this.desc;
 	}
