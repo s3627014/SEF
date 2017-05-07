@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AdminPageHomeController">
+   <children>
+      <Label layoutX="324.0" layoutY="43.0" prefHeight="62.0" prefWidth="411.0" text="Advance The System">
+         <font>
+            <Font name="System Bold" size="42.0" />
+         </font>
+      </Label>
+      <Button layoutX="409.0" layoutY="590.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Back" />
+      <Button fx:id="advanceSysButton" layoutX="409.0" layoutY="286.0" mnemonicParsing="false" onAction="#advanceSysClicked" prefHeight="64.0" prefWidth="241.0" text="Advance System" />
+      <DatePicker layoutX="409.0" layoutY="208.0" prefHeight="64.0" prefWidth="241.0" showWeekNumbers="true" />
+      <Button fx:id="advanceSysButton1" layoutX="409.0" layoutY="450.0" mnemonicParsing="false" onAction="#advanceSysClicked" prefHeight="64.0" prefWidth="241.0" text="Backward One Week" />
+      <Button fx:id="advanceSysButton2" layoutX="409.0" layoutY="369.0" mnemonicParsing="false" onAction="#advanceSysClicked" prefHeight="64.0" prefWidth="241.0" text="Froward One Week" />
+      <DialogPane headerText="System Time:" layoutX="170.0" layoutY="105.0">
+         <effect>
+            <Reflection />
+         </effect>
+      </DialogPane>
+      <DialogPane headerText="Real Time:" layoutX="530.0" layoutY="105.0" />
+   </children>
+</AnchorPane>

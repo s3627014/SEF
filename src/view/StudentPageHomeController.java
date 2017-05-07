@@ -10,7 +10,9 @@ import main.User;
 public class StudentPageHomeController {
 	@FXML
 	private Button courseButton;
-
+	@FXML
+	private Button enrolButton;
+	
 	private String userID;
 	 MainApp main = new MainApp();
 	 @FXML

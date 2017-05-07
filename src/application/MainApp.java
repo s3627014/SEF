@@ -101,6 +101,46 @@ public class MainApp extends Application {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void showCreateOfferingPage(){
+    	try {
+    		 
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/createOfferingPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            StudentEnrolPageController controller = loader.getController();
+            System.out.println("Sending id: " + userID);
+            controller.setUserID(userID);
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void showAdvanceSysPage(){
+    	try {
+    		 
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/advanceSysPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            StudentEnrolPageController controller = loader.getController();
+            System.out.println("Sending id: " + userID);
+            controller.setUserID(userID);
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public void setUserID(String userID) {
     	this.userID = userID;
     }

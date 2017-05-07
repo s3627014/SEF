@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import errors.InstanceNotFound;
 
 /**
- * Created by luke on 31/03/2017.
+ * Created by luke on 31/03/2017. <-- lol which one?
  */
 
 public class Admin extends User {

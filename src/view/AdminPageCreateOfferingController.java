@@ -1,26 +1,23 @@
 package view;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import application.MainApp;
 import errors.InstanceNotFound;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import main.Admin;
 import main.Course;
 import main.CourseOffering;
 import main.Reader;
-import main.Student;
 import main.User;
 
-public class StudentPageCourseController {
+public class AdminPageCreateOfferingController {
 	@FXML
 	private TableView<CourseOffering> table;
 	@FXML
@@ -28,12 +25,16 @@ public class StudentPageCourseController {
 	@FXML
 	private TableColumn<CourseOffering, String> courseIDColumn;
 	@FXML
-	private Button withdrawButton;
+	private TableColumn<CourseOffering, String> courseDescColumn;
+	@FXML
+	private TableColumn<CourseOffering, String> courseCoordColumn;
+	@FXML
+	private Button createButton;
 	@FXML
 	private Button backButton;
 	private String userID;
 
-	public StudentPageCourseController() {}
+	public AdminPageCreateOfferingController() {}
     
 	   
 	
@@ -42,11 +43,14 @@ public class StudentPageCourseController {
     	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseNameProperty());
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseIDProperty());
     	
+    	//Issue here with getDescription() and getCoordinator()
+    	//courseDescColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getDescription());
+    	//courseCoordColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCoordinator());
 			
     }
 
 	public void ListStudentCourses() {
-		ObservableList<CourseOffering> studentEnrolledCourses = FXCollections.observableArrayList();
+		ObservableList<Course> courseNeedingCreating = FXCollections.observableArrayList();
 		Reader reader = new Reader();
 		User user = null;
 		try {
@@ -56,19 +60,23 @@ public class StudentPageCourseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (user instanceof Student) {
-			Student student = (Student) user;
+		if (user instanceof Admin) {
+			Admin admin = (Admin) user;
 			try {
-				ArrayList<CourseOffering> courses = student.listCourses();
-				for (CourseOffering course : courses) {
-					studentEnrolledCourses.add(course);
+				ArrayList<Course> courses = admin.getAllCourses();
+				for (Course course : courses) {
+					courseNeedingCreating.add(course);
 				}
-			} catch (SQLException e1) {
+				/*} catch (SQLException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e1.printStackTrace();*/	
 			}
-			table.setItems(studentEnrolledCourses);
-		}
+			//remove finally when fixed
+			finally{
+				
+			}
+			//table.setId(courseNeedingCreating);
+	}
 
 	}
 
@@ -77,11 +85,7 @@ public class StudentPageCourseController {
 		System.out.println("Setting the id as " + userID);
 		ListStudentCourses();
 	}
-	public void withdraw() throws SQLException {
-		Student student = new Student();
-		student.withdraw(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
-		ListStudentCourses();
-	}
+
 	public void backButtonClicked() {
 		MainApp main = new MainApp();
 		main.showStudentHomePage();
