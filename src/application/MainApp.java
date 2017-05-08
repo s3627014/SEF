@@ -101,6 +101,21 @@ public class MainApp extends Application {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public void showProgramCoordinatorHomePage(){
+    	try {
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/programCoordinatorPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public void setUserID(String userID) {
     	this.userID = userID;
     }

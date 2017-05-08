@@ -5,7 +5,7 @@ public class Database {
 	
 	private static Connection con;
 	
-	public static Connection connect2 () throws SQLException, ClassNotFoundException {
+	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
 	    String username = "s3435088";
@@ -17,7 +17,7 @@ public class Database {
 
 		return con;
 	}
-	public static Connection connect () throws SQLException, ClassNotFoundException {
+	public static Connection connect2 () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@192.168.1.111:1521:xe";
 	    String username = "hope";
