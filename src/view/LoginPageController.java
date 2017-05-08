@@ -14,7 +14,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import main.Admin;
 import main.Database;
+import main.ProgramCoordinator;
+import main.Student;
 import main.User;
 
 
@@ -43,9 +46,17 @@ public class LoginPageController {
     public void loginClicked() throws Exception{
     	Database db = new Database();
     	System.out.println(usernameField.getText());
-    	User.login(usernameField.getText(), passwordField.getText());
+    	User user = User.login(usernameField.getText(), passwordField.getText());
     	main.setUserID(usernameField.getText());
+    	if(user instanceof Student) {
     	main.showStudentHomePage();
+    	}
+    	if(user instanceof ProgramCoordinator) {
+    	main.showProgramCoordinatorHomePage();
+    	}
+    	if(user instanceof Admin) {
+        	//main.showAdminHomePage();
+        	}
     	//main.showStudentCoursePage(usernameField.getText());
     }
 
