@@ -717,9 +717,9 @@ public class Reader {
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));	
 		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
-
+		keypairs.add(new Keypair("COURSEID", course.getCourseIDProperty().getValue()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
-		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
+		wherePairs.add(new Keypair("COURSEID", course.getCourseIDProperty().getValue()));
 		
 		// Try to update, and if no instance exists try to add
 		UpdateRecord("ASS1_COURSES", keypairs, wherePairs);

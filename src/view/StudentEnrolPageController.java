@@ -2,16 +2,23 @@ package view;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import application.MainApp;
 import errors.InstanceNotFound;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import main.Course;
 import main.CourseOffering;
+import main.InternalMark;
+import main.Mark;
 import main.Reader;
 import main.Student;
 import main.User;
@@ -28,7 +35,9 @@ public class StudentEnrolPageController {
 	@FXML
 	private Button backButton;
 	private String userID;
-
+	MainApp main = new MainApp();
+	Reader reader = new Reader();
+	
 	@FXML
 	private void initialize() {
 		courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().getCourse().getCourseNameProperty());
@@ -41,12 +50,50 @@ public class StudentEnrolPageController {
 	}
 
 	public void enrol() throws SQLException, InstanceNotFound {
-		Student student = new Student();
-		student.enrol(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
+		ArrayList<Course> prereqs = reader.LoadPrereqs("COURSE",
+				table.getSelectionModel().selectedItemProperty().getValue().getCourse().getCourseID());
+		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", userID);
+		ArrayList<InternalMark> InternalMarks = new ArrayList<InternalMark>();
+		int i = 0;
+		while (i < marks.size()) {
+			if (marks.get(i) instanceof InternalMark) {
+				InternalMarks.add((InternalMark) marks.get(i));
+			}
+			i++;
+		}
+		i =0;
+		if(prereqs.size()==0) {
+			Student student = new Student();
+			student.enrol(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
+			listOfferings();
+			return;
+		}
+		while(i<prereqs.size()) {
+			int k=0;
+			while(k<InternalMarks.size()) {
+				if(prereqs.get(i).getCourseID().equals(InternalMarks.get(k).getOffer().getCourse().getCourseID())) {
+					Student student = new Student();
+
+					student.enrol(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
+					listOfferings();
+					return;
+					
+				}
+				k++;
+			}
+			i++;
+		}
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("PREREQS NOT MET");
+		alert.setHeaderText("Enrolment Failed!");
+		String s ="Reason: Prerequistes not met.";
+		alert.setContentText(s);
+		alert.show();
+
+		
 	}
 
 	public void backButtonClicked() {
-		MainApp main = new MainApp();
 		main.showStudentHomePage();
 	}
 
@@ -56,9 +103,19 @@ public class StudentEnrolPageController {
 		
 			try {
 				ArrayList<CourseOffering> courses = student.listOfferings();
-				System.out.println(courses.get(0).getOfferID());
-				
-					offerings.addAll(courses);
+				ArrayList<CourseOffering> enrolments = reader.LoadClasses(userID);
+				offerings.addAll(courses);
+				int i=0;
+				while(i<courses.size()) {
+					int k=0;
+					while(k<enrolments.size()) {
+						if(courses.get(i).getCourse().getCourseID().equals(enrolments.get(k).getCourse().getCourseID())) {
+							offerings.remove(courses.get(i));
+						}
+						k++;
+					}
+					i++;
+				}
 				
 			} catch (InstanceNotFound e) {
 				// TODO Auto-generated catch block
