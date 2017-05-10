@@ -30,4 +30,7 @@ public class StudentPageHomeController {
 			this.userID = userID;
 			System.out.println("Setting the id as " + userID);
 		}
+	 public void logoutClicked() {
+		 main.showLoginPage();
+	 }
 }

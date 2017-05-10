@@ -188,6 +188,26 @@ public class MainApp extends Application {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public void showLoginPage() {
+    	 try {
+         	
+         	FXMLLoader loader = new FXMLLoader();
+             loader.setLocation(MainApp.class.getResource("/view/LoginPage.fxml"));
+             AnchorPane page = (AnchorPane) loader.load();
+         	
+         	
+             Scene scene = new Scene(page);
+             primaryStage.setScene(scene);
+             primaryStage.setTitle("Course Manager");
+             scene.getStylesheets().add
+             (MainApp.class.getResource("/styles/login.css").toExternalForm());
+             
+             primaryStage.show();
+             
+         } catch (Exception ex) {
+             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
     
     public void setUserID(String userID) {
     	this.userID = userID;

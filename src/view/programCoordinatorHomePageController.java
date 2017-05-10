@@ -45,5 +45,8 @@ public class programCoordinatorHomePageController {
 	    	*/
 	    	
 	    }
+	 public void logoutClicked() {
+		 main.showLoginPage();
+	 }
 
 }
