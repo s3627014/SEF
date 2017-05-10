@@ -55,8 +55,8 @@ public class LoginPageController {
     	if(user instanceof ProgramCoordinator) {
     	main.showProgramCoordinatorHomePage();
     	}
-    	if(user instanceof Staff) {
-        	main.showUploadMarksPage();
+    	else if(user instanceof Staff) {
+        	main.showLecturerHomePage();
         	}
     	//main.showStudentCoursePage(usernameField.getText());
     }

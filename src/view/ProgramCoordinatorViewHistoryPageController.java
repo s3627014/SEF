@@ -50,15 +50,12 @@ public class ProgramCoordinatorViewHistoryPageController {
 	@FXML
 	private TableColumn<InternalMark, String> offerIDColumn;
 	@FXML
-	private RadioButton rbInternal;
-	@FXML
-	private RadioButton rbExternal;
-	@FXML
 	private ToggleGroup toggles;
 	@FXML
 	private TextField studentIDField;
+@FXML
+private Button exemptionButton;
 	private String userID;
-
 	public ProgramCoordinatorViewHistoryPageController() {}
     
 	   
@@ -69,6 +66,7 @@ public class ProgramCoordinatorViewHistoryPageController {
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseIDProperty());
     	offerIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getOfferIDProperty());
     	markColumn.setCellValueFactory(cellData ->cellData.getValue().getResultProperty());
+    
 			
     }
 
@@ -132,7 +130,8 @@ public class ProgramCoordinatorViewHistoryPageController {
 	public void externalClicked() {
 		MainApp main = new MainApp();
 		main.showStudentExternalHistoryPage();
-			
-		
+	}
+	public void removeExemptionButton() {
+		exemptionButton.setVisible(false);
 	}
 }

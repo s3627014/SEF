@@ -13,7 +13,7 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <Button id="button" layoutX="533.0" layoutY="601.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Back" />
+      <Button onAction="#backClicked" id="button" layoutX="533.0" layoutY="601.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Back" />
       <TextField fx:id="offerIDField" layoutX="417.0" layoutY="267.0" prefHeight="47.0" prefWidth="200.0" promptText="Offering ID" />
       <Button id="button" fx:id="createCourseButton" layoutX="261.0" layoutY="601.0" mnemonicParsing="false" onAction="#uploadResult" prefHeight="64.0" prefWidth="241.0" text="Upload result" />
       <TextField fx:id="markField" layoutX="417.0" layoutY="362.0" prefHeight="47.0" prefWidth="200.0" promptText="Mark" />

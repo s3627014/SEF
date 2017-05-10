@@ -25,7 +25,7 @@
             <TableColumn id="markColumn" fx:id="markColumn" prefWidth="192.0" text="Mark" />
         </columns>
       </TableView>
-      <Button layoutX="713.0" layoutY="539.0" mnemonicParsing="false" onAction="#showGrantExemption" prefHeight="64.0" prefWidth="241.0" text="Grant Exemptions" />
+      <Button fx:id="exemptionButton" layoutX="713.0" layoutY="539.0" mnemonicParsing="false" onAction="#showGrantExemption" prefHeight="64.0" prefWidth="241.0" text="Grant Exemptions" />
       <Button onAction="#externalClicked" layoutX="184.0" layoutY="539.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="View External results" />
   
    </children>

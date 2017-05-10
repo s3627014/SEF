@@ -53,6 +53,8 @@ private TextField markField;
     	InternalMark mark = new InternalMark(student,offer,markField.getText());
     	reader.SaveMark(mark);
     }
- 
+    public void backClicked() {
+    	main.showLecturerHomePage();
+    }
 
 }
