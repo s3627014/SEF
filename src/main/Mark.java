@@ -9,7 +9,7 @@ public class Mark {
 	
 	public Mark (Student student, String result) {
 		this.student = student;
-		this.result = new SimpleStringProperty(result);;
+		this.result = new SimpleStringProperty(result);
 	}
 	
 	public Student getStudent () {

@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import main.Admin;
 import main.Database;
 import main.ProgramCoordinator;
+import main.Staff;
 import main.Student;
 import main.User;
 
@@ -54,8 +55,8 @@ public class LoginPageController {
     	if(user instanceof ProgramCoordinator) {
     	main.showProgramCoordinatorHomePage();
     	}
-    	if(user instanceof Admin) {
-        	//main.showAdminHomePage();
+    	if(user instanceof Staff) {
+        	main.showUploadMarksPage();
         	}
     	//main.showStudentCoursePage(usernameField.getText());
     }

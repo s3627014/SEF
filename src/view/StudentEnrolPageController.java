@@ -13,8 +13,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import main.Course;
 import main.CourseOffering;
 import main.InternalMark;
@@ -34,6 +36,7 @@ public class StudentEnrolPageController {
 	private Button enrolButton;
 	@FXML
 	private Button backButton;
+	
 	private String userID;
 	MainApp main = new MainApp();
 	Reader reader = new Reader();
@@ -93,7 +96,12 @@ public class StudentEnrolPageController {
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-			//Do something
+			Alert alert2 = new Alert(AlertType.INFORMATION);
+			alert2.setTitle("Application for Exemption");
+			alert2.setHeaderText("Application sent.");
+			alert2.setContentText("Sent to program coordinator for approval.");
+
+			alert2.showAndWait();
 		}
 		
 	}
@@ -101,6 +109,7 @@ public class StudentEnrolPageController {
 	public void backButtonClicked() {
 		main.showStudentHomePage();
 	}
+	
 
 	public void listOfferings() {
 		ObservableList<CourseOffering> offerings = FXCollections.observableArrayList();

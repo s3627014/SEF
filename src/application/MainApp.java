@@ -164,7 +164,7 @@ public class MainApp extends Application {
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             scene.getStylesheets().add
-            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            (MainApp.class.getResource("/styles/createCourse.css").toExternalForm());
             
             primaryStage.show();
         } catch (Exception ex) {
@@ -175,6 +175,23 @@ public class MainApp extends Application {
     	try {
     		FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/programCoordinatorViewHistoryPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/studentHistory.css").toExternalForm());
+            ProgramCoordinatorViewHistoryPageController controller = loader.getController();
+           
+            controller.ListStudentHistory();
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void showStudentExternalHistoryPage(){
+    	try {
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/programCoordinatorViewExternalHistoryPage.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
@@ -208,7 +225,26 @@ public class MainApp extends Application {
              Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
          }
     }
-    
+    public void showUploadMarksPage() {
+   	 try {
+        	
+        	FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/uploadResults.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+        	
+        	
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Course Manager");
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            
+            primaryStage.show();
+            
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   }
     public void setUserID(String userID) {
     	this.userID = userID;
     }

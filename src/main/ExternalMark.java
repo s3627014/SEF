@@ -2,21 +2,22 @@ package main;
 
 import java.util.Date;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class ExternalMark extends Mark {
-	private String course;
-	private String institution;
-	private String description;
+	private StringProperty course;
+	private StringProperty institution;
+	private StringProperty description;
 	private Date startDate;
 
 	public ExternalMark(Student student, String course, String institution, String description,
 			Date startDate, String result) {
 		super(student, result);
 		
-		this.course = (course);
-		this.institution = (institution);
-		this.description = (description);
+		this.course = new SimpleStringProperty(course);
+		this.institution = new SimpleStringProperty(institution);
+		this.description = new SimpleStringProperty(description);
 		this.startDate = (startDate);
 	}
 
@@ -24,22 +25,33 @@ public class ExternalMark extends Mark {
 			Date startDate, StringProperty result) {
 
 		this.student = student;
-		this.course = course;
-		this.institution = institution;
-		this.description = description;
+		this.course = new SimpleStringProperty(course);;
+		this.institution = new SimpleStringProperty(institution);;
+		this.description = new SimpleStringProperty(description);;
 		this.startDate = startDate;
 		this.result = result;
 	}
 
 	public String getCourse() {
-		return course;
+		return course.get();
 	}
 
 	public String getInstitution() {
-		return institution;
+		return institution.get();
 	}
 
 	public String getDescription() {
+		return description.get();
+	}
+	public StringProperty getCourseProperty() {
+		return course;
+	}
+
+	public StringProperty getInstitutionProperty() {
+		return institution;
+	}
+
+	public StringProperty getDescriptionProperty() {
 		return description;
 	}
 

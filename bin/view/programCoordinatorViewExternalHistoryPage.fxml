@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ProgramCoordinatorViewHistoryPageController">
+<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ProgramCoordinatorViewExternalHistoryPageController">
    <children>
       <Label layoutX="358.0" layoutY="43.0" prefHeight="61.0" prefWidth="322.0" text="Student History">
          <font>
@@ -19,14 +19,14 @@
       <TextField fx:id="studentIDField" layoutX="209.0" layoutY="144.0" onAction="#ListStudentHistory" prefHeight="47.0" prefWidth="200.0" promptText="Student ID" />
       <TableView fx:id="table" layoutX="209.0" layoutY="216.0" prefHeight="285.0" prefWidth="714.0">
         <columns>
-          <TableColumn fx:id="offerIDColumn" prefWidth="136.0" text="Offer ID" />
-          <TableColumn fx:id="courseIDColumn" prefWidth="192.0" text="Course ID" />
-            <TableColumn fx:id="courseNameColumn" prefWidth="192.0" text="Course Name" />
+          <TableColumn fx:id="courseNameColumn" prefWidth="136.0" text="Course Name" />
+          <TableColumn fx:id="courseDescriptionColumn" prefWidth="192.0" text="Course description" />
+            <TableColumn fx:id="institutionColumn" prefWidth="192.0" text="Institution" />
             <TableColumn id="markColumn" fx:id="markColumn" prefWidth="192.0" text="Mark" />
         </columns>
       </TableView>
       <Button layoutX="713.0" layoutY="539.0" mnemonicParsing="false" onAction="#showGrantExemption" prefHeight="64.0" prefWidth="241.0" text="Grant Exemptions" />
-      <Button onAction="#externalClicked" layoutX="184.0" layoutY="539.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="View External results" />
+      <Button onAction="#showInternalMarks" layoutX="184.0" layoutY="539.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="View Internal results" />
   
    </children>
 </AnchorPane>

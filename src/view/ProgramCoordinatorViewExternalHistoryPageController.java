@@ -32,62 +32,57 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import main.Course;
 import main.CourseOffering;
+import main.ExternalMark;
 import main.InternalMark;
 import main.Mark;
 import main.Reader;
 import main.Student;
 import main.User;
 
-public class ProgramCoordinatorViewHistoryPageController {
+public class ProgramCoordinatorViewExternalHistoryPageController {
 	@FXML
-	private TableView<InternalMark> table;
+	private TableView<ExternalMark> table;
 	@FXML
-	private TableColumn<InternalMark, String> courseNameColumn;
+	private TableColumn<ExternalMark, String> courseNameColumn;
 	@FXML
-	private TableColumn<InternalMark, String> courseIDColumn;
+	private TableColumn<ExternalMark, String> courseDescriptionColumn;
 	@FXML
-	private TableColumn<InternalMark, String> markColumn;
+	private TableColumn<ExternalMark, String> markColumn;
 	@FXML
-	private TableColumn<InternalMark, String> offerIDColumn;
-	@FXML
-	private RadioButton rbInternal;
-	@FXML
-	private RadioButton rbExternal;
-	@FXML
-	private ToggleGroup toggles;
+	private TableColumn<ExternalMark, String> institutionColumn;
 	@FXML
 	private TextField studentIDField;
 	private String userID;
 
-	public ProgramCoordinatorViewHistoryPageController() {}
+	public ProgramCoordinatorViewExternalHistoryPageController() {}
     
 	   
 	
     @FXML
     private void initialize() {
-    	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseNameProperty());
-    	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseIDProperty());
-    	offerIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getOfferIDProperty());
+    	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getCourseProperty());
+    	courseDescriptionColumn.setCellValueFactory(cellData ->cellData.getValue().getDescriptionProperty());
+    	institutionColumn.setCellValueFactory(cellData ->cellData.getValue().getInstitutionProperty());
     	markColumn.setCellValueFactory(cellData ->cellData.getValue().getResultProperty());
 			
     }
 
 	public void ListStudentHistory() throws InstanceNotFound {
 		setUserID(studentIDField.getText());
-		ObservableList<InternalMark> markList = FXCollections.observableArrayList();
+		ObservableList<ExternalMark> markList = FXCollections.observableArrayList();
 		Reader reader = new Reader();
 		
 		User user = null;
 		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", userID);
-		ArrayList<InternalMark> internalMarks = new ArrayList<InternalMark>();
+		ArrayList<ExternalMark> externalMark = new ArrayList<ExternalMark>();
 		int i = 0;
 		while (i < marks.size()) {
-			if (marks.get(i) instanceof InternalMark) {
-				internalMarks.add((InternalMark) marks.get(i));
+			if (marks.get(i) instanceof ExternalMark) {
+				externalMark.add((ExternalMark) marks.get(i));
 			}
 			i++;
 		}
-		markList.addAll(internalMarks);
+		markList.addAll(externalMark);
 		
 			table.setItems(markList);
 		
@@ -129,10 +124,9 @@ public class ProgramCoordinatorViewHistoryPageController {
 			}
 		});
 	}
-	public void externalClicked() {
+	public void showInternalMarks() {
 		MainApp main = new MainApp();
-		main.showStudentExternalHistoryPage();
-			
+		main.showStudentHistoryPage();
 		
 	}
 }

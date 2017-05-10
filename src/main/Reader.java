@@ -65,6 +65,7 @@ public class Reader {
 			ResultSet rs = GetTable("ASS1_COURSES");
 			
 			while (rs.next()) {
+				
 				// Set everything to null
 				Course course = null;
 			    String courseID = null;
@@ -717,7 +718,7 @@ public class Reader {
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));	
 		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
-
+		keypairs.add(new Keypair("COURSEID", course.getCourseID()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
 		
@@ -761,7 +762,8 @@ public class Reader {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("MARK", mark.getResult()));
-		
+		keypairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));
+		keypairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));	
 		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));	
