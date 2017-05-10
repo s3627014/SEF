@@ -29,8 +29,6 @@ public class StudentPageCourseController {
 	private TableColumn<CourseOffering, String> courseIDColumn;
 	@FXML
 	private Button withdrawButton;
-	@FXML
-	private Button backButton;
 	private String userID;
 
 	public StudentPageCourseController() {}

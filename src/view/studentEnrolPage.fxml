@@ -18,7 +18,7 @@
          <columns>
             <TableColumn fx:id="courseIDColumn" prefWidth="171.0" text="Course Code" />
             <TableColumn fx:id="courseNameColumn" prefWidth="342.0" text="Course Name" />
-            <TableColumn prefWidth="117.0" text="C1" />
+            <TableColumn fx:id="prereqMet" prefWidth="117.0" text="preReq" />
             <TableColumn prefWidth="94.0" text="C1" />
          </columns>
       </TableView>
