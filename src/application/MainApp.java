@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.User;
+import view.ProgramCoordinatorViewHistoryPageController;
 import view.StudentEnrolPageController;
 import view.StudentPageCourseController;
 import view.StudentPageHomeController;
@@ -139,7 +140,54 @@ public class MainApp extends Application {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    public void showProgramCoordinatorHomePage(){
+    	try {
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/programCoordinatorPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void showProgramCoordinatorCreateCoursePage(){
+    	try {
+    		System.out.println("sadasd");
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/programCoordinatorCreateCoursePage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/login.css").toExternalForm());
+            
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void showStudentHistoryPage(){
+    	try {
+    		FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/view/programCoordinatorViewHistoryPage.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            scene.getStylesheets().add
+            (MainApp.class.getResource("/styles/studentHistory.css").toExternalForm());
+            ProgramCoordinatorViewHistoryPageController controller = loader.getController();
+           
+            controller.ListStudentHistory();
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public void setUserID(String userID) {
     	this.userID = userID;

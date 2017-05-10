@@ -2,6 +2,8 @@ package main;
 
 import java.util.Date;
 
+import javafx.beans.property.StringProperty;
+
 public class ExternalMark extends Mark {
 	private String course;
 	private String institution;
@@ -19,7 +21,7 @@ public class ExternalMark extends Mark {
 	}
 
 	public void setAll (Student student, String course, String institution, String description,
-			Date startDate, String result) {
+			Date startDate, StringProperty result) {
 
 		this.student = student;
 		this.course = course;

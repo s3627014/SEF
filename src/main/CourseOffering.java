@@ -1,33 +1,38 @@
 package main;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class CourseOffering {
-	String offerID;
+	StringProperty offerID;
 	DateTime semester;
 	Course course;
 	Staff lecturer;
 	
 	public CourseOffering (String offerID) {
-		this.offerID = offerID;
+		this.offerID = new SimpleStringProperty(offerID);
 	}
 	
 	public CourseOffering (String offerID, DateTime semester, Course course, Staff lecturer) {
-		this.offerID = offerID;
+		this.offerID = new SimpleStringProperty(offerID);;
 		this.semester = semester;
 		this.course = course;
 		this.lecturer = lecturer;
 	}
 	
 	public void setAll (String offerID, DateTime semester, Course course, Staff lecturer) {
-		this.offerID = offerID;
+		this.offerID = new SimpleStringProperty(offerID);;
 		this.semester = semester;
 		this.course = course;
 		this.lecturer = lecturer;
 	}
 	
 	public String getOfferID () {
+		return offerID.get();
+	}
+	public StringProperty getOfferIDProperty () {
 		return offerID;
 	}
-	
 	public DateTime getSemester () {
 		return semester;
 	}
