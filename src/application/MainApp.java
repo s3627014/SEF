@@ -193,15 +193,13 @@ public class MainApp extends Application {
     public void showStudentHistoryPageLecturer(){
     	try {
     		FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/view/programCoordinatorViewHistoryPage.fxml"));
+            loader.setLocation(MainApp.class.getResource("/view/LecturerViewHistoryPage.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             scene.getStylesheets().add
             (MainApp.class.getResource("/styles/studentHistory.css").toExternalForm());
-            ProgramCoordinatorViewHistoryPageController controller = loader.getController();
-           controller.removeExemptionButton();
-            controller.ListStudentHistory();
+            
             primaryStage.show();
         } catch (Exception ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);

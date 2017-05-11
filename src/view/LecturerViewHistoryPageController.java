@@ -38,7 +38,7 @@ import main.Reader;
 import main.Student;
 import main.User;
 
-public class ProgramCoordinatorViewHistoryPageController {
+public class LecturerViewHistoryPageController {
 	@FXML
 	private TableView<InternalMark> table;
 	@FXML
@@ -56,7 +56,7 @@ public class ProgramCoordinatorViewHistoryPageController {
 @FXML
 private Button exemptionButton;
 	private String userID;
-	public ProgramCoordinatorViewHistoryPageController() {}
+	public LecturerViewHistoryPageController() {}
     
 	   
 	
@@ -66,7 +66,7 @@ private Button exemptionButton;
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseIDProperty());
     	offerIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getOfferIDProperty());
     	markColumn.setCellValueFactory(cellData ->cellData.getValue().getResultProperty());
-
+    	
 			
     }
 
@@ -91,12 +91,7 @@ private Button exemptionButton;
 		
 
 	}
-	public void showGrantExemption() {
-		showEnrolDialog();
-		//MainApp main = new MainApp();
-		//main.showGrantExemptionPage();
-		
-	}
+	
 	public void setUserID(String userID) {
 		this.userID = userID;
 		
@@ -104,34 +99,7 @@ private Button exemptionButton;
 
 	public void backButtonClicked() {
 		MainApp main = new MainApp();
-		main.showProgramCoordinatorHomePage();
+		main.showLecturerHomePage();
 	}
-	public void showEnrolDialog() {
-		TextInputDialog dialog = new TextInputDialog("o1234");
-		dialog.setTitle("Grant Exemption for " + userID);
-		dialog.setHeaderText("Please enter offering to enrol into.");
-		dialog.setContentText("Offer ID: ");
-
-		// Traditional way to get the response value.
-		Optional<String> result = dialog.showAndWait();
 	
-
-		// The Java 8 way to get the response value (with lambda expression).
-		Student student = new Student();
-		result.ifPresent(offerID -> {
-			try {
-				student.enrol(userID,offerID);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-	}
-	public void externalClicked() {
-		MainApp main = new MainApp();
-		main.showStudentExternalHistoryPage();
-	}
-	public void removeExemptionButton() {
-		exemptionButton.setVisible(false);
-	}
 }

@@ -45,6 +45,7 @@ public class Course {
 	}
 
 
+
 	// GETTERS
 	public String getCourseName () {
 		return this.courseName.get();
