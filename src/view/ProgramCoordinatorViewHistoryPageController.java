@@ -66,7 +66,7 @@ private Button exemptionButton;
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseIDProperty());
     	offerIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getOfferIDProperty());
     	markColumn.setCellValueFactory(cellData ->cellData.getValue().getResultProperty());
-
+    
 			
     }
 

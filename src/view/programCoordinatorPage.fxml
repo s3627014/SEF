@@ -5,17 +5,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.programCoordinatorHomePageController">
+<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.programCoordinatorHomePageController">
    <children>
       <Label layoutX="358.0" layoutY="43.0" prefHeight="61.0" prefWidth="322.0" text="Welcome back!">
          <font>
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <Button fx:id="courseButton" layoutX="399.0" layoutY="170.0" mnemonicParsing="false" onAction="#CourseClicked" prefHeight="64.0" prefWidth="241.0" text="Create Course" />
-      <Button layoutX="397.0" layoutY="467.0" mnemonicParsing="false" onAction="#logoutClicked" prefHeight="64.0" prefWidth="241.0" text="Logout" />
-      <Button layoutX="399.0" layoutY="265.0" mnemonicParsing="false" onAction="#studentActionsClicked" prefHeight="64.0" prefWidth="241.0" text="Student History/Exemptions" />
-      <Button onAction="#showOverloadDialog" layoutX="399.0" layoutY="369.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Overload Permission" />
+      <Button fx:id="courseButton" onAction="#CourseClicked" layoutX="399.0" layoutY="170.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Create Course" />
+      <Button onAction="#logoutClicked" layoutX="397.0" layoutY="467.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Logout" />
+      <Button onAction="#studentActionsClicked" layoutX="399.0" layoutY="318.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Student Actions" />
   
    </children>
 </AnchorPane>

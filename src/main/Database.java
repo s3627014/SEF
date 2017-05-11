@@ -5,7 +5,8 @@ public class Database {
 	
 	private static Connection con;
 	
-	public static Connection connect2 () throws SQLException, ClassNotFoundException {
+<<<<<<< HEAD
+	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
 	    String username = "s3435088";
@@ -18,9 +19,9 @@ public class Database {
 		return con;
 	}
 	
-	public static Connection connect () throws SQLException, ClassNotFoundException {
+	public static Connection connect2 () throws SQLException, ClassNotFoundException {
 		// Connection details
-	    String host = "jdbc:oracle:thin:@localHost:1521:xe";
+	    String host = "jdbc:oracle:thin:@192.168.1.111:1521:xe";
 	    String username = "hope";
 	    String password = "oracle";
 	    
@@ -31,7 +32,32 @@ public class Database {
 		return con;
 	}
 	
+=======
+	public static Connection connect2 () throws SQLException, ClassNotFoundException {
+		// Connection details
+	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
+	    String username = "s3435088";
+	    String password = "qoSpjXcw";
+	    
+		// Load the driver class and start connection
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection con = DriverManager.getConnection(host, username, password);
 
+		return con;
+	}
+	public static Connection connect () throws SQLException, ClassNotFoundException {
+		// Connection details
+	    String host = "jdbc:oracle:thin:@192.168.1.111:1521:xe";
+	    String username = "hope";
+	    String password = "oracle";
+	    
+		// Load the driver class and start connection
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection con = DriverManager.getConnection(host, username, password);
+		System.out.println("CONNECTED");
+		return con;
+	}
+>>>>>>> refs/remotes/origin/JavaFX
 	public static void closeConnection(){
         if(con!=null){
             try {
