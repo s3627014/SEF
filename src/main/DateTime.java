@@ -6,7 +6,7 @@ import java.sql.Date;
 public class DateTime {
 	
 	private long advance;
-	private long time;
+	private static long time;
 	
 	public DateTime()
 	{
@@ -24,7 +24,7 @@ public class DateTime {
 		setDate(day, month, year);
 	}
 	
-	public long getTime()
+	public static long getTime()
 	{
 		return time;
 	}
@@ -51,7 +51,7 @@ public class DateTime {
 		return gct;
 	}
 	
-	public String getFormattedDate()
+	public static String getFormattedDate()
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		long currentTime = getTime();

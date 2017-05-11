@@ -17,8 +17,8 @@
         <columns>
           <TableColumn fx:id="courseIDColumn" prefWidth="131.20001220703125" text="Course Code" />
           <TableColumn fx:id="courseNameColumn" prefWidth="185.0" text="Course Name" />
-            <TableColumn prefWidth="304.2000732421875" text="Descritption" />
-            <TableColumn prefWidth="104.7999267578125" text="Coordinator" />
+            <TableColumn fx:id="courseDescColumn" prefWidth="304.2000732421875" text="Descritption" />
+            <TableColumn fx:id="courseCoordColumn" prefWidth="104.7999267578125" text="Coordinator" />
         </columns>
       </TableView>
       <Button fx:id="createButton" layoutX="423.0" layoutY="574.0" mnemonicParsing="false" onAction="#createButtonClicked" prefHeight="52.0" prefWidth="188.0" text="Create" />

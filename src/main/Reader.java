@@ -7,9 +7,11 @@ import application.MainApp;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import errors.*;
 import javafx.scene.control.Alert;
@@ -1171,4 +1173,30 @@ public class Reader {
 		// Return user if found in database
 		return(rs);
 	}
+	
+	public static String SystemDate() throws SQLException{
+		
+		Date todaysDate = null;
+		// Connect to database
+		Connection con = null;
+		try {
+			con = Database.connect();
+		} 
+		catch (ClassNotFoundException err) {
+			System.out.println("Could not find Oracle package.");
+		} 
+		catch (SQLException err) {
+			System.out.println("Could not connect to database.");
+		}
+
+		// Attempt to run statement on oracle server
+		todaysDate = new java.sql.Date(new java.util.Date().getTime());	
+		
+		String StringTD=todaysDate.toString();
+		
+		return StringTD; 
+	}
+	
+	
+	
 }
