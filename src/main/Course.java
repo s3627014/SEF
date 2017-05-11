@@ -39,13 +39,10 @@ public class Course {
 	public void setPrereqs (ArrayList<Course> prereqs) {
 		this.prereqs = prereqs;
 	}
-<<<<<<< HEAD
 	
 	public void setTopics (ArrayList<String> topics) {
 		this.topics = topics;
 	}
-=======
->>>>>>> refs/remotes/origin/JavaFX
 
 	// GETTERS
 	public String getCourseName () {

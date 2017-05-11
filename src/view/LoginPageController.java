@@ -48,6 +48,7 @@ public class LoginPageController {
     	Database db = new Database();
     	System.out.println(usernameField.getText());
     	User user = User.login(usernameField.getText(), passwordField.getText());
+    	System.out.println(user.getClass());
     	main.setUserID(usernameField.getText());
     	if(user instanceof Student) {
     	main.showStudentHomePage();
@@ -56,6 +57,7 @@ public class LoginPageController {
     	main.showProgramCoordinatorHomePage();
     	}
     	else if(user instanceof Staff) {
+    		System.out.println("rerer");
         	main.showLecturerHomePage();
         	}
     	//main.showStudentCoursePage(usernameField.getText());
