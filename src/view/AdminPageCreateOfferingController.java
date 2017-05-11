@@ -79,6 +79,11 @@ public class AdminPageCreateOfferingController {
 	}
 
 	}
+	
+	public void createButtonClicked() {
+		//MainApp main = new MainApp();
+		//main.showStudentHomePage();
+	}
 
 	public void setUserID(String userID) {
 		this.userID = userID;
@@ -88,6 +93,6 @@ public class AdminPageCreateOfferingController {
 
 	public void backButtonClicked() {
 		MainApp main = new MainApp();
-		main.showStudentHomePage();
+		main.showAdminHomePage();
 	}
 }

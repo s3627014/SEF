@@ -52,6 +52,9 @@ public class LoginPageController {
     	if(user instanceof Student) {
     	main.showStudentHomePage();
     	}
+    	if(user instanceof Admin) {
+        	main.showAdminHomePage();
+        	}
     	if(user instanceof ProgramCoordinator) {
     	main.showProgramCoordinatorHomePage();
     	}
