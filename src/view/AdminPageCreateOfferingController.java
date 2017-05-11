@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import main.Admin;
 import main.Course;
 import main.CourseOffering;
 import main.Reader;
@@ -45,23 +46,23 @@ public class AdminPageCreateOfferingController {
     	//Issue here with getDescription() and getCoordinator()
     	//courseDescColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getDescription());
     	//courseCoordColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCoordinator());
-			
+    	
     }
     
     public void listOfferings() {
-		ObservableList<CourseOffering> offerings = FXCollections.observableArrayList();
-		Student student = new Student();
-		
-			try {
+		ObservableList<Course> offerings = FXCollections.observableArrayList();
+		//Student student = new Student();
+
+		try {
 				ArrayList<Course> courses = reader.LoadAllCourses();
 		    	ArrayList<Course> tempCourses = new ArrayList<Course>();
-		    	//ArrayList<CourseOffering> offerings = reader.LoadAllOfferings();
+		    	ArrayList<CourseOffering> offering = reader.LoadAllOfferings();
 		    	int i=0;
 		    	Boolean MatchFound = false;
 		    	while(i<courses.size()){
 		    		int k=0;
-		    		while(k<offerings.size()){
-		    			if(courses.get(i).getCourseID().equals(offerings.get(k).getCourse().getCourseID())){
+		    		while(k<offering.size()){
+		    			if(courses.get(i).getCourseID().equals(offering.get(k).getCourse().getCourseID())){
 		    				MatchFound = true;
 		    			}
 		    			k++;
@@ -94,6 +95,7 @@ public class AdminPageCreateOfferingController {
 	public void setUserID(String userID) {
 		this.userID = userID;
 		System.out.println("Setting the id as " + userID);
+		listOfferings();
 	}
 
 	public void backButtonClicked() {

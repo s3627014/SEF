@@ -9,6 +9,8 @@ public class AdminPageHomeController {
 	private Button createOfferingButton;
 	@FXML
 	private Button advanceSysButton;
+	@FXML
+	private Button logoutButton;
 	
 	private String userID;
 	 MainApp main = new MainApp();
