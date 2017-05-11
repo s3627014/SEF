@@ -24,10 +24,26 @@ public class AdminAdvanceSysController {
 	
     @FXML
     private void initialize() throws SQLException {
-    	sysTimeLabel.setText(main.Reader.SystemDate());
-    	realTimeLabel.setText(main.DateTime.getCurrentTime());
+    	//sysTimeLabel.setText(main.Reader.SystemDate());
+    	displayTime();
+    	
+    	//realTimeLabel.setText(main.DateTime.getCurrentTime());
     }
-
+    
+    public void displayTime(){
+    	sysTimeLabel.setText("Week " + main.DateTime.getCurrentWeek()+ " Semester " + main.DateTime.getCurrentSem()+ ", " + main.DateTime.getCurrentYear());
+    }
+    
+    
+    public void plusWeekButtonClicked(){
+    	main.DateTime.incrementWeek();
+    	displayTime();
+    }
+    
+    public void minusWeekButtonClicked(){
+    	main.DateTime.decrementWeek();
+    	displayTime();
+    }
 	
 	public void backButtonClicked() {
 		MainApp main = new MainApp();

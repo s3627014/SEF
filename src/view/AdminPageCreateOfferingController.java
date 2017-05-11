@@ -1,12 +1,19 @@
 package view;
 
-import application.MainApp;
+import java.util.ArrayList;
 
+import application.MainApp;
+import errors.InstanceNotFound;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import main.Course;
+import main.CourseOffering;
+import main.Reader;
+import main.Student;
 
 
 public class AdminPageCreateOfferingController {
@@ -25,6 +32,7 @@ public class AdminPageCreateOfferingController {
 	@FXML
 	private Button backButton;
 	private String userID;
+	Reader reader = new Reader();
 
 	public AdminPageCreateOfferingController() {}
     
@@ -39,7 +47,44 @@ public class AdminPageCreateOfferingController {
     	//courseCoordColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCoordinator());
 			
     }
+    
+    public void listOfferings() {
+		ObservableList<CourseOffering> offerings = FXCollections.observableArrayList();
+		Student student = new Student();
+		
+			try {
+				ArrayList<Course> courses = reader.LoadAllCourses();
+		    	ArrayList<Course> tempCourses = new ArrayList<Course>();
+		    	//ArrayList<CourseOffering> offerings = reader.LoadAllOfferings();
+		    	int i=0;
+		    	Boolean MatchFound = false;
+		    	while(i<courses.size()){
+		    		int k=0;
+		    		while(k<offerings.size()){
+		    			if(courses.get(i).getCourseID().equals(offerings.get(k).getCourse().getCourseID())){
+		    				MatchFound = true;
+		    			}
+		    			k++;
+		    		}
+		    		if(!MatchFound){
+		    			tempCourses.add(courses.get(i));
+		    		}
+		    		MatchFound=false;
+		    		i++;
+		    	}
+		    	 courses = tempCourses;
+				
+			} catch (InstanceNotFound e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			table.setItems(offerings);
+		
 
+	}
+    
+    
+    
 	
 	public void createButtonClicked() {
 		//MainApp main = new MainApp();
@@ -55,4 +100,8 @@ public class AdminPageCreateOfferingController {
 		MainApp main = new MainApp();
 		main.showAdminHomePage();
 	}
+
+	
 }
+
+
