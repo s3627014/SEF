@@ -28,7 +28,7 @@
          <font>
             <Font size="38.0" />
          </font></Label>
-      <ComboBox layoutX="172.0" layoutY="242.0" prefHeight="64.0" prefWidth="122.0" promptText="Week Num" />
+      <ComboBox fx:id="weekComboBox" layoutX="172.0" layoutY="242.0" prefHeight="64.0" prefWidth="122.0" promptText="Week Num" />
       <ComboBox layoutX="338.0" layoutY="242.0" prefHeight="64.0" prefWidth="122.0" promptText="Semester" />
       <ComboBox layoutX="508.0" layoutY="242.0" prefHeight="64.0" prefWidth="122.0" promptText="Year" />
    </children>

@@ -34,7 +34,6 @@ public class AdminAdvanceSysController {
 
     	//sysTimeLabel.setText(main.Reader.SystemDate());
     	displayTime();
-    	
     	//realTimeLabel.setText(main.DateTime.getCurrentTime());
     	
     	int i = 0;

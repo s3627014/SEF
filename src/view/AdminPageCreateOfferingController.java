@@ -49,12 +49,12 @@ public class AdminPageCreateOfferingController {
     	
     }
     
-    public void listOfferings() {
+    public void listOfferings() throws InstanceNotFound {
 		ObservableList<Course> offerings = FXCollections.observableArrayList();
 		//Student student = new Student();
+		ArrayList<Course> courses = reader.LoadAllCourses();
 
 		try {
-				ArrayList<Course> courses = reader.LoadAllCourses();
 		    	ArrayList<Course> tempCourses = new ArrayList<Course>();
 		    	ArrayList<CourseOffering> offering = reader.LoadAllOfferings();
 		    	int i=0;
@@ -79,6 +79,7 @@ public class AdminPageCreateOfferingController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			offerings.addAll(courses);
 			table.setItems(offerings);
 		
 
@@ -92,10 +93,11 @@ public class AdminPageCreateOfferingController {
 		//main.showStudentHomePage();
 	}
 
-	public void setUserID(String userID) {
+	public void setUserID(String userID) throws InstanceNotFound {
 		this.userID = userID;
 		System.out.println("Setting the id as " + userID);
 		listOfferings();
+		
 	}
 
 	public void backButtonClicked() {
