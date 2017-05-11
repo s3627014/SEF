@@ -23,6 +23,10 @@ public class AdminPageHomeController {
 	    	main.showAdvanceSysPage();
 	    	
 	    }
+	public void logoutClicked() {
+			main.showLoginPage();
+		}
+	 
 	 public void setUserID(String userID) {
 			this.userID = userID;
 			System.out.println("Setting the id as " + userID);

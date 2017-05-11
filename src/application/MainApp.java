@@ -14,6 +14,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.User;
+import view.AdminAdvanceSysController;
+import view.AdminPageCreateOfferingController;
 import view.ProgramCoordinatorViewHistoryPageController;
 import view.StudentEnrolPageController;
 import view.StudentPageCourseController;
@@ -102,18 +104,18 @@ public class MainApp extends Application {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void showCreateOfferingPage(){
     	try {
     		 
     		FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/view/createOfferingPage.fxml"));
+            loader.setLocation(MainApp.class.getResource("/view/AdminCreateOfferingPage.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             scene.getStylesheets().add
             (MainApp.class.getResource("/styles/login.css").toExternalForm());
-            StudentEnrolPageController controller = loader.getController();
+            AdminPageCreateOfferingController controller = loader.getController();
             System.out.println("Sending id: " + userID);
             controller.setUserID(userID);
             primaryStage.show();
@@ -126,13 +128,13 @@ public class MainApp extends Application {
     	try {
     		 
     		FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/view/advanceSysPage.fxml"));
+            loader.setLocation(MainApp.class.getResource("/view/AdminAdvanceSysPage.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             scene.getStylesheets().add
             (MainApp.class.getResource("/styles/login.css").toExternalForm());
-            StudentEnrolPageController controller = loader.getController();
+            AdminAdvanceSysController controller = loader.getController();
             System.out.println("Sending id: " + userID);
             controller.setUserID(userID);
             primaryStage.show();
@@ -282,12 +284,35 @@ public class MainApp extends Application {
                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
            }
       }
+    
+    public void showAdminHomePage() {
+     	 try {
+          	
+          	FXMLLoader loader = new FXMLLoader();
+              loader.setLocation(MainApp.class.getResource("/view/AdminPage.fxml"));
+              AnchorPane page = (AnchorPane) loader.load();
+          	
+          	
+              Scene scene = new Scene(page);
+              primaryStage.setScene(scene);
+              primaryStage.setTitle("Course Manager");
+              scene.getStylesheets().add
+              (MainApp.class.getResource("/styles/login.css").toExternalForm());
+              
+              primaryStage.show();
+              
+          } catch (Exception ex) {
+              Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+          }
+     }
+    
     public void setUserID(String userID) {
     	this.userID = userID;
     }
     public String getUserID() {
     	return userID;
     }
+
 
    
 }

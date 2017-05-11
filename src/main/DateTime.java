@@ -5,8 +5,8 @@ import java.sql.Date;
 
 public class DateTime {
 	
-	private long advance;
-	private long time;
+ 	private long advance;
+	private static long time;
 	
 	public DateTime()
 	{
@@ -24,7 +24,7 @@ public class DateTime {
 		setDate(day, month, year);
 	}
 	
-	public long getTime()
+	public static long getTime()
 	{
 		return time;
 	}
@@ -51,7 +51,7 @@ public class DateTime {
 		return gct;
 	}
 	
-	public String getFormattedDate()
+	public static String getFormattedDate()
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		long currentTime = getTime();
@@ -89,4 +89,72 @@ public class DateTime {
 		advance = ((days * 24L + hours) * 60L) * 60000L;
 	}
 	
+	
+
+	static int currentWeekNum = 0;
+	static int currentSemesterNum = 1;
+	static int currentYearNum = 2017;
+	static String weekString = null;
+	static String semString = null;
+	static String yearString = null;
+	
+	public static String incrementWeek (){
+		
+		currentWeekNum += 1;
+		
+		if(currentWeekNum >12){
+			currentWeekNum =0;
+			if(currentSemesterNum == 1){
+				currentSemesterNum =2;
+			}
+			else{
+				currentSemesterNum =1;
+				currentYearNum +=1;
+			}
+		}
+		weekString = Integer.toString(currentWeekNum);
+			
+		return weekString;
+	}
+	
+	public static String decrementWeek (){
+		
+		
+		currentWeekNum -= 1;
+		
+		if(currentWeekNum <0){
+			currentWeekNum =12;
+			if(currentSemesterNum == 2){
+				currentSemesterNum =1;
+			}
+			else{
+				currentSemesterNum =2;
+				currentYearNum -=1;
+			}
+		}
+		weekString = Integer.toString(currentWeekNum);
+			
+		return weekString;
+	}
+	
+	public static String getCurrentWeek(){
+		
+		weekString = Integer.toString(currentWeekNum);
+		return weekString;
+		
+	}
+	
+	public static String getCurrentSem(){
+		
+		semString = Integer.toString(currentSemesterNum);
+		return semString;
+		
+	}
+	
+	public static String getCurrentYear(){
+		
+		yearString = Integer.toString(currentYearNum);
+		return yearString;
+		
+	}
 }

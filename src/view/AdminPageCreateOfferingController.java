@@ -1,6 +1,5 @@
 package view;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import application.MainApp;
@@ -11,83 +10,98 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import main.Admin;
 import main.Course;
 import main.CourseOffering;
 import main.Reader;
-import main.User;
+import main.Student;
+
 
 public class AdminPageCreateOfferingController {
 	@FXML
-	private TableView<CourseOffering> table;
+	private TableView<Course> table;
 	@FXML
-	private TableColumn<CourseOffering, String> courseNameColumn;
+	private TableColumn<Course, String> courseNameColumn;
 	@FXML
-	private TableColumn<CourseOffering, String> courseIDColumn;
+	private TableColumn<Course, String> courseIDColumn;
 	@FXML
-	private TableColumn<CourseOffering, String> courseDescColumn;
+	private TableColumn<Course, String> courseDescColumn;
 	@FXML
-	private TableColumn<CourseOffering, String> courseCoordColumn;
+	private TableColumn<Course, String> courseCoordColumn;
 	@FXML
 	private Button createButton;
 	@FXML
 	private Button backButton;
 	private String userID;
+	Reader reader = new Reader();
 
 	public AdminPageCreateOfferingController() {}
     
 	   
-	
     @FXML
     private void initialize() {
-    	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseNameProperty());
-    	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseIDProperty());
+    	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getCourseNameProperty());
+    	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getCourseIDProperty());
     	
     	//Issue here with getDescription() and getCoordinator()
     	//courseDescColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getDescription());
     	//courseCoordColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCoordinator());
 			
     }
-
-	public void ListStudentCourses() {
-		ObservableList<Course> courseNeedingCreating = FXCollections.observableArrayList();
-		Reader reader = new Reader();
-		User user = null;
-		try {
-			System.out.println("Loading user: " + userID);
-			user = reader.LoadUser(userID);
-		} catch (InstanceNotFound e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (user instanceof Admin) {
-			Admin admin = (Admin) user;
+    
+    public void listOfferings() {
+		ObservableList<CourseOffering> offerings = FXCollections.observableArrayList();
+		Student student = new Student();
+		
 			try {
-				ArrayList<Course> courses = admin.getAllCourses();
-				for (Course course : courses) {
-					courseNeedingCreating.add(course);
-				}
-				/*} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();*/	
-			}
-			//remove finally when fixed
-			finally{
+				ArrayList<Course> courses = reader.LoadAllCourses();
+		    	ArrayList<Course> tempCourses = new ArrayList<Course>();
+		    	//ArrayList<CourseOffering> offerings = reader.LoadAllOfferings();
+		    	int i=0;
+		    	Boolean MatchFound = false;
+		    	while(i<courses.size()){
+		    		int k=0;
+		    		while(k<offerings.size()){
+		    			if(courses.get(i).getCourseID().equals(offerings.get(k).getCourse().getCourseID())){
+		    				MatchFound = true;
+		    			}
+		    			k++;
+		    		}
+		    		if(!MatchFound){
+		    			tempCourses.add(courses.get(i));
+		    		}
+		    		MatchFound=false;
+		    		i++;
+		    	}
+		    	 courses = tempCourses;
 				
+			} catch (InstanceNotFound e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			//table.setId(courseNeedingCreating);
-	}
+			table.setItems(offerings);
+		
 
+	}
+    
+    
+    
+	
+	public void createButtonClicked() {
+		//MainApp main = new MainApp();
+		//main.showStudentHomePage();
 	}
 
 	public void setUserID(String userID) {
 		this.userID = userID;
 		System.out.println("Setting the id as " + userID);
-		ListStudentCourses();
 	}
 
 	public void backButtonClicked() {
 		MainApp main = new MainApp();
-		main.showStudentHomePage();
+		main.showAdminHomePage();
 	}
+
+	
 }
+
+
