@@ -17,6 +17,7 @@ public class Database {
 
 		return con;
 	}
+	
 	public static Connection connect2 () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@192.168.1.111:1521:xe";
@@ -29,6 +30,7 @@ public class Database {
 		System.out.println("CONNECTED");
 		return con;
 	}
+	
 	public static void closeConnection(){
         if(con!=null){
             try {

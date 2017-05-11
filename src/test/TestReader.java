@@ -22,7 +22,7 @@ import errors.*;
 public class TestReader {
 
 	@Test (timeout=5000)
-	public void testStudentLoad() throws InstanceNotFound {
+	public void testStudentLoad() throws Exception {
 		Reader reader = new Reader();
 		Student user = (Student) reader.LoadUser("s12345");
 		assertEquals(user.getFirstName(), "John");
@@ -31,14 +31,14 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
-	public void testStaffLoad() throws InstanceNotFound {
+	public void testStaffLoad() throws Exception {
 		Reader reader = new Reader();
 		User user = reader.LoadUser("e12345");
 		assertEquals(user.getFirstName(), "Halil");
 	}
 
 	@Test (timeout=5000)
-	public void testProgramCoordinatorLoad() throws InstanceNotFound {
+	public void testProgramCoordinatorLoad() throws Exception {
 		Reader reader = new Reader();
 		Staff user = (Staff) reader.LoadUser("e23456");
 		assertEquals(user.getFirstName(), "CompSciGuy");
@@ -46,7 +46,7 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
-	public void testAdminLoad() throws InstanceNotFound {
+	public void testAdminLoad() throws Exception {
 		Reader reader = new Reader();
 		Admin user = (Admin) reader.LoadUser("a12345");
 		assertEquals(user.getFirstName(), "Bland");
@@ -54,7 +54,7 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
-	public void testCourseLoad() throws InstanceNotFound {
+	public void testCourseLoad() throws Exception {
 		Reader reader = new Reader();
 		Course course = reader.LoadCourse("c23456");
 		assertEquals(course.getCourseName(), "Database Concepts");
@@ -65,7 +65,7 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
-	public void testCourseSearch() throws InstanceNotFound {
+	public void testCourseSearch() throws Exception {
 		Reader reader = new Reader();
 		ArrayList<Course> courses = reader.SearchForCourse("Database");
 		assertEquals(courses.get(0).getCourseName(), "Database Concepts");
@@ -81,16 +81,24 @@ public class TestReader {
 		courses.get(0).setPrereqs(reader.LoadPrereqs("COURSE", courses.get(0).getCourseID()));
 		assertEquals(courses.get(0).getPrereqs().size(), 1);
 	}
+
+	@Test (timeout=5000)
+	public void testLoadAllCourses() throws Exception {
+		Reader reader = new Reader();
+		ArrayList<Course> courses = reader.LoadAllCourses();
+		
+		assertEquals(courses.size(), 3);
+	}
 	
 	@Test (timeout=5000)
-	public void testOfferLoad() throws InstanceNotFound {
+	public void testOfferLoad() throws Exception {
 		Reader reader = new Reader();
 		CourseOffering offer = reader.LoadOffering("o12345");
 		assertEquals(offer.getCourse().getCourseName(), "Software Engineering Fundamentals");
 	}
 
 	@Test (timeout=5000)
-	public void testMarksLoad() throws InstanceNotFound {
+	public void testMarksLoad() throws Exception {
 		Reader reader = new Reader();
 		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", "s12345");
 		assertEquals(marks.get(0).getResult(), "82");
@@ -98,14 +106,14 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
-	public void testOffersLoad() throws InstanceNotFound {
+	public void testOffersLoad() throws Exception {
 		Reader reader = new Reader();
 		ArrayList<CourseOffering> offers = reader.LoadOfferings("TEACHER", "e12345");
 		assertEquals(offers.size(), 2);
 	}
 
 	@Test (timeout=5000)
-	public void testStudentClassesLoad() throws InstanceNotFound {
+	public void testStudentClassesLoad() throws Exception {
 		Reader reader = new Reader();
 		
 		// Enrol in two classes
@@ -129,7 +137,7 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
-	public void testTeacherClassesLoad() throws InstanceNotFound {
+	public void testTeacherClassesLoad() throws Exception {
 		Reader reader = new Reader();
 		ArrayList<CourseOffering> offers = reader.LoadClasses("e12345");
 		assertEquals(offers.size(), 2);
@@ -149,9 +157,15 @@ public class TestReader {
 	@Test (timeout=5000)
 	public void testCourseSave() throws Exception {
 		Reader reader = new Reader();
+		ArrayList<Course> prereqs = new ArrayList<Course>();
+		prereqs.add(reader.LoadCourse("c12345"));
+		ArrayList<String> topics = new ArrayList<String>();
+		topics.add("A testing topic.");
+		topics.add("Another testing topic.");
 		Course course = new Course("Testing Course", "c34567", "A testing course.", 
-				new Staff("e12345", "pass", "Halil", "Ali"), new ArrayList<String>());
+				new Staff("e12345", "pass", "Halil", "Ali"), prereqs, topics);
 		reader.SaveCourse(course);
+		
 		
 		course = reader.LoadCourse("c34567");
 		assertEquals(course.getCourseName(), "Testing Course");

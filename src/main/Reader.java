@@ -66,7 +66,6 @@ public class Reader {
 			    String description = null;
 			    String coordID = null;
 			    Staff coordinator = null;
-		 	    ArrayList<String> topics = new ArrayList<String>();
 				
 		 	    // Get information
 			    courseID = rs.getString("COURSEID");
@@ -74,30 +73,32 @@ public class Reader {
 			    description = rs.getString("DESCRIPTION");
 			    coordID = rs.getString("COORDINATOR");
 				
-				// Throw error if course was not found
-				if (courseName == null)
-					throw new InstanceNotFound();
-				
-				// Search through database for topics 
-		 		rs = SearchDB("ASS1_TOPICS", "COURSEID", courseID);
-		 		
-		 		// Go through result set and build course
-		 		try {
-		 			while (rs.next()) {
-		 			    String topicDesc = rs.getString("DESCRIPTION");
-		 			    topics.add(topicDesc);
-		 			}
-		 		} catch (SQLException err) {
-		 			System.out.println(err);
-		 		}
-				
 				// Set up course object
-				course = new Course(courseName, courseID, description, coordinator, topics);
+				course = new Course(courseName, courseID, description, coordinator, new ArrayList<String>());
 				courses.add(course);
 			}
 		} catch (SQLException err) {
 			System.out.println(err);
 		}	
+		
+		// Search through database for topics 
+		for (int i = 0; i < courses.size(); i++) {
+	 	    ArrayList<String> topics = new ArrayList<String>();
+	 	    
+	 		// Go through result set and build course
+	 		try {
+		 		ResultSet rs = SearchDB("ASS1_TOPICS", "COURSEID", courses.get(i).getCourseID());
+		 		
+	 			while (rs.next()) {
+	 			    String topicDesc = rs.getString("DESCRIPTION");
+	 			    topics.add(topicDesc);
+	 			}
+	 		} catch (SQLException err) {
+	 			System.out.println(err);
+	 		}
+	 		
+	 		courses.get(i).setTopics(topics);
+		}
 		
 		return courses;
 	}
@@ -699,8 +700,12 @@ public class Reader {
 		wherePairs.add(new Keypair("USERID", user.getUserID()));	
 		
 		// Try to update, and if no instance exists try to add
-		UpdateRecord("ASS1_USERS", setPairs, wherePairs);
-		AddRecord("ASS1_USERS", setPairs);
+		try {
+			UpdateRecord("ASS1_USERS", setPairs, wherePairs);
+		}
+		catch (SQLException err) {
+			AddRecord("ASS1_USERS", setPairs);
+		}
 		
 		return true;
 	}
@@ -708,6 +713,7 @@ public class Reader {
 	public boolean SaveCourse (Course course) throws SQLException {
 
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
+		keypairs.add(new Keypair("COURSEID", course.getCourseID()));	
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));	
 		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
@@ -716,8 +722,40 @@ public class Reader {
 		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
 		
 		// Try to update, and if no instance exists try to add
-		UpdateRecord("ASS1_COURSES", keypairs, wherePairs);
-		AddRecord("ASS1_COURSES", keypairs);
+		try {
+			UpdateRecord("ASS1_COURSES", keypairs, wherePairs);
+		}
+		catch (SQLException err) {
+			AddRecord("ASS1_COURSES", keypairs);
+		}
+		
+		// Delete all current topics
+		wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
+		
+		DeleteRecord("ASS1_TOPICS", wherePairs);
+		
+		// Add new topics
+		for (int i = 0; i < course.getTopics().size(); i++){
+			keypairs = new ArrayList<Keypair>();	
+			keypairs.add(new Keypair("COURSEID", course.getCourseID()));	
+			keypairs.add(new Keypair("DESCRIPTION", course.getTopics().get(i)));
+			AddRecord("ASS1_TOPICS", keypairs);
+		}
+		
+		// Delete all current prereqs
+		wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("COURSE", course.getCourseID()));
+		
+		DeleteRecord("ASS1_PREREQS", wherePairs);
+		
+		// Add new prereqs
+		for (int i = 0; i < course.getPrereqs().size(); i++){
+			keypairs = new ArrayList<Keypair>();	
+			keypairs.add(new Keypair("COURSE", course.getCourseID()));	
+			keypairs.add(new Keypair("PREREQ", course.getPrereqs().get(i).getCourseID()));
+			AddRecord("ASS1_PREREQS", keypairs);
+		}
 		
 		return true;
 	}
@@ -733,8 +771,12 @@ public class Reader {
 		wherePairs.add(new Keypair("OFFERID", offer.getOfferID()));	
 		
 		// Try to update, and if no instance exists try to add
-		UpdateRecord("ASS1_OFFERINGS", keypairs, wherePairs);
-		AddRecord("ASS1_OFFERINGS", keypairs);
+		try {
+			UpdateRecord("ASS1_OFFERINGS", keypairs, wherePairs);
+		}
+		catch (SQLException err) {
+			AddRecord("ASS1_OFFERINGS", keypairs);
+		}
 		
 		return true;
 	}
@@ -761,8 +803,12 @@ public class Reader {
 		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));	
 		
 		// Try to update, and if no instance exists try to add
-		UpdateRecord("ASS1_INTLMARKS", keypairs, wherePairs);
-		AddRecord("ASS1_INTLMARKS", keypairs);
+		try {
+			UpdateRecord("ASS1_MARKS", keypairs, wherePairs);
+		}
+		catch (SQLException err) {
+			AddRecord("ASS1_MARKS", keypairs);
+		}
 		
 		return true;
 	}

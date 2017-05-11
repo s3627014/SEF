@@ -1,7 +1,9 @@
+/application/
 /classes12.jar
+/images/
+/ojdbc14.jar
+/styles/
 /errors/
 /main/
-/ojdbc14.jar
 /test/
 /view/
-/application/

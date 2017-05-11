@@ -39,6 +39,10 @@ public class Course {
 	public void setPrereqs (ArrayList<Course> prereqs) {
 		this.prereqs = prereqs;
 	}
+	
+	public void setTopics (ArrayList<String> topics) {
+		this.topics = topics;
+	}
 
 	// GETTERS
 	public String getCourseName () {
