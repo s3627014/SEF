@@ -75,7 +75,7 @@ public class StudentPageCourseController {
 		System.out.println("Setting the id as " + userID);
 		ListStudentCourses();
 	}
-	public void withdraw() {
+	public void withdraw() throws SQLException {
 		Student student = new Student();
 		student.withdraw(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
 		ListStudentCourses();

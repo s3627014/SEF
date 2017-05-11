@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import main.Admin;
@@ -113,7 +114,11 @@ public class TestReader {
 	}
 
 	@Test (timeout=5000)
+<<<<<<< HEAD
 	public void testStudentClassesLoad() throws Exception {
+=======
+	public void testStudentClassesLoad() throws InstanceNotFound, SQLException {
+>>>>>>> refs/remotes/origin/JavaFX
 		Reader reader = new Reader();
 		
 		// Enrol in two classes

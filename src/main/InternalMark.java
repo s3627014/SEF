@@ -1,5 +1,7 @@
 package main;
 
+import javafx.beans.property.StringProperty;
+
 public class InternalMark extends Mark {
 	Student student;
 	CourseOffering offer;
@@ -10,7 +12,7 @@ public class InternalMark extends Mark {
 		this.offer = offer;
 	}
 	
-	public void setAll (Student student, CourseOffering offer, String result) {		
+	public void setAll (Student student, CourseOffering offer, StringProperty result) {		
 		this.student = student;
 		this.offer = offer;
 		this.result = result;

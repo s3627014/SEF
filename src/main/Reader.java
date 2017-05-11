@@ -2,6 +2,9 @@ package main;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
+
+import application.MainApp;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -9,6 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import errors.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import view.LoginPageController;
 
 
 public class Reader {
@@ -59,6 +65,7 @@ public class Reader {
 			ResultSet rs = GetTable("ASS1_COURSES");
 			
 			while (rs.next()) {
+				
 				// Set everything to null
 				Course course = null;
 			    String courseID = null;
@@ -126,7 +133,7 @@ public class Reader {
 				Date semesterDate = rs.getDate("SEMESTER");
 				courseID = rs.getString("COURSE");
 				lecturerID = rs.getString("TEACHER");
-				
+				offerID = rs.getString("OFFERID");
 				// Create semester date
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(semesterDate);
@@ -142,6 +149,7 @@ public class Reader {
 		 		lecturer = (Staff) LoadUser(lecturerID);
 				
 				// Set up offer 
+
 				offer = new CourseOffering(offerID, semester, course, lecturer);	
 				offers.add(offer);
 			}
@@ -157,7 +165,6 @@ public class Reader {
 	
 	public User LoadUser (String userID) throws InstanceNotFound {
 		System.out.println("Loading User");
-		
 		// Set everything to null
 		User user = null;
 	    String fName = null;
@@ -717,7 +724,7 @@ public class Reader {
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));		
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));	
 		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
-
+		keypairs.add(new Keypair("COURSEID", course.getCourseID()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
 		
@@ -797,7 +804,8 @@ public class Reader {
 			
 		ArrayList<Keypair> keypairs = new ArrayList<Keypair>();	
 		keypairs.add(new Keypair("MARK", mark.getResult()));
-		
+		keypairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));
+		keypairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));	
 		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));	

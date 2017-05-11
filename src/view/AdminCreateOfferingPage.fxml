@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1034.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AdminPageCreateOfferingController">
+   <children>
+      <Label layoutX="300.0" layoutY="75.0" prefHeight="62.0" prefWidth="347.0" text="Course Offerings">
+         <font>
+            <Font name="System Bold" size="42.0" />
+         </font></Label>
+      <TableView fx:id="table" layoutX="155.0" layoutY="169.0" prefHeight="331.0" prefWidth="725.0">
+        <columns>
+          <TableColumn fx:id="courseIDColumn" prefWidth="131.20001220703125" text="Course Code" />
+          <TableColumn fx:id="courseNameColumn" prefWidth="185.0" text="Course Name" />
+            <TableColumn prefWidth="304.2000732421875" text="Descritption" />
+            <TableColumn prefWidth="104.7999267578125" text="Coordinator" />
+        </columns>
+      </TableView>
+      <Button fx:id="createButton" layoutX="423.0" layoutY="574.0" mnemonicParsing="false" onAction="#create" prefHeight="52.0" prefWidth="188.0" text="Create" />
+      <Button fx:id="backButton" layoutX="218.0" layoutY="574.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="52.0" prefWidth="188.0" text="Back" />
+   </children>
+</AnchorPane>
