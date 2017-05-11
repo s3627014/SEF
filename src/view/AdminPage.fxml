@@ -12,8 +12,10 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <Button layoutX="407.0" layoutY="477.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Logout" />
+      <Button fx:id="logoutButton" layoutX="407.0" layoutY="477.0" mnemonicParsing="false" onAction="#logoutClicked" prefHeight="64.0" prefWidth="241.0" text="Logout" />
       <Button fx:id="createOfferingButton" layoutX="409.0" layoutY="180.0" mnemonicParsing="false" onAction="#createOfferingClicked" prefHeight="64.0" prefWidth="241.0" text="Create Course Offering" />
       <Button fx:id="advanceSysButton" layoutX="409.0" layoutY="328.0" mnemonicParsing="false" onAction="#advanceSysClicked" prefHeight="64.0" prefWidth="241.0" text="Advance System" />
    </children>
 </AnchorPane>
+
+
