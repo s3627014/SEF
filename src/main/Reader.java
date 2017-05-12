@@ -125,24 +125,21 @@ public class Reader {
 				// Set all to null
 				CourseOffering offer = null;
 			    String offerID = null;
-				DateTime semester = null;
 				Course course = null;
 			    Staff lecturer = null;
 			    String courseID = null;
 			    String lecturerID = null;
+				int semester = 0;
+				int year = 0;
 
 			    // Get information
-				Date semesterDate = rs.getDate("SEMESTER");
 				courseID = rs.getString("COURSE");
 				lecturerID = rs.getString("TEACHER");
 				offerID = rs.getString("OFFERID");
+				semester = rs.getInt("SEMESTER");
+				year = rs.getInt("YEAR");
 				// Create semester date
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(semesterDate);
-				int day = cal.get(Calendar.DAY_OF_MONTH);
-				int month = cal.get(Calendar.MONTH);
-				int year = cal.get(Calendar.YEAR);
-				semester = new DateTime(day, month, year);	
+				DateTime time = new DateTime(0, semester, year);	
 		 		
 		 		// Load course
 		 		course = LoadCourse(courseID);
@@ -151,8 +148,7 @@ public class Reader {
 		 		lecturer = (Staff) LoadUser(lecturerID);
 				
 				// Set up offer 
-
-				offer = new CourseOffering(offerID, semester, course, lecturer);	
+				offer = new CourseOffering(offerID, time, course, lecturer);	
 				offers.add(offer);
 			}
 		} catch (SQLException err) {
@@ -207,19 +203,16 @@ public class Reader {
  	 			// Go through result set and build overloads
  	 			
  				while (rs.next()) {
- 				    Date dateSem = rs.getDate("SEMESTER");
- 				    DateTime semester;
+ 				    int semester = 0;
+ 				    int year = 0;
  				    
  					// Create semester date
- 					Calendar cal = Calendar.getInstance();
- 					cal.setTime(dateSem);
- 					int day = cal.get(Calendar.DAY_OF_MONTH);
- 					int month = cal.get(Calendar.MONTH);
- 					int year = cal.get(Calendar.YEAR);
- 					semester = new DateTime(day, month, year);
+ 					semester = rs.getInt("SEMESTER");
+ 					year = rs.getInt("YEAR");
+ 					DateTime time = new DateTime(0, semester, year);	
  					
  					// Set overloadPerm semester date
- 					overloadPerms.addSemester(semester);
+ 					overloadPerms.addSemester(time);
  				}
  			} catch (SQLException err) {
  				System.out.println(err);
