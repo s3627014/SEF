@@ -47,7 +47,7 @@ public class CourseOffering {
 	
 	public void print () {
 		System.out.println("Course Offering: " + offerID);
-		System.out.println("Semester: " + semester.getFormattedDate());
+		System.out.println("Semester: " + DateTime.getCurrentSem());
 		System.out.println("Course: " + course.getCourseName());
 		System.out.println("Lecturer: " + lecturer.getFirstName() + " " + lecturer.getLastName());
 	}
