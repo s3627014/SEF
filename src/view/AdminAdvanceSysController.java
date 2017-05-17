@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import main.DateTime;
 
 public class AdminAdvanceSysController {
 
@@ -50,18 +51,20 @@ public class AdminAdvanceSysController {
     	weekComboBox.getItems().addAll(weeks);
     }
     
+    
+    
     public void displayTime(){
-    	sysTimeLabel.setText("Week " + main.DateTime.getCurrentWeek()+ " Semester " + main.DateTime.getCurrentSem()+ ", " + main.DateTime.getCurrentYear());
+    	sysTimeLabel.setText("Week " + dt.getCurrentWeek()+ " Semester " + dt.getCurrentSem()+ ", " + dt.getCurrentYear());
     }
     
     
     public void plusWeekButtonClicked(){
-    	main.DateTime.incrementWeek();
+    	dt.incrementWeek();
     	displayTime();
     }
     
     public void minusWeekButtonClicked(){
-    	main.DateTime.decrementWeek();
+    	dt.decrementWeek();
     	displayTime();
     }
 	
