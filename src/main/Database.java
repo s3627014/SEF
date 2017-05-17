@@ -2,36 +2,36 @@ package main;
 import java.sql.*;
 
 public class Database {
-	
+
 	private static Connection con;
-	
-	public static Connection connect2 () throws SQLException, ClassNotFoundException {
+
+	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
 	    String username = "s3435088";
 	    String password = "qoSpjXcw";
-	    
+
 		// Load the driver class and start connection
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		Connection con = DriverManager.getConnection(host, username, password);
 
 		return con;
 	}
-	
-	public static Connection connect () throws SQLException, ClassNotFoundException {
+
+	public static Connection connect2 () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@localhost:1521:xe";
 	    String username = "SEFONLINEDB";
 	    String password = "t_(IdM13";
-	    
+
 		// Load the driver class and start connection
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		Connection con = DriverManager.getConnection(host, username, password);
 		System.out.println("CONNECTED");
 		return con;
 	}
-	
-	
+
+
 	public static void closeConnection(){
         if(con!=null){
             try {
@@ -42,11 +42,11 @@ public class Database {
         }
 
     }
-	
+
 //	public String getWhatever () throws SQLException {
 //		// Connect to database
 //		Connection connection = Connect(null, null, null);
-//		
+//
 //		return "Not yet functional";
 //	}
 }

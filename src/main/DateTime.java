@@ -1,13 +1,13 @@
 package main;
 
-public class DateTime {	
-	
-	static int currentWeekNum = 0;
-	static int currentSemesterNum = 1;
-	static int currentYearNum = 2017;
-	static String weekString = null;
-	static String semString = null;
-	static String yearString = null;
+public class DateTime {
+
+	int currentWeekNum = 0;
+	int currentSemesterNum = 1;
+	int currentYearNum = 2017;
+	String weekString = null;
+	String semString = null;
+	String yearString = null;
 
 
 	public DateTime(int week, int semester, int year)
@@ -17,11 +17,11 @@ public class DateTime {
 		this.currentYearNum=year;
 
 	}
-	
-	public static String incrementWeek (){
-		
+
+	public String incrementWeek (){
+
 		currentWeekNum += 1;
-		
+
 		if(currentWeekNum >12){
 			currentWeekNum =0;
 			if(currentSemesterNum == 1){
@@ -33,15 +33,15 @@ public class DateTime {
 			}
 		}
 		weekString = Integer.toString(currentWeekNum);
-			
+
 		return weekString;
 	}
-	
-	public static String decrementWeek (){
-		
-		
+
+	public String decrementWeek (){
+
+
 		currentWeekNum -= 1;
-		
+
 		if(currentWeekNum <0){
 			currentWeekNum =12;
 			if(currentSemesterNum == 2){
@@ -53,28 +53,28 @@ public class DateTime {
 			}
 		}
 		weekString = Integer.toString(currentWeekNum);
-			
+
 		return weekString;
 	}
-	
-	public static String getCurrentWeek(){
-		
+
+	public String getCurrentWeek(){
+
 		weekString = Integer.toString(currentWeekNum);
 		return weekString;
-		
+
 	}
-	
-	public static String getCurrentSem(){
-		
+
+	public String getCurrentSem(){
+
 		semString = Integer.toString(currentSemesterNum);
 		return semString;
-		
+
 	}
-	
-	public static String getCurrentYear(){
-		
+
+	public String getCurrentYear(){
+
 		yearString = Integer.toString(currentYearNum);
 		return yearString;
-		
+
 	}
 }
