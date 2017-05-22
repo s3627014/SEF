@@ -1,5 +1,6 @@
 package main;
 
+
 public class DateTime {
 
 	int currentWeekNum = 0;
@@ -8,8 +9,7 @@ public class DateTime {
 	String weekString = null;
 	String semString = null;
 	String yearString = null;
-
-
+	
 	public DateTime(int week, int semester, int year)
 	{
 		this.currentWeekNum=week;
@@ -17,7 +17,7 @@ public class DateTime {
 		this.currentYearNum=year;
 
 	}
-
+	
 	public String incrementWeek (){
 
 		currentWeekNum += 1;
@@ -77,4 +77,5 @@ public class DateTime {
 		return yearString;
 
 	}
+
 }

@@ -1,10 +1,14 @@
 package main;
 import java.sql.*;
 
+import javafx.scene.control.Label;
+
 public class Database {
 
 	private static Connection con;
-
+	public static DateTime dt = new DateTime(0,1,2017);
+	
+	
 	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
@@ -42,6 +46,8 @@ public class Database {
         }
 
     }
+
+
 
 //	public String getWhatever () throws SQLException {
 //		// Connect to database
