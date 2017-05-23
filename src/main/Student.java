@@ -27,7 +27,6 @@ public class Student extends User {
 	public ArrayList<CourseOffering> listCourses () throws SQLException {
 		
 		// Initialise reader and result
-		//ArrayList<CourseOffering> classList = null;
 		
 		// Run reader function
 		try {
@@ -38,6 +37,22 @@ public class Student extends User {
 		}
 		
 		return classList;
+	}
+	
+	public ArrayList<CourseOffering> listCoursesForYear (int year) {
+		
+		// Start list 
+		ArrayList<CourseOffering> list = new ArrayList<CourseOffering>();
+		
+		// Go through all enrolled classes
+		for (CourseOffering c : classList) {
+			
+			// Check data against year
+			if (Integer.parseInt(c.getSemester().getCurrentYear()) == year)
+				list.add(c);
+		}
+		
+		return list;
 	}
 	
 	public OverloadPerms getOverloadPerms () {
