@@ -512,13 +512,17 @@ public class Reader {
 				String studentID = rs.getString("STUDENT");
 				String offerID = rs.getString("OFFERING");
 				String result = rs.getString("MARK");
+				String fString = rs.getString("FINALISED");
+				boolean finalised = false;
+				if (fString.equals("true"))
+					finalised = true;
 
 				// Load student and offer
 				student = (Student) LoadUser(studentID);
 				offer = LoadOffering(offerID);
 
 				// Build mark
-				InternalMark mark = new InternalMark(student, offer, result);
+				InternalMark mark = new InternalMark(student, offer, result, finalised);
 				marks.add(mark);
 			}
 		} catch (SQLException err) {
@@ -713,7 +717,6 @@ public class Reader {
 		keypairs.add(new Keypair("COURSENAME", course.getCourseName()));
 		keypairs.add(new Keypair("DESCRIPTION", course.getDescription()));
 		keypairs.add(new Keypair("COORDINATOR", course.getCoordinator().getUserID()));
-		keypairs.add(new Keypair("COURSEID", course.getCourseID()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("COURSEID", course.getCourseID()));
 
@@ -797,10 +800,11 @@ public class Reader {
 		keypairs.add(new Keypair("MARK", mark.getResult()));
 		keypairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));
 		keypairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));
+		keypairs.add(new Keypair("FINALISED", mark.getFinalised()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));
 		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));
-		wherePairs.add(new Keypair("MARK", mark.getResult()));
+
 		// Try to update, and if no instance exists try to add
 		if (CheckRecord("ASS1_INTLMARKS", wherePairs)) {
 			UpdateRecord("ASS1_INTLMARKS", keypairs, wherePairs);

@@ -9,6 +9,7 @@ import main.Admin;
 import main.Course;
 import main.CourseOffering;
 import main.DateTime;
+import main.InternalMark;
 import main.Mark;
 import main.ProgramCoordinator;
 import main.Reader;
@@ -102,8 +103,18 @@ public class TestReader {
 	public void testMarksLoad() throws Exception {
 		Reader reader = new Reader();
 		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", "s12345");
-		assertEquals(marks.get(0).getResult(), "82");
+		InternalMark intlMark = (InternalMark) marks.get(0);
+		assertEquals(intlMark.getFinalised(), true);
 		assertEquals(marks.get(1).getResult(), "71");
+	}
+
+	@Test (timeout=15000)
+	public void testMarksSave() throws Exception {
+		Reader reader = new Reader();
+		Student student = (Student) reader.LoadUser("s12345");
+		CourseOffering offer = reader.LoadOffering("o12345");
+		InternalMark mark = new InternalMark(student, offer, "61", true);
+		reader.SaveMark(mark);
 	}
 
 	@Test (timeout=15000)
