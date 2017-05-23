@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -27,11 +28,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import main.Course;
 import main.CourseOffering;
+import main.DateTime;
 import main.InternalMark;
 import main.Mark;
 import main.Reader;
@@ -92,7 +95,13 @@ private Button exemptionButton;
 
 	}
 	public void showGrantExemption() {
+		DateTime dt = main.Database.dt;
+		if (Integer.parseInt(dt.getCurrentWeek()) > 3) {
+			warningDialog();
+		} 
+		else {
 		showEnrolDialog();
+		}
 		//MainApp main = new MainApp();
 		//main.showGrantExemptionPage();
 		
@@ -133,5 +142,13 @@ private Button exemptionButton;
 	}
 	public void removeExemptionButton() {
 		exemptionButton.setVisible(false);
+	}
+	public void warningDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot grant exemption!");
+		alert.setHeaderText("You can not grant exemption past week 1.");
+		alert.setContentText("Please contact staff for more information.");
+
+		alert.showAndWait();
 	}
 }

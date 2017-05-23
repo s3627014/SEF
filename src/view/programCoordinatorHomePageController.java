@@ -10,12 +10,15 @@ import java.util.Optional;
 
 import application.MainApp;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import main.Course;
 import main.Database;
+import main.DateTime;
 import main.Reader;
 import main.Staff;
 import main.Student;
@@ -32,29 +35,17 @@ public class programCoordinatorHomePageController {
 	}
 
 	public void CourseClicked() throws Exception {
+		Database db = new Database();
+		DateTime dt = db.dt;
+		if(Integer.parseInt(dt.getCurrentWeek())>8) {
+			warningDialog();
+		}
 		main.showProgramCoordinatorCreateCoursePage();
-		/*
-		 * Reader reader = new Reader(); ArrayList<String> topics = new
-		 * ArrayList<String>(); topics.add("topic 1");
-		 * 
-		 * Staff prgCoordinator = (Staff) reader.LoadUser("e12345"); Course
-		 * course = new Course("Test","c12346","123",prgCoordinator,topics);
-		 * reader.SaveCourse(course);
-		 */
 
 	}
 
 	public void studentActionsClicked() throws Exception {
 		main.showStudentHistoryPage();
-		/*
-		 * Reader reader = new Reader(); ArrayList<String> topics = new
-		 * ArrayList<String>(); topics.add("topic 1");
-		 * 
-		 * Staff prgCoordinator = (Staff) reader.LoadUser("e12345"); Course
-		 * course = new Course("Test","c12346","123",prgCoordinator,topics);
-		 * reader.SaveCourse(course);
-		 */
-
 	}
 
 	public void logoutClicked() {
@@ -120,4 +111,12 @@ public class programCoordinatorHomePageController {
 			   
 			}
 	 }
+	public void warningDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot create course");
+		alert.setHeaderText("courses must be created 4 weeks before next semester.");
+		alert.setContentText("Good job.");
+
+		alert.showAndWait();
+	}
 }
