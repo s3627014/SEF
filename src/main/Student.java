@@ -39,7 +39,7 @@ public class Student extends User {
 		return classList;
 	}
 	
-	public ArrayList<CourseOffering> listCoursesForYear (int year) {
+	public ArrayList<CourseOffering> listCoursesForSem (int sem, int year) {
 		
 		// Start list 
 		ArrayList<CourseOffering> list = new ArrayList<CourseOffering>();
@@ -48,7 +48,8 @@ public class Student extends User {
 		for (CourseOffering c : classList) {
 			
 			// Check data against year
-			if (Integer.parseInt(c.getSemester().getCurrentYear()) == year)
+			if (Integer.parseInt(c.getSemester().getCurrentYear()) == year
+					&& Integer.parseInt(c.getSemester().getCurrentSem()) == sem)
 				list.add(c);
 		}
 		
