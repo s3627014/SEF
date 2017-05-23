@@ -13,7 +13,7 @@ public class Admin extends User {
    public Admin(String id, String password, String fName, String lName){
         super(id, password, fName, lName);
     }
-   
+   public Admin() {}
    public ArrayList<User> getAllUsers () {
 	   
 	   Reader reader = new Reader();

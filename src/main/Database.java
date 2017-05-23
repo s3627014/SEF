@@ -9,7 +9,7 @@ public class Database {
 	public static DateTime dt = new DateTime(0,1,2017);
 	
 	
-	public static Connection connect () throws SQLException, ClassNotFoundException {
+	public static Connection connect2 () throws SQLException, ClassNotFoundException {
 		// Connection details
 	    String host = "jdbc:oracle:thin:@emu.cs.rmit.edu.au:1521:general";
 	    String username = "s3435088";
@@ -22,11 +22,11 @@ public class Database {
 		return con;
 	}
 
-	public static Connection connect2 () throws SQLException, ClassNotFoundException {
+	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
-	    String host = "jdbc:oracle:thin:@localhost:1521:xe";
-	    String username = "SEFONLINEDB";
-	    String password = "t_(IdM13";
+	    String host = "jdbc:oracle:thin:@192.168.1.121:1521:xe";
+	    String username = "hope";
+	    String password = "oracle";
 
 		// Load the driver class and start connection
 		Class.forName("oracle.jdbc.driver.OracleDriver");
