@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import application.MainApp;
 import errors.InstanceNotFound;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +36,10 @@ public class StudentEnrolPageController {
 	@FXML
 	private TableColumn<CourseOffering, String> courseIDColumn;
 	@FXML
+	private TableColumn<CourseOffering, String> semesterColumn;
+	@FXML
+	private TableColumn<CourseOffering, String> yearColumn;
+	@FXML
 	private Button enrolButton;
 	@FXML
 	private Button backButton;
@@ -47,6 +52,8 @@ public class StudentEnrolPageController {
 	private void initialize() {
 		courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().getCourse().getCourseNameProperty());
 		courseIDColumn.setCellValueFactory(cellData -> cellData.getValue().getCourse().getCourseIDProperty());
+		semesterColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getSemester().getCurrentSem()));
+		yearColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getSemester().getCurrentYear()));
 	}
 
 	public void setUserID(String userID) {

@@ -17,8 +17,8 @@
         <columns>
           <TableColumn fx:id="courseIDColumn" prefWidth="171.0" text="Course Code" />
           <TableColumn fx:id="courseNameColumn" prefWidth="342.0" text="Course Name" />
-            <TableColumn prefWidth="117.0" text="C1" />
-            <TableColumn prefWidth="94.0" text="C1" />
+          <TableColumn fx:id="semesterColumn" prefWidth="117.0" text="Semester" />
+          <TableColumn fx:id="yearColumn" prefWidth="94.0" text="Year" />
         </columns>
       </TableView>
       <Button fx:id="withdrawButton" layoutX="423.0" layoutY="574.0" mnemonicParsing="false" onAction="#withdraw" prefHeight="52.0" prefWidth="188.0" text="Withdraw" />

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import application.MainApp;
 import errors.InstanceNotFound;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +33,10 @@ public class StudentPageCourseController {
 	@FXML
 	private TableColumn<CourseOffering, String> courseIDColumn;
 	@FXML
+	private TableColumn<CourseOffering, String> semesterColumn;
+	@FXML
+	private TableColumn<CourseOffering, String> yearColumn;
+	@FXML
 	private Button withdrawButton;
 	private String userID;
 
@@ -43,7 +48,8 @@ public class StudentPageCourseController {
     private void initialize() {
     	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseNameProperty());
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getCourse().getCourseIDProperty());
-    	
+    	semesterColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getSemester().getCurrentSem()));
+		yearColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getSemester().getCurrentYear()));
 			
     }
 
