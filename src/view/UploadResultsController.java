@@ -9,15 +9,18 @@ import java.util.logging.Logger;
 import application.MainApp;
 import errors.InstanceNotFound;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 import main.Admin;
 import main.CourseOffering;
 import main.Database;
+import main.DateTime;
 import main.InternalMark;
 import main.ProgramCoordinator;
 import main.Reader;
@@ -48,13 +51,31 @@ private TextField markField;
     }
 
     public void uploadResult() throws InstanceNotFound, SQLException {
-    	Student student =(Student) reader.LoadUser(studentIDField.getText());
     	CourseOffering offer = reader.LoadOffering(offerIDField.getText());
-    	InternalMark mark = new InternalMark(student,offer,markField.getText());
-    	reader.SaveMark(mark);
+    	Database db = new Database();
+		DateTime dt = db.dt;
+		if((Integer.parseInt(dt.getCurrentSem()) != Integer.parseInt(offer.getSemester().getCurrentSem())) && 
+				(Integer.parseInt(dt.getCurrentYear()) != Integer.parseInt(offer.getSemester().getCurrentYear()))){
+		Student student =(Student) reader.LoadUser(studentIDField.getText());
+		InternalMark mark = new InternalMark(student,offer,markField.getText());
+		reader.SaveMark(mark);
+		}
+		else {
+			warningDialog();
+		}
     }
     public void backClicked() {
     	main.showLecturerHomePage();
     }
+    public void warningDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot upload results");
+		alert.setHeaderText("You can only upload results for current semester.");
+		alert.setContentText("Please have fun.");
+
+		alert.showAndWait();
+	}
 
 }
+
+
