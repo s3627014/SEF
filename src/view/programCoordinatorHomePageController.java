@@ -40,7 +40,9 @@ public class programCoordinatorHomePageController {
 		if(Integer.parseInt(dt.getCurrentWeek())>8) {
 			warningDialog();
 		}
-		main.showProgramCoordinatorCreateCoursePage();
+		else {
+			main.showProgramCoordinatorCreateCoursePage();
+		}
 
 	}
 
