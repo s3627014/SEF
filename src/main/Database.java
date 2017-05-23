@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 public class Database {
 
 	private static Connection con;
-	public static DateTime dt = new DateTime(0,1,2017);
+	public static DateTime dt = new DateTime(1,1,2017);
 	
 	
 	public static Connection connect2 () throws SQLException, ClassNotFoundException {
@@ -24,9 +24,9 @@ public class Database {
 
 	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
-	    String host = "jdbc:oracle:thin:@192.168.1.121:1521:xe";
-	    String username = "hope";
-	    String password = "oracle";
+	    String host = "jdbc:oracle:thin:@localhost:1521:xe";
+	    String username = "SEFONLINEDB";
+	    String password = "t_(IdM13";
 
 		// Load the driver class and start connection
 		Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -35,6 +35,18 @@ public class Database {
 		return con;
 	}
 
+	public static Connection connect3 () throws SQLException, ClassNotFoundException {
+		// Connection details
+	    String host = "jdbc:oracle:thin:@localhost:1521:xe"; //Sorry Luke
+	    String username = "HOPE";
+	    String password = "Oracle";
+
+		// Load the driver class and start connection
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection con = DriverManager.getConnection(host, username, password);
+		System.out.println("CONNECTED");
+		return con;
+	}
 
 	public static void closeConnection(){
         if(con!=null){

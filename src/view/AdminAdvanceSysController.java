@@ -18,17 +18,17 @@ public class AdminAdvanceSysController {
 	@FXML
     private Label sysTimeLabel;
 	
-	@FXML
-	private ComboBox<String> weekComboBox;
-	@FXML
-	private ComboBox<String> semComboBox;
-	@FXML
-	private ComboBox<String> yearComboBox;
+//	@FXML
+//	private ComboBox<String> weekComboBox;
+//	@FXML
+//	private ComboBox<String> semComboBox;
+//	@FXML
+//	private ComboBox<String> yearComboBox;
 	
 	@FXML
 	private Button backButton;
-	@FXML
-	private Button advanceSysButton;
+//	@FXML
+//	private Button advanceSysButton;
 	@FXML
 	private Button minusWeekButton;
 	@FXML
@@ -51,27 +51,27 @@ public class AdminAdvanceSysController {
 
     	displayTime();
     	
-    	int i = 0;
- 		while (i <= 12) {
- 			weeks.add(Integer.toString(i));
- 			i++;
- 		}
- 		
- 		int j = 1;
- 		while (j <= 2){
- 			sem.add(Integer.toString(j));
- 			j++;
- 		}
- 		
- 		int k = 2015;
- 		while (k <= 2020){
- 			year.add(Integer.toString(k));
- 			k++;
- 		}
- 		
-    	weekComboBox.getItems().addAll(weeks);
-    	semComboBox.getItems().addAll(sem);
-    	yearComboBox.getItems().addAll(year);
+//    	int i = 0;
+// 		while (i <= 12) {
+// 			weeks.add(Integer.toString(i));
+// 			i++;
+// 		}
+// 		
+// 		int j = 1;
+// 		while (j <= 2){
+// 			sem.add(Integer.toString(j));
+// 			j++;
+// 		}
+// 		
+// 		int k = 2015;
+// 		while (k <= 2020){
+// 			year.add(Integer.toString(k));
+// 			k++;
+// 		}
+// 		
+//    	weekComboBox.getItems().addAll(weeks);
+//    	semComboBox.getItems().addAll(sem);
+//    	yearComboBox.getItems().addAll(year);
 
     	
     }
@@ -83,13 +83,13 @@ public class AdminAdvanceSysController {
     
     
     
-    public void advanceSysButtonClicked(){
-    	
-    	//String weeks = weekComboBox.getItems();
-    	
-        //dt = new DateTime();
-
-    }
+//    public void advanceSysButtonClicked(){
+//    	
+//    	//String weeks = weekComboBox.getItems();
+//    	
+//        //dt = new DateTime();
+//
+//    }
 
     
     public void plusWeekButtonClicked(){

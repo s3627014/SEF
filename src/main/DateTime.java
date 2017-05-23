@@ -3,7 +3,7 @@ package main;
 
 public class DateTime {
 
-	int currentWeekNum = 0;
+	int currentWeekNum = 1;
 	int currentSemesterNum = 1;
 	int currentYearNum = 2017;
 	String weekString = null;
@@ -23,7 +23,7 @@ public class DateTime {
 		currentWeekNum += 1;
 
 		if(currentWeekNum >12){
-			currentWeekNum =0;
+			currentWeekNum =1;
 			if(currentSemesterNum == 1){
 				currentSemesterNum =2;
 			}
@@ -42,7 +42,7 @@ public class DateTime {
 
 		currentWeekNum -= 1;
 
-		if(currentWeekNum <0){
+		if(currentWeekNum <1){
 			currentWeekNum =12;
 			if(currentSemesterNum == 2){
 				currentSemesterNum =1;
