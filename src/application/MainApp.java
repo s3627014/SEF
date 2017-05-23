@@ -17,10 +17,12 @@ import main.DateTime;
 import main.User;
 import view.AdminAdvanceSysController;
 import view.AdminPageCreateOfferingController;
+import view.LecturerHomePageController;
 import view.ProgramCoordinatorViewHistoryPageController;
 import view.StudentEnrolPageController;
 import view.StudentPageCourseController;
 import view.StudentPageHomeController;
+import view.UploadResultsController;
 
 public class MainApp extends Application {
 	private static Stage primaryStage;
@@ -244,13 +246,15 @@ public class MainApp extends Application {
              Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
          }
     }
-    public void showUploadMarksPage() {
+    public void showUploadMarksPage(String lecturerID) {
    	 try {
         	
         	FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/view/uploadResults.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
-        	
+            UploadResultsController controller = loader.getController();
+            System.out.println("Sending id: " + userID);
+            controller.setUserID(userID);
         	
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
@@ -271,7 +275,9 @@ public class MainApp extends Application {
                loader.setLocation(MainApp.class.getResource("/view/lecturerHomePage.fxml"));
                AnchorPane page = (AnchorPane) loader.load();
            	
-           	
+               LecturerHomePageController controller = loader.getController();
+               System.out.println("Sending id: " + userID);
+               controller.setUserID(userID);
                Scene scene = new Scene(page);
                primaryStage.setScene(scene);
                primaryStage.setTitle("Course Manager");
