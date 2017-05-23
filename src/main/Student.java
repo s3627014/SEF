@@ -39,13 +39,13 @@ public class Student extends User {
 		return classList;
 	}
 	
-	public ArrayList<CourseOffering> listCoursesForSem (int sem, int year) {
+	public ArrayList<CourseOffering> listCoursesForSem (int sem, int year) throws SQLException {
 		
 		// Start list 
 		ArrayList<CourseOffering> list = new ArrayList<CourseOffering>();
-		
+		ArrayList<CourseOffering> templist= listCourses ();
 		// Go through all enrolled classes
-		for (CourseOffering c : classList) {
+		for (CourseOffering c : templist) {
 			
 			// Check data against year
 			if (Integer.parseInt(c.getSemester().getCurrentYear()) == year

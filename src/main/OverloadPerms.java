@@ -16,10 +16,10 @@ public class OverloadPerms {
 		boolean result = false;
 		
 		for (DateTime s : semesters) {
-			if (semester.equals(s))
+			if (semester.getCurrentYear().equals(s.getCurrentYear()) && semester.getCurrentSem().equals(s.getCurrentSem()))
 				result = true;
 		}
-		
+		System.out.println(result);
 		return result;
 	}
 }

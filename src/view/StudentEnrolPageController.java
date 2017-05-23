@@ -19,6 +19,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import main.Course;
 import main.CourseOffering;
+import main.Database;
+import main.DateTime;
 import main.InternalMark;
 import main.Mark;
 import main.Reader;
@@ -36,11 +38,11 @@ public class StudentEnrolPageController {
 	private Button enrolButton;
 	@FXML
 	private Button backButton;
-	
+
 	private String userID;
 	MainApp main = new MainApp();
 	Reader reader = new Reader();
-	
+
 	@FXML
 	private void initialize() {
 		courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().getCourse().getCourseNameProperty());
@@ -53,6 +55,22 @@ public class StudentEnrolPageController {
 	}
 
 	public void enrol() throws SQLException, InstanceNotFound {
+		Student student = (Student) reader.LoadUser(userID);
+		int sem = Integer
+				.parseInt(table.getSelectionModel().selectedItemProperty().getValue().getSemester().getCurrentSem());
+		int year = Integer
+				.parseInt(table.getSelectionModel().selectedItemProperty().getValue().getSemester().getCurrentYear());
+		int numberofEnrols = student.listCoursesForSem(sem, year).size();
+		System.out.println("size of enrols: " + numberofEnrols);
+		if (numberofEnrols > 3) {
+			System.out.println("too many units");
+			DateTime semester = table.getSelectionModel().selectedItemProperty().getValue().getSemester();
+
+			if (!student.getOverloadPerms().checkSemester(semester)) {
+				warningDialog();
+				return;
+			}
+		}
 		ArrayList<Course> prereqs = reader.LoadPrereqs("COURSE",
 				table.getSelectionModel().selectedItemProperty().getValue().getCourse().getCourseID());
 		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", userID);
@@ -64,33 +82,31 @@ public class StudentEnrolPageController {
 			}
 			i++;
 		}
-		i =0;
-		if(prereqs.size()==0) {
-			Student student = new Student();
-			student.enrol(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
+		i = 0;
+		if (prereqs.size() == 0) {
+
+			student.enrol(userID, table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
 			listOfferings();
 			return;
 		}
-		while(i<prereqs.size()) {
-			int k=0;
-			while(k<InternalMarks.size()) {
-				if(prereqs.get(i).getCourseID().equals(InternalMarks.get(k).getOffer().getCourse().getCourseID())) {
-					Student student = new Student();
+		while (i < prereqs.size()) {
+			int k = 0;
+			while (k < InternalMarks.size()) {
+				if (prereqs.get(i).getCourseID().equals(InternalMarks.get(k).getOffer().getCourse().getCourseID())) {
 
-					student.enrol(userID,table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
+					student.enrol(userID, table.getSelectionModel().selectedItemProperty().getValue().getOfferID());
 					listOfferings();
 					return;
-					
+
 				}
 				k++;
 			}
 			i++;
 		}
-	
-		
+
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("PREREQS NOT MET");
-		String s ="Prerequistes not met. Would you like to \napply for exemption?";
+		String s = "Prerequistes not met. Would you like to \napply for exemption?";
 		alert.setContentText(s);
 
 		Optional<ButtonType> result = alert.showAndWait();
@@ -103,41 +119,84 @@ public class StudentEnrolPageController {
 
 			alert2.showAndWait();
 		}
-		
+
 	}
 
+	/*
+	 * ArrayList<Course> prereqs = reader.LoadPrereqs("COURSE",
+	 * table.getSelectionModel().selectedItemProperty().getValue().getCourse().
+	 * getCourseID()); ArrayList<Mark> marks = reader.LoadMarks("STUDENT",
+	 * userID); ArrayList<InternalMark> InternalMarks = new
+	 * ArrayList<InternalMark>(); int i = 0; while (i < marks.size()) { if
+	 * (marks.get(i) instanceof InternalMark) { InternalMarks.add((InternalMark)
+	 * marks.get(i)); } i++; } i =0; if(prereqs.size()==0) {
+	 * 
+	 * student.enrol(userID,table.getSelectionModel().selectedItemProperty().
+	 * getValue().getOfferID()); listOfferings(); return; }
+	 * while(i<prereqs.size()) { int k=0; while(k<InternalMarks.size()) {
+	 * if(prereqs.get(i).getCourseID().equals(InternalMarks.get(k).getOffer().
+	 * getCourse().getCourseID())) {
+	 * 
+	 * student.enrol(userID,table.getSelectionModel().selectedItemProperty().
+	 * getValue().getOfferID()); listOfferings(); return;
+	 * 
+	 * } k++; } i++; }
+	 * 
+	 * 
+	 * Alert alert = new Alert(AlertType.CONFIRMATION);
+	 * alert.setTitle("PREREQS NOT MET"); String s
+	 * ="Prerequistes not met. Would you like to \napply for exemption?";
+	 * alert.setContentText(s);
+	 * 
+	 * Optional<ButtonType> result = alert.showAndWait();
+	 * 
+	 * if ((result.isPresent()) && (result.get() == ButtonType.OK)) { Alert
+	 * alert2 = new Alert(AlertType.INFORMATION);
+	 * alert2.setTitle("Application for Exemption");
+	 * alert2.setHeaderText("Application sent.");
+	 * alert2.setContentText("Sent to program coordinator for approval.");
+	 * 
+	 * alert2.showAndWait(); }
+	 * 
+	 * }
+	 */
 	public void backButtonClicked() {
 		main.showStudentHomePage();
 	}
-	
 
 	public void listOfferings() {
 		ObservableList<CourseOffering> offerings = FXCollections.observableArrayList();
 		Student student = new Student();
-		
-			try {
-				ArrayList<CourseOffering> courses = student.listOfferings();
-				ArrayList<CourseOffering> enrolments = reader.LoadClasses(userID);
-				offerings.addAll(courses);
-				int i=0;
-				while(i<courses.size()) {
-					int k=0;
-					while(k<enrolments.size()) {
-						if(courses.get(i).getCourse().getCourseID().equals(enrolments.get(k).getCourse().getCourseID())) {
-							offerings.remove(courses.get(i));
-						}
-						k++;
+
+		try {
+			ArrayList<CourseOffering> courses = student.listOfferings();
+			ArrayList<CourseOffering> enrolments = reader.LoadClasses(userID);
+			offerings.addAll(courses);
+			int i = 0;
+			while (i < courses.size()) {
+				int k = 0;
+				while (k < enrolments.size()) {
+					if (courses.get(i).getCourse().getCourseID().equals(enrolments.get(k).getCourse().getCourseID())) {
+						offerings.remove(courses.get(i));
 					}
-					i++;
+					k++;
 				}
-				
-			} catch (InstanceNotFound e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				i++;
 			}
-			table.setItems(offerings);
-		
+
+		} catch (InstanceNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		table.setItems(offerings);
 
 	}
+	public void warningDialog() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Cannot Enrol");
+		alert.setHeaderText("Already at maximum load for semester.");
+		alert.setContentText("Please contact staff for more information.");
 
+		alert.showAndWait();
+	}
 }
