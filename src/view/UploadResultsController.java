@@ -54,8 +54,8 @@ private TextField markField;
     	CourseOffering offer = reader.LoadOffering(offerIDField.getText());
     	Database db = new Database();
 		DateTime dt = db.dt;
-		if((Integer.parseInt(dt.getCurrentSem()) != Integer.parseInt(offer.getSemester().getCurrentSem())) && 
-				(Integer.parseInt(dt.getCurrentYear()) != Integer.parseInt(offer.getSemester().getCurrentYear()))){
+		if((Integer.parseInt(dt.getCurrentSem()) == Integer.parseInt(offer.getSemester().getCurrentSem())) && 
+				(Integer.parseInt(dt.getCurrentYear()) == Integer.parseInt(offer.getSemester().getCurrentYear()))){
 		Student student =(Student) reader.LoadUser(studentIDField.getText());
 		InternalMark mark = new InternalMark(student,offer,markField.getText());
 		reader.SaveMark(mark);

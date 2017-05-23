@@ -800,13 +800,13 @@ public class Reader {
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("STUDENT", mark.getStudent().getUserID()));
 		wherePairs.add(new Keypair("OFFERING", mark.getOffer().getOfferID()));
-
+		wherePairs.add(new Keypair("MARK", mark.getResult()));
 		// Try to update, and if no instance exists try to add
-		if (CheckRecord("ASS1_MARKS", wherePairs)) {
-			UpdateRecord("ASS1_MARKS", keypairs, wherePairs);
+		if (CheckRecord("ASS1_INTLMARKS", wherePairs)) {
+			UpdateRecord("ASS1_INTLMARKS", keypairs, wherePairs);
 		}
 		else {
-			AddRecord("ASS1_MARKS", keypairs);
+			AddRecord("ASS1_INTLMARKS", keypairs);
 		}
 
 		return true;
