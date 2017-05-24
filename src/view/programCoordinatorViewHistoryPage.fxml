@@ -22,11 +22,12 @@
           <TableColumn fx:id="offerIDColumn" prefWidth="136.0" text="Offer ID" />
           <TableColumn fx:id="courseIDColumn" prefWidth="192.0" text="Course ID" />
             <TableColumn fx:id="courseNameColumn" prefWidth="192.0" text="Course Name" />
-            <TableColumn id="markColumn" fx:id="markColumn" prefWidth="192.0" text="Mark" />
+            <TableColumn id="markColumn" fx:id="markColumn" prefWidth="91.0" text="Mark" />
+            <TableColumn id="markColumn" fx:id="RNFColumn" prefWidth="102.0" text="Finalised" />
         </columns>
       </TableView>
       <Button fx:id="exemptionButton" layoutX="713.0" layoutY="539.0" mnemonicParsing="false" onAction="#showGrantExemption" prefHeight="64.0" prefWidth="241.0" text="Grant Exemptions" />
-      <Button onAction="#externalClicked" layoutX="184.0" layoutY="539.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="View External results" />
+      <Button layoutX="184.0" layoutY="539.0" mnemonicParsing="false" onAction="#externalClicked" prefHeight="64.0" prefWidth="241.0" text="View External results" />
   
    </children>
 </AnchorPane>

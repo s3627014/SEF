@@ -8,6 +8,7 @@ import java.util.Optional;
 import application.MainApp;
 import errors.InstanceNotFound;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,34 +55,37 @@ public class LecturerViewHistoryPageController {
 	@FXML
 	private TableColumn<InternalMark, String> offerIDColumn;
 	@FXML
+	private TableColumn<InternalMark, String> RNFColumn;
+	@FXML
 	private ToggleGroup toggles;
 	@FXML
 	private TextField studentIDField;
-@FXML
-private Button exemptionButton;
+	@FXML
+	private Button exemptionButton;
 
 	private String userID;
-	public LecturerViewHistoryPageController() {}
-    
-	   
-	
-    @FXML
-    private void initialize() {
-    	courseNameColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseNameProperty());
-    	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseIDProperty());
-    	offerIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getOfferIDProperty());
-    	markColumn.setCellValueFactory(cellData ->cellData.getValue().getResultProperty());
-    	
-			
-    }
+
+	public LecturerViewHistoryPageController() {
+	}
+
+	@FXML
+	private void initialize() {
+		courseNameColumn
+				.setCellValueFactory(cellData -> cellData.getValue().getOffer().getCourse().getCourseNameProperty());
+		courseIDColumn
+				.setCellValueFactory(cellData -> cellData.getValue().getOffer().getCourse().getCourseIDProperty());
+		offerIDColumn.setCellValueFactory(cellData -> cellData.getValue().getOffer().getOfferIDProperty());
+		markColumn.setCellValueFactory(cellData -> cellData.getValue().getResultProperty());
+		RNFColumn.setCellValueFactory(
+				cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getFinalised())));
+
+	}
 
 	public void ListStudentHistory() throws InstanceNotFound {
-		setUserID(studentIDField.getText());
 		ObservableList<InternalMark> markList = FXCollections.observableArrayList();
 		Reader reader = new Reader();
-		
-		User user = null;
-		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", userID);
+
+		ArrayList<Mark> marks = reader.LoadMarks("STUDENT", studentIDField.getText());
 		ArrayList<InternalMark> internalMarks = new ArrayList<InternalMark>();
 		int i = 0;
 		while (i < marks.size()) {
@@ -91,21 +95,16 @@ private Button exemptionButton;
 			i++;
 		}
 		markList.addAll(internalMarks);
-		
-			table.setItems(markList);
-		
 
-	}
-	
-	public void setUserID(String userID) {
-		this.userID = userID;
-		
+		table.setItems(markList);
+
 	}
 
 	public void backButtonClicked() {
 		MainApp main = new MainApp();
 		main.showLecturerHomePage();
 	}
+
 	public void warningDialog() {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Cannot grant exemption!");
@@ -114,5 +113,72 @@ private Button exemptionButton;
 
 		alert.showAndWait();
 	}
+	public void editButtonClicked() {
+		TextInputDialog dialog = new TextInputDialog("mark");
+		dialog.setTitle("Change mark for " + userID);
+		dialog.setHeaderText("Please enter updated mark.");
+		dialog.setContentText("Mark: ");
+
+		// Traditional way to get the response value.
+		Optional<String> result = dialog.showAndWait();
 	
+
+		// The Java 8 way to get the response value (with lambda expression).
+		result.ifPresent(mark -> {
+		
+				try {
+					uploadResult(table.getSelectionModel().selectedItemProperty().getValue().getOffer().getOfferID(),mark);
+				} catch (InstanceNotFound e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+		});
+	}
+	public void uploadResult(String offerID, String result) throws InstanceNotFound, SQLException {
+		Reader reader = new Reader();
+		CourseOffering offer = reader.LoadOffering(offerID);
+		ArrayList<CourseOffering> offerings = reader.LoadOfferings("TEACHER", userID);
+		System.out.println("SIZEEE:   " + offer.getOfferID());
+		int i = 0;
+		while (i < offerings.size()) {
+
+			if (offerings.get(i).getOfferID().equals(offer.getOfferID())) {
+
+				Database db = new Database();
+				DateTime dt = db.dt;
+				if ((Integer.parseInt(dt.getCurrentSem()) == Integer.parseInt(offer.getSemester().getCurrentSem()))
+						&& (Integer.parseInt(dt.getCurrentYear()) == Integer
+								.parseInt(offer.getSemester().getCurrentYear()))) {
+					Student student = (Student) reader.LoadUser(studentIDField.getText());
+					InternalMark mark = new InternalMark(student, offer, result, false);
+					reader.SaveMark(mark);
+				} else {
+					System.out.println();
+					warningDialog();
+				}
+				return;
+			}
+			i++;
+		}
+		notLecturerDialog();
+	}
+
+	public void notLecturerDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot upload results");
+		alert.setHeaderText("You can only upload results for your offerings.");
+		alert.setContentText("Please have fun.");
+
+		alert.showAndWait();
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+		System.out.println("Setting the id as " + userID);
+	}
+
 }

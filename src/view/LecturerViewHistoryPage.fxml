@@ -15,16 +15,18 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <Button layoutX="443.0" layoutY="539.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="64.0" prefWidth="241.0" text="Back" />
+      <Button layoutX="316.0" layoutY="539.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="64.0" prefWidth="241.0" text="Back" />
       <TextField fx:id="studentIDField" layoutX="209.0" layoutY="144.0" onAction="#ListStudentHistory" prefHeight="47.0" prefWidth="200.0" promptText="Student ID" />
       <TableView fx:id="table" layoutX="209.0" layoutY="216.0" prefHeight="285.0" prefWidth="714.0">
         <columns>
           <TableColumn fx:id="offerIDColumn" prefWidth="136.0" text="Offer ID" />
           <TableColumn fx:id="courseIDColumn" prefWidth="192.0" text="Course ID" />
             <TableColumn fx:id="courseNameColumn" prefWidth="192.0" text="Course Name" />
-            <TableColumn id="markColumn" fx:id="markColumn" prefWidth="192.0" text="Mark" />
+            <TableColumn id="markColumn" fx:id="markColumn" prefWidth="93.0" text="Mark" />
+            <TableColumn id="RNFColumn" fx:id="RNFColumn" prefWidth="100.0" text="Finalised" />
         </columns>
       </TableView>
+      <Button onAction="#editButtonClicked" layoutX="579.0" layoutY="539.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="241.0" text="Edit Result" />
   
    </children>
 </AnchorPane>

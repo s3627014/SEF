@@ -71,10 +71,19 @@ public class UploadResultsController {
 					warningDialog();
 				}
 				return;
-			} 
+			}
 			i++;
 		}
 		notLecturerDialog();
+	}
+
+	public void notLecturerDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot upload results");
+		alert.setHeaderText("You can only upload results for your offerings.");
+		alert.setContentText("Please have fun.");
+
+		alert.showAndWait();
 	}
 
 	public void backClicked() {
@@ -86,15 +95,6 @@ public class UploadResultsController {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Cannot upload results");
 		alert.setHeaderText("You can only upload results for current semester.");
-		alert.setContentText("Please have fun.");
-
-		alert.showAndWait();
-	}
-
-	public void notLecturerDialog() {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Cannot upload results");
-		alert.setHeaderText("You can only upload results for your offerings.");
 		alert.setContentText("Please have fun.");
 
 		alert.showAndWait();

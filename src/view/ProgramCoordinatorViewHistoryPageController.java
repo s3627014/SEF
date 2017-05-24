@@ -8,6 +8,7 @@ import java.util.Optional;
 import application.MainApp;
 import errors.InstanceNotFound;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,6 +54,8 @@ public class ProgramCoordinatorViewHistoryPageController {
 	@FXML
 	private TableColumn<InternalMark, String> offerIDColumn;
 	@FXML
+	private TableColumn<InternalMark, String> RNFColumn;
+	@FXML
 	private ToggleGroup toggles;
 	@FXML
 	private TextField studentIDField;
@@ -69,6 +72,7 @@ private Button exemptionButton;
     	courseIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getCourse().getCourseIDProperty());
     	offerIDColumn.setCellValueFactory(cellData ->cellData.getValue().getOffer().getOfferIDProperty());
     	markColumn.setCellValueFactory(cellData ->cellData.getValue().getResultProperty());
+    	RNFColumn.setCellValueFactory(cellData ->new SimpleStringProperty(String.valueOf(cellData.getValue().getFinalised())));
 
 			
     }
@@ -115,6 +119,7 @@ private Button exemptionButton;
 		MainApp main = new MainApp();
 		main.showProgramCoordinatorHomePage();
 	}
+	
 	public void showEnrolDialog() {
 		TextInputDialog dialog = new TextInputDialog("o1234");
 		dialog.setTitle("Grant Exemption for " + userID);

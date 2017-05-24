@@ -18,6 +18,7 @@ import main.User;
 import view.AdminAdvanceSysController;
 import view.AdminPageCreateOfferingController;
 import view.LecturerHomePageController;
+import view.LecturerViewHistoryPageController;
 import view.ProgramCoordinatorViewHistoryPageController;
 import view.StudentEnrolPageController;
 import view.StudentPageCourseController;
@@ -203,7 +204,8 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
             scene.getStylesheets().add
             (MainApp.class.getResource("/styles/studentHistory.css").toExternalForm());
-            
+            LecturerViewHistoryPageController controller = loader.getController();
+            controller.setUserID(userID);
             primaryStage.show();
         } catch (Exception ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
