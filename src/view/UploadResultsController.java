@@ -64,7 +64,7 @@ public class UploadResultsController {
 						&& (Integer.parseInt(dt.getCurrentYear()) == Integer
 								.parseInt(offer.getSemester().getCurrentYear()))) {
 					Student student = (Student) reader.LoadUser(studentIDField.getText());
-					InternalMark mark = new InternalMark(student, offer, markField.getText());
+					InternalMark mark = new InternalMark(student, offer, markField.getText(), false);
 					reader.SaveMark(mark);
 				} else {
 					System.out.println();

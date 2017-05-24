@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 
+import errors.InstanceNotFound;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -23,7 +24,7 @@ public class CourseOffering {
 		this.semester = semester;
 		this.course = course;
 		this.lecturer = lecturer;
-		this.maxStudents = maxStudents;
+		this.maxStudents = capacity;
 		this.students = students;
 	}
 
@@ -33,7 +34,7 @@ public class CourseOffering {
 		this.semester = semester;
 		this.course = course;
 		this.lecturer = lecturer;
-		this.maxStudents = maxStudents;
+		this.maxStudents = capacity;
 		this.students = students;
 	}
 	
@@ -49,7 +50,12 @@ public class CourseOffering {
 		
 		// Fill students list
 		Reader reader = new Reader();
-		this.students = reader.LoadEnrolledStudents(this.offerID);
+		try {
+			this.students = reader.LoadEnrolledStudents(this.offerID.get());
+		} catch (InstanceNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// If there are less students than the max
 		if (this.students.size() < maxStudents)

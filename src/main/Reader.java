@@ -809,7 +809,7 @@ public class Reader {
 		keypairs.add(new Keypair("TEACHER", offer.getLecturer().getUserID()));
 		keypairs.add(new Keypair("SEMESTER", offer.getSemester().getCurrentSem()));
 		keypairs.add(new Keypair("YEAR", offer.getSemester().getCurrentYear()));
-
+		keypairs.add(new Keypair("MAXSTUDENTS", offer.getMaxStudents()));
 		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
 		wherePairs.add(new Keypair("OFFERID", offer.getOfferID()));
 

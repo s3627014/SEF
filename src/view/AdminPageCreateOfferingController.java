@@ -117,6 +117,8 @@ public class AdminPageCreateOfferingController {
 	    gridPane.setPadding(new Insets(20, 150, 10, 10));
 	    TextField offerID = new TextField();
 	    offerID.setPromptText("offerID");
+	    TextField capacity = new TextField();
+	    capacity.setPromptText("capacity");
 	    TextField from = new TextField();
 	    from.setPromptText("Semester");
 	    TextField to = new TextField();
@@ -127,10 +129,10 @@ public class AdminPageCreateOfferingController {
 	    gridPane.add(to, 2, 0);
 	    gridPane.add(offerID, 0, 2);
 	    gridPane.add(lecturer, 2, 2);
+	    gridPane.add(capacity, 3, 0);
 	    dialog.getDialogPane().setContent(gridPane);
 
-	    // Request focus on the username field by default.
-	    Platform.runLater(() -> from.requestFocus());
+	   
 
 	    // Convert the result to a username-password-pair when the login button is clicked.
 	    dialog.setResultConverter(dialogButton -> {
@@ -155,7 +157,7 @@ public class AdminPageCreateOfferingController {
 	    	DateTime time = new DateTime(0, semester, year);
 	    	Admin admin = new Admin();
 	    	Course course = table.getSelectionModel().selectedItemProperty().getValue();
-	    	admin.addCourseOffering(offerID.getText(), time, course, lecturerID);
+	    	admin.addCourseOffering(offerID.getText(), time, course, lecturerID, Integer.parseInt(capacity.getText()));
 	    	
 	        System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
 	    });

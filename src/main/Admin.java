@@ -57,10 +57,10 @@ public class Admin extends User {
    }
    
    public boolean addCourseOffering(String offerID, DateTime semester, Course course, 
-		   		Staff lecturer){
+		   		Staff lecturer, int capacity){
 	   
 	   // Create offer based on passed in variables
-	   CourseOffering offer = new CourseOffering(offerID, semester, course, lecturer);
+	   CourseOffering offer = new CourseOffering(offerID, semester, course, lecturer,capacity, new ArrayList<Student>());
 	   
 	   boolean result = true;
 
