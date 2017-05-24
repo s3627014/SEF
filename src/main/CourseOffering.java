@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -8,25 +10,54 @@ public class CourseOffering {
 	DateTime semester;
 	Course course;
 	Staff lecturer;
+	int maxStudents;
+	ArrayList<Student> students = new ArrayList<Student>();
 
 	public CourseOffering (String offerID) {
 		this.offerID = new SimpleStringProperty(offerID);
 	}
 
-	public CourseOffering (String offerID, DateTime semester, Course course, Staff lecturer) {
-		this.offerID = new SimpleStringProperty(offerID);;
+	public CourseOffering (String offerID, DateTime semester, Course course, Staff lecturer, int capacity,
+			ArrayList<Student> students) {
+		this.offerID = new SimpleStringProperty(offerID);
 		this.semester = semester;
 		this.course = course;
 		this.lecturer = lecturer;
+		this.maxStudents = maxStudents;
+		this.students = students;
 	}
 
-	public void setAll (String offerID, DateTime semester, Course course, Staff lecturer) {
-		this.offerID = new SimpleStringProperty(offerID);;
+	public void setAll (String offerID, DateTime semester, Course course, Staff lecturer, int capacity,
+			ArrayList<Student> students) {
+		this.offerID = new SimpleStringProperty(offerID);
 		this.semester = semester;
 		this.course = course;
 		this.lecturer = lecturer;
+		this.maxStudents = maxStudents;
+		this.students = students;
+	}
+	
+	public int getMaxStudents () {
+		return maxStudents;
+	}
+	
+	public ArrayList<Student> getStudents () {
+		return this.students;
 	}
 
+	public boolean checkIfFull() {
+		
+		// Fill students list
+		Reader reader = new Reader();
+		this.students = reader.LoadEnrolledStudents(this.offerID);
+		
+		// If there are less students than the max
+		if (this.students.size() < maxStudents)
+			return false;
+		else
+			return true;
+	}
+	
 	public String getOfferID () {
 		return offerID.get();
 	}

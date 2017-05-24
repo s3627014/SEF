@@ -130,7 +130,8 @@ public class TestReader {
 		DateTime time = new DateTime(0,1,2017);
 		Staff teacher = (Staff) reader.LoadUser("e12345");
 		Course course = reader.LoadCourse("c12345");
-		CourseOffering offer = new CourseOffering("o34567", time, course, teacher);
+		CourseOffering offer = new CourseOffering("o12345", time, course, teacher);
+		offer.checkIfFull();
 
 		reader.SaveOffering(offer);
 	}

@@ -48,17 +48,6 @@ public class Database {
 		return con;
 	}
 
-	public static void closeConnection(){
-        if(con!=null){
-            try {
-                con.close();
-            } catch (SQLException e) {
-                 e.printStackTrace();
-            }
-        }
-
-    }
-
 
 
 //	public String getWhatever () throws SQLException {

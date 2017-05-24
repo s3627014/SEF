@@ -131,6 +131,8 @@ public class Reader {
 			    String lecturerID = null;
 				int semester = 0;
 				int year = 0;
+				int maxStudents = 0;
+				ArrayList<Student> students = new ArrayList<Student>();
 
 			    // Get information
 				courseID = rs.getString("COURSE");
@@ -138,6 +140,7 @@ public class Reader {
 				offerID = rs.getString("OFFERID");
 				semester = rs.getInt("SEMESTER");
 				year = rs.getInt("YEAR");
+				maxStudents = rs.getInt("MAXSTUDENTS");
 				// Create semester date
 				DateTime time = new DateTime(0, semester, year);
 
@@ -148,7 +151,7 @@ public class Reader {
 		 		lecturer = (Staff) LoadUser(lecturerID);
 
 				// Set up offer
-				offer = new CourseOffering(offerID, time, course, lecturer);
+				offer = new CourseOffering(offerID, time, course, lecturer, maxStudents, students);
 				offers.add(offer);
 			}
 		} catch (SQLException err) {
@@ -456,6 +459,8 @@ public class Reader {
 	    Staff lecturer = null;
 	    String courseID = null;
 	    String lecturerID = null;
+	    ArrayList<Student> students = new ArrayList<Student>();
+	    int maxStudents = 0;
 
 		// Go through result set and build offering
 		try {
@@ -468,6 +473,7 @@ public class Reader {
 				lecturerID = rs.getString("TEACHER");
 				semester = rs.getInt("SEMESTER");
 				year = rs.getInt("YEAR");
+				maxStudents = rs.getInt("MAXSTUDENTS");
 
 				// Create semester date
 				time = new DateTime(0, semester, year);
@@ -487,7 +493,7 @@ public class Reader {
 			throw new InstanceNotFound();
 
 		// Set up offer
-		offer = new CourseOffering(offerID, time, course, lecturer);
+		offer = new CourseOffering(offerID, time, course, lecturer, maxStudents, students);
 		return offer;
 	}
 
@@ -585,6 +591,8 @@ public class Reader {
 			    Staff lecturer = null;
 			    String courseID = null;
 			    String lecturerID = null;
+			    int maxStudents = 0;
+			    ArrayList<Student> students = new ArrayList<Student>();
 
 				// Get gotten values
 			    offerID = rs.getString("OFFERID");
@@ -592,6 +600,7 @@ public class Reader {
 				lecturerID = rs.getString("TEACHER");
 			    semester = rs.getInt("SEMESTER");
 			    year = rs.getInt("YEAR");
+			    maxStudents = rs.getInt("MAXSTUDENTS");
 
 				// Create semester date
 				time = new DateTime(0, semester, year);
@@ -601,7 +610,7 @@ public class Reader {
 				lecturer = (Staff) LoadUser(lecturerID);
 
 				// Build offer
-				CourseOffering offer = new CourseOffering (offerID, time, course, lecturer);
+				CourseOffering offer = new CourseOffering (offerID, time, course, lecturer, maxStudents, students);
 				offers.add(offer);
 			}
 		} catch (SQLException err) {
@@ -660,6 +669,8 @@ public class Reader {
 				    Staff lecturer = null;
 				    String courseID = null;
 				    String lecturerID = null;
+				    int maxStudents = 0;
+				    ArrayList<Student> students = new ArrayList<Student>();
 
 					// Get gotten values
 				    offerID = rs.getString("OFFERID");
@@ -667,12 +678,13 @@ public class Reader {
 					lecturerID = rs.getString("TEACHER");
 				    semester = rs.getInt("SEMESTER");
 				    year = rs.getInt("YEAR");
+				    maxStudents = rs.getInt("MAXSTUDENTS");
 
 					// Create semester date
 					time = new DateTime(0, semester, year);
 
 					// Build offer
-					CourseOffering offer = new CourseOffering (offerID, time, course, lecturer);
+					CourseOffering offer = new CourseOffering (offerID, time, course, lecturer, maxStudents, students);
 					classes.add(offer);
 				}
 			} catch (SQLException err) {
@@ -684,6 +696,36 @@ public class Reader {
 		}
 
 		return classes;
+	}
+	
+	public ArrayList<Student> LoadEnrolledStudents (String offerID) throws InstanceNotFound {
+		System.out.println("Loading Enrolments");
+
+		// Set an empty list up
+		ArrayList<Student> students = new ArrayList<Student>();
+
+		// Go through result set and build internal marks
+		try {
+
+			// Search through database for enrolment
+			ResultSet rs = SearchDB("ASS1_ENROLMENTS", "OFFERID", offerID);
+
+			while (rs.next()) {
+				// Start with null variables
+				Student student = null;
+
+				// Get gotten values
+				String studentID = rs.getString("STUDENTID");
+
+				// Load student and offer
+				student = (Student) LoadUser(studentID);
+				students.add(student);
+			}
+		} catch (SQLException err) {
+			System.out.println(err);
+		}
+
+		return students;
 	}
 
 

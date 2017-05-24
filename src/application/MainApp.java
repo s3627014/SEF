@@ -233,7 +233,6 @@ public class MainApp extends Application {
              loader.setLocation(MainApp.class.getResource("/view/LoginPage.fxml"));
              AnchorPane page = (AnchorPane) loader.load();
          	
-         	
              Scene scene = new Scene(page);
              primaryStage.setScene(scene);
              primaryStage.setTitle("Course Manager");
