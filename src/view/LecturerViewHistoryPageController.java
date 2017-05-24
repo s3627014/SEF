@@ -113,7 +113,19 @@ public class LecturerViewHistoryPageController {
 
 		alert.showAndWait();
 	}
+	public void RNFDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Can only edit RNF marks!");
+		alert.setHeaderText("You can not edit this mark.");
+		alert.setContentText("Please contact nobody");
+
+		alert.showAndWait();
+	}
 	public void editButtonClicked() {
+		if(table.getSelectionModel().selectedItemProperty().getValue().getFinalised() ==true) {
+			RNFDialog();
+			return;
+		}
 		TextInputDialog dialog = new TextInputDialog("mark");
 		dialog.setTitle("Change mark for " + userID);
 		dialog.setHeaderText("Please enter updated mark.");
