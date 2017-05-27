@@ -10,7 +10,6 @@ public class Student extends User {
 	ArrayList<Mark> marks;
 	private static ArrayList<CourseOffering> classList;
 	public Student () {}
-	private Reader reader = new Reader();
 	
 	public Student (String id, String password, String fName, String lName, OverloadPerms overloadPerms){
 		super(id, password, fName, lName);
@@ -68,15 +67,18 @@ public class Student extends User {
 		this.marks = marks;
 	}
 	public void withdraw(String userID, String offerID) throws SQLException {
+		Reader reader = new Reader();
 		System.out.println("ID IS " + offerID);
 		System.out.println(userID);
 		reader.DeleteEnrolment(userID,offerID);
 		System.out.println("Withdrawn from unit!!!");
 	}
 	public ArrayList<CourseOffering> listOfferings() throws InstanceNotFound {
+		Reader reader = new Reader();
 		return reader.LoadAllOfferings();
 	}
 	public void enrol(String userID, String offerID) throws SQLException {
+		Reader reader = new Reader();
 		reader.SaveEnrolment(userID, offerID);
 	}
 }
