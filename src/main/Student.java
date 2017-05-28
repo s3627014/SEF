@@ -10,7 +10,7 @@ public class Student extends User {
 	ArrayList<Mark> marks;
 	private static ArrayList<CourseOffering> classList;
 	public Student () {}
-	
+	Reader reader = new Reader();
 	public Student (String id, String password, String fName, String lName, OverloadPerms overloadPerms){
 		super(id, password, fName, lName);
 		this.overloadPerms = overloadPerms;

@@ -37,6 +37,7 @@ import main.Course;
 import main.CourseOffering;
 import main.DateTime;
 import main.InternalMark;
+import main.Keypair;
 import main.Mark;
 import main.Reader;
 import main.Student;
@@ -106,8 +107,7 @@ private Button exemptionButton;
 		else {
 		showEnrolDialog();
 		}
-		//MainApp main = new MainApp();
-		//main.showGrantExemptionPage();
+
 		
 	}
 	public void setUserID(String userID) {
@@ -133,6 +133,20 @@ private Button exemptionButton;
 		// The Java 8 way to get the response value (with lambda expression).
 		Student student = new Student();
 		result.ifPresent(offerID -> {
+			Reader reader = new Reader();
+			ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+			wherePairs.add(new Keypair("STUDENT", userID));
+			wherePairs.add(new Keypair("OFFERING", offerID));
+	    	try {
+				if(reader.CheckRecord("ASS1_ENROLMENTS", wherePairs)){
+					warningDialog("Student is already enrolled in that offering.");
+					return;
+				}
+	    	} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			try {
 				student.enrol(userID,offerID);
 			} catch (SQLException e) {
@@ -153,6 +167,13 @@ private Button exemptionButton;
 		alert.setTitle("Cannot grant exemption!");
 		alert.setHeaderText("You can not grant exemption past week 1.");
 		alert.setContentText("Please contact staff for more information.");
+
+		alert.showAndWait();
+	}
+	public void warningDialog(String error) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot Create Offering!");
+		alert.setHeaderText(error);
 
 		alert.showAndWait();
 	}

@@ -37,7 +37,7 @@ public class Database {
 
 	public static Connection connect () throws SQLException, ClassNotFoundException {
 		// Connection details
-	    String host = "jdbc:oracle:thin:@192.168.1.121:1521:xe"; //Sorry Luke
+	    String host = "jdbc:oracle:thin:@localhost:1521:xe"; //Sorry Luke
 	    String username = "HOPE";
 	    String password = "oracle";
 

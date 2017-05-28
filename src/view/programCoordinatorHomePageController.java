@@ -29,6 +29,7 @@ import main.Admin;
 import main.Course;
 import main.Database;
 import main.DateTime;
+import main.Keypair;
 import main.Reader;
 import main.Staff;
 import main.Student;
@@ -96,8 +97,6 @@ public class programCoordinatorHomePageController {
 	    gridPane.add(from, 0, 0);
 	    gridPane.add(to, 2, 0);
 	    dialog.getDialogPane().setContent(gridPane);
-	    // Request focus on the username field by default.
-	    Platform.runLater(() -> from.requestFocus());
 	    // Convert the result to a username-password-pair when the login button is clicked.
 	    dialog.setResultConverter(dialogButton -> {
 	        if (dialogButton == loginButtonType) {
@@ -111,8 +110,22 @@ public class programCoordinatorHomePageController {
 	    result.ifPresent(pair -> {
 	    	int semester = Integer.parseInt(pair.getKey());
 	    	int year = Integer.parseInt(pair.getValue());
-	    	DateTime time = new DateTime(0, semester, year);
 	    	Reader reader = new Reader();
+	    	ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+			wherePairs.add(new Keypair("STUDENT", studentID));
+			wherePairs.add(new Keypair("SEMESTER", semester));
+			wherePairs.add(new Keypair("YEAR", year));
+	    	try {
+				if(reader.CheckRecord("ASS1_OVERLOADS", wherePairs)){
+					warningDialog("Student is already overloaded for that semester.");
+					return;
+				}
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	DateTime time = new DateTime(0, semester, year);
 			try {
 				reader.SaveOverloadPerm(studentID, time);
 			} catch (SQLException e) {
@@ -128,6 +141,13 @@ public class programCoordinatorHomePageController {
 		alert.setTitle("Cannot create course");
 		alert.setHeaderText("courses must be created 4 weeks before next semester.");
 		alert.setContentText("Good job.");
+
+		alert.showAndWait();
+	}
+	public void warningDialog(String error) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot Create Offering!");
+		alert.setHeaderText(error);
 
 		alert.showAndWait();
 	}

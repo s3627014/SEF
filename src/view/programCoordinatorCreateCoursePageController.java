@@ -8,15 +8,18 @@ import errors.InstanceNotFound;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import main.Course;
 import main.CourseOffering;
 import main.Database;
+import main.Keypair;
 import main.ProgramCoordinator;
 import main.Reader;
 import main.Staff;
@@ -71,8 +74,29 @@ public class programCoordinatorCreateCoursePageController {
 	}
 
 	public void createCourse() throws InstanceNotFound, SQLException {
-		User coordinator = reader.LoadUser(progCoordComboBox.getValue());
+		User coordinator = null;
+		try {
+			coordinator = reader.LoadUser(progCoordComboBox.getValue());
+		} catch (InstanceNotFound e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+			warningDialog("Invalid Staff ID");
+			return;
+		}
 		String courseID = courseIDField.getText();
+		ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+		wherePairs.add(new Keypair("COURSEID", courseID));
+    	try {
+			if(reader.CheckRecord("ASS1_COURSES", wherePairs)){
+				warningDialog("COURSE ID already exists");
+				return;
+			}
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String courseName = courseNameField.getText();
 		String courseDesc = courseDescArea.getText();
 
@@ -103,5 +127,12 @@ public class programCoordinatorCreateCoursePageController {
 		String topic = topicTextField.getText();
 		topicArrayList.remove(topic);
 		topicList.getItems().remove(topic);
+	}
+	public void warningDialog(String error) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot Create Offering!");
+		alert.setHeaderText(error);
+
+		alert.showAndWait();
 	}
 }

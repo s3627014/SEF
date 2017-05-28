@@ -22,6 +22,7 @@ import main.CourseOffering;
 import main.Database;
 import main.DateTime;
 import main.InternalMark;
+import main.Keypair;
 import main.ProgramCoordinator;
 import main.Reader;
 import main.Staff;
@@ -50,9 +51,23 @@ public class UploadResultsController {
 	}
 
 	public void uploadResult() throws InstanceNotFound, SQLException {
-		CourseOffering offer = reader.LoadOffering(offerIDField.getText());
+		try{
+	        Integer.parseInt (markField.getText());
+	    }catch(NumberFormatException e){
+	        warningDialog("Invalid mark");
+	    	return;
+	    } 
+		CourseOffering offer = null;
+		try {
+			 offer = reader.LoadOffering(offerIDField.getText());
+		} catch (InstanceNotFound e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+			warningDialog("Invalid offer ID");
+			return;
+		}
 		ArrayList<CourseOffering> offerings = reader.LoadOfferings("TEACHER", userID);
-		System.out.println("SIZEEE:   " + offer.getOfferID());
 		int i = 0;
 		while (i < offerings.size()) {
 
@@ -63,7 +78,35 @@ public class UploadResultsController {
 				if ((Integer.parseInt(dt.getCurrentSem()) == Integer.parseInt(offer.getSemester().getCurrentSem()))
 						&& (Integer.parseInt(dt.getCurrentYear()) == Integer
 								.parseInt(offer.getSemester().getCurrentYear()))) {
-					Student student = (Student) reader.LoadUser(studentIDField.getText());
+					Student student = null;
+					try {
+						student = (Student) reader.LoadUser(studentIDField.getText());
+					} catch (InstanceNotFound e) {
+						// TODO Auto-generated catch block
+						
+						e.printStackTrace();
+						warningDialog("Invalid Student ID");
+						return;
+					}
+					
+					Reader reader = new Reader();
+					ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+					wherePairs.add(new Keypair("STUDENT", studentIDField.getText()));
+					wherePairs.add(new Keypair("OFFERING", offer.getOfferID()));
+			    	try {
+						if(!reader.CheckRecord("ASS1_ENROLMENTS", wherePairs)){
+							warningDialog("Student is NOT enrolled in that offering.");
+							return;
+						}
+						if(reader.CheckRecord("ASS1_INTLMARKS", wherePairs)){
+							warningDialog("Student already has a mark.");
+							return;
+						}
+			    	} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			    	
 					InternalMark mark = new InternalMark(student, offer, markField.getText(), false);
 					reader.SaveMark(mark);
 				} else {
@@ -103,6 +146,13 @@ public class UploadResultsController {
 	public void setUserID(String userID) {
 		this.userID = userID;
 		System.out.println("Setting the id as " + userID);
+	}
+	public void warningDialog(String error) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot Create Offering!");
+		alert.setHeaderText(error);
+
+		alert.showAndWait();
 	}
 
 }

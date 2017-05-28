@@ -1091,7 +1091,7 @@ public class Reader {
 		return true;
 	}
 
-	private boolean CheckRecord (String table, ArrayList<Keypair> wherePairs) throws SQLException{
+	public boolean CheckRecord (String table, ArrayList<Keypair> wherePairs) throws SQLException{
 
 		// Connect to database
 		Connection con = null;

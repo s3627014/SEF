@@ -107,8 +107,15 @@ public class LecturerViewHistoryPageController {
 
 	public void warningDialog() {
 		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot upload result!");
+
+
+		alert.showAndWait();
+	}
+	public void noSelectionDialog() {
+		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Cannot grant exemption!");
-		alert.setHeaderText("You can not grant exemptions past week 1.");
+		alert.setHeaderText("You must select a mark first.");
 		alert.setContentText("Please contact nobody");
 
 		alert.showAndWait();
@@ -122,6 +129,10 @@ public class LecturerViewHistoryPageController {
 		alert.showAndWait();
 	}
 	public void editButtonClicked() {
+		if(table.getSelectionModel().selectedItemProperty() ==null) {
+			noSelectionDialog();
+			return;
+		}
 		if(table.getSelectionModel().selectedItemProperty().getValue().getFinalised() ==true) {
 			RNFDialog();
 			return;
@@ -140,6 +151,7 @@ public class LecturerViewHistoryPageController {
 		
 				try {
 					uploadResult(table.getSelectionModel().selectedItemProperty().getValue().getOffer().getOfferID(),mark);
+					ListStudentHistory();
 				} catch (InstanceNotFound e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -154,7 +166,6 @@ public class LecturerViewHistoryPageController {
 		Reader reader = new Reader();
 		CourseOffering offer = reader.LoadOffering(offerID);
 		ArrayList<CourseOffering> offerings = reader.LoadOfferings("TEACHER", userID);
-		System.out.println("SIZEEE:   " + offer.getOfferID());
 		int i = 0;
 		while (i < offerings.size()) {
 

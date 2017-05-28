@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -20,12 +21,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import main.Admin;
 import main.Course;
 import main.CourseOffering;
 import main.DateTime;
+import main.Keypair;
 import main.Reader;
 import main.Staff;
 import main.Student;
@@ -102,7 +105,11 @@ public class AdminPageCreateOfferingController {
     
     
 	
-	public void createButtonClicked() {
+	public void createButtonClicked()  {
+		if(table.getSelectionModel().getSelectedItem() ==null){
+			warningDialog("You must select a course from the table.");
+			return;
+		}
 		// Create the custom dialog.
 	    Dialog<Pair<String, String>> dialog = new Dialog<>();
 	    dialog.setTitle("Offering Date");
@@ -145,20 +152,64 @@ public class AdminPageCreateOfferingController {
 	    Optional<Pair<String, String>> result = dialog.showAndWait();
 
 	    result.ifPresent(pair -> {
+	    	try{
+    	        Integer.parseInt(pair.getKey());
+    	    }catch(NumberFormatException e){
+    	        warningDialog("Invalid Semester");
+    	    	return;
+    	    } 
+	    	try{
+	    	        Integer.parseInt(pair.getValue());
+	    	    }catch(NumberFormatException e){
+	    	        warningDialog("Invalid year");
+	    	    	return;
+	    	    }
+	    	  try{
+	    	        Integer.parseInt(capacity.getText());
+	    	    }catch(NumberFormatException e){
+	    	        warningDialog("Invalid capacity.");
+	    	    	return;
+	    	    }
 	    	int semester = Integer.parseInt(pair.getKey());
+	    	if(semester !=1 && semester !=2){
+	    		warningDialog("Semester must be 1 or 2.");
+	    		return;
+	    	}
+	    	 
 	    	int year = Integer.parseInt(pair.getValue());
+	    	
 	    	Staff lecturerID = null;
 			try {
 				lecturerID = (Staff) reader.LoadUser(lecturer.getText());
 			} catch (InstanceNotFound e) {
 				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
+				warningDialog("Invalid Staff ID");
+				return;
 			}
 	    	DateTime time = new DateTime(0, semester, year);
 	    	Admin admin = new Admin();
 	    	Course course = table.getSelectionModel().selectedItemProperty().getValue();
+	    	ArrayList<Keypair> wherePairs = new ArrayList<Keypair>();
+			wherePairs.add(new Keypair("OFFERID", offerID.getText()));
+	    	try {
+				if(reader.CheckRecord("ASS1_OFFERINGS", wherePairs)){
+					warningDialog("Offering ID already exists");
+					return;
+				}
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	admin.addCourseOffering(offerID.getText(), time, course, lecturerID, Integer.parseInt(capacity.getText()));
-	    	
+	    	try {
+				listOfferings();
+			} catch (InstanceNotFound e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
 	    });
 	}
@@ -195,7 +246,13 @@ public class AdminPageCreateOfferingController {
 			}
 		});
 	}
-	
+	public void warningDialog(String error) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Cannot Create Offering!");
+		alert.setHeaderText(error);
+
+		alert.showAndWait();
+	}
 }
 
 
