@@ -50,9 +50,10 @@ public class programCoordinatorCreateCoursePageController {
 	ArrayList<Course> prereqArrayList = new ArrayList<Course>();
 	ArrayList<String> topicArrayList = new ArrayList<String>();
 	MainApp main = new MainApp();
-	Reader reader = new Reader();
+	
 	@FXML
 	private void initialize() throws InstanceNotFound {
+		Reader reader = new Reader();
 		ObservableList<String> programCoordinators = FXCollections.observableArrayList();
 		ObservableList<String> prereqs = FXCollections.observableArrayList();
 		ArrayList<User> users = reader.LoadAllUsers();
@@ -75,6 +76,7 @@ public class programCoordinatorCreateCoursePageController {
 
 	public void createCourse() throws InstanceNotFound, SQLException {
 		User coordinator = null;
+		Reader reader = new Reader();
 		try {
 			coordinator = reader.LoadUser(progCoordComboBox.getValue());
 		} catch (InstanceNotFound e) {
@@ -100,20 +102,21 @@ public class programCoordinatorCreateCoursePageController {
 		String courseName = courseNameField.getText();
 		String courseDesc = courseDescArea.getText();
 
-
-		Course course = new Course(courseName, courseID, courseDesc, (Staff) coordinator, prereqArrayList, topicArrayList);
-		reader.SaveCourse(course);
+		((ProgramCoordinator) coordinator).addCourse(courseName, courseID, courseDesc, (Staff) coordinator, prereqArrayList, topicArrayList);
+		successDialog();
 	}
 	public void backButtonClicked() {
 		MainApp main = new MainApp();
 		main.showProgramCoordinatorHomePage();
 	}
 	public void addPrereq() throws InstanceNotFound {
+		Reader reader = new Reader();
 		Course course = reader.LoadCourse(courseComboBox.getValue());
 		prereqArrayList.add(course);
 		prereqList.getItems().add(courseComboBox.getValue());
 	}
 	public void removePrereq() throws InstanceNotFound {
+		Reader reader = new Reader();
 		Course course = reader.LoadCourse(courseComboBox.getValue());
 		prereqArrayList.remove(course);
 		prereqList.getItems().remove(courseComboBox.getValue());
@@ -132,6 +135,13 @@ public class programCoordinatorCreateCoursePageController {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Cannot Create Offering!");
 		alert.setHeaderText(error);
+
+		alert.showAndWait();
+	}
+	public void successDialog() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Course Created");
+		
 
 		alert.showAndWait();
 	}

@@ -68,10 +68,7 @@ public class Student extends User {
 	}
 	public void withdraw(String userID, String offerID) throws SQLException {
 		Reader reader = new Reader();
-		System.out.println("ID IS " + offerID);
-		System.out.println(userID);
 		reader.DeleteEnrolment(userID,offerID);
-		System.out.println("Withdrawn from unit!!!");
 	}
 	public ArrayList<CourseOffering> listOfferings() throws InstanceNotFound {
 		Reader reader = new Reader();

@@ -39,10 +39,10 @@ public class ProgramCoordinator extends Staff {
 	}
 	
 	public boolean addCourse (String courseName, String courseID, String desc, 
-			Staff coordinator, ArrayList<String> topics) {
+			Staff coordinator,ArrayList<Course> prereqs, ArrayList<String> topics) {
 		
 		// Make course out of passed variables
-		Course course = new Course(courseName, courseID, desc, coordinator, topics);
+		Course course = new Course(courseName, courseID, desc, coordinator,prereqs , topics);
 		
 		boolean result = true;
 		   
